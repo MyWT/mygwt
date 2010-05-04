@@ -2,19 +2,28 @@ package rnd.webapp.mygwtext.client.mvc.page.board;
 
 import java.io.Serializable;
 
+import rnd.expression.Expression;
+import rnd.expression.XChangeEvent;
+import rnd.expression.XChangeListener;
+import rnd.mywt.client.Logger;
+import rnd.mywt.client.bean.ValueChangeEvent;
 import rnd.mywt.client.bean.ValueChangeListenerAdapter;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
 import rnd.mywt.client.data.FilterInfo;
+import rnd.mywt.client.data.Row;
 import rnd.mywt.client.mvc.MVCHandlerFactory;
+import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.mvc.field.Table.RowTableModel;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
 import rnd.mywt.client.mvc.page.board.DataBoard;
-import rnd.mywt.client.mvc.page.board.DataBoard.DataBoardModel;
-import rnd.mywt.client.mvc.page.board.DataBoard.DataBoardView;
+import rnd.mywt.client.rpc.util.ARUtils;
+import rnd.util.WrapperUtils;
 import rnd.webapp.mygwt.client.ARBAsyncCallback;
+import rnd.webapp.mygwt.client.ARBUtils;
 
-import com.gwtext.client.widgets.Panel;
+import com.google.gwt.user.client.ui.Panel;
+
 
 public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 
@@ -72,7 +81,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 		// Logger.log("getFilter()", getFilter());
 		((DataBoardModel) getModel()).setDataTableIntialized(false);
 
-		ARBUtils.getARB().executeRequest(ARCreator.createFetchRequest(getModuleName(), getApplicationBeanName(), getViewName(), filterInfo), new ARBAsyncCallback() {
+		ARBUtils.getARB().executeRequest(ARUtils.createFetchRequest(getModuleName(), getApplicationBeanName(), getViewName(), filterInfo), new ARBAsyncCallback() {
 			
 			@Override
 			public void onSuccess(Serializable result) {

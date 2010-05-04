@@ -16,8 +16,9 @@ import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.mvc.page.board.FormBoard;
 import rnd.mywt.client.mvc.page.form.Form.FormModel;
 import rnd.mywt.client.rpc.ApplicationRequest;
-import rnd.webapp.mwt.client.rpc.util.ARUtils;
+import rnd.mywt.client.rpc.util.ARUtils;
 import rnd.webapp.mygwt.client.ARBAsyncCallback;
+import rnd.webapp.mygwt.client.ARBUtils;
 
 import com.google.gwt.user.client.Window;
 import com.gwtext.client.core.EventObject;
@@ -253,7 +254,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 
 	private void performDeleteAction(Long appBeanId) {
 
-		ApplicationRequest req = ARCreator.createDeleteRequest(getCurrentDataBoard().getModuleName(), getCurrentDataBoard().getApplicationBeanName(), appBeanId);
+		ApplicationRequest req = ARUtils.createDeleteRequest(getCurrentDataBoard().getModuleName(), getCurrentDataBoard().getApplicationBeanName(), appBeanId);
 		ARBUtils.getARB().executeRequest(req, new ARBAsyncCallback() {
 
 			public void onSuccess(Serializable result) {

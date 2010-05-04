@@ -4,10 +4,11 @@ import java.util.List;
 
 import rnd.mywt.client.bean.ApplicationBean;
 import rnd.mywt.client.bean.BindingManager;
+import rnd.mywt.client.bean.ValueChangeEvent;
 import rnd.mywt.client.bean.ValueChangeListenerAdapter;
 import rnd.mywt.client.bean._BoundBean;
+import rnd.mywt.client.mvc.field.Field;
 import rnd.mywt.client.mvc.page.form.Form;
-import rnd.mywt.client.mvc.page.form.Form.FormModel;
 import rnd.webapp.mygwtext.client.mvc.page.GWTExtPage;
 
 import com.gwtext.client.widgets.Panel;
