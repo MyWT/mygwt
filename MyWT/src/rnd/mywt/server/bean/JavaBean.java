@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import rnd.mywt.client.bean.AbstractBean;
-import rnd.mywt.server.util.BeanUtils;
+import rnd.util.BeanUtils;
 
 public class JavaBean extends AbstractBean {
 
