@@ -1,0 +1,9 @@
+<project name="MyGWT-Ext" default="build-project">
+
+	<target name="build-project">
+
+		<jar destfile="MyGWT-Ext.jar" includes="./bin" />
+
+	</target>
+
+</project>

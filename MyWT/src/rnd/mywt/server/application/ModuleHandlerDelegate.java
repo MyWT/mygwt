@@ -1,29 +1,21 @@
 package rnd.mywt.server.application;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import rnd.dao.DataAccessObject;
-import rnd.dao.rdbms.jdbc.JDBCDataAccessObject;
 import rnd.dao.rdbms.jdbc.rsmdp.ResultSetMetaDataProcessor;
 import rnd.mywt.client.bean.ApplicationBean;
 import rnd.mywt.client.bean._Bean;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
 import rnd.mywt.client.data.FilterInfo;
-import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.impl.ColumnMetaDataImpl;
-import rnd.mywt.client.data.impl.DataTableImpl;
-import rnd.mywt.client.data.impl.RowImpl;
-import rnd.mywt.client.data.impl.RowMetaDataImpl;
 import rnd.mywt.client.expression.RowColumnExpression;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
@@ -37,7 +29,6 @@ import rnd.mywt.server.util.ApplicationBeanUtils.BeanCopyHelper;
 import rnd.mywt.server.util.ApplicationBeanUtils.ClientBeanCopyHelper;
 import rnd.mywt.server.util.ApplicationBeanUtils.ServerBeanCopyHelper;
 import rnd.op.ObjectPersistor;
-import rnd.util.WrapperUtils;
 
 public final class ModuleHandlerDelegate implements ModuleHandler {
 
@@ -141,7 +132,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 			vmd = DefaultApplicationBeanHandler.getSharedInstance().getViewMetaData(viewName);
 		}
 
-		DataTable dataTable;
+		DataTable dataTable = null;
 
 		if (vmd instanceof SQLViewMetaData) {
 
@@ -150,12 +141,12 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 			String viewQuery = sqlvmd.getViewQuery();
 			// D.println("viewQuery", viewQuery);
 
-			Object[] params = null;
+//			Object[] params = null;
 			boolean filtered = false;
 
 			if (filterInfo != null) {
 				viewQuery = new StringBuffer(viewQuery).append(" where ").append(sqlvmd.getFilterExpression(filterInfo.getFilterName())).toString();
-				params = filterInfo.getFilterParams().toArray();
+//				params = filterInfo.getFilterParams().toArray();
 				filtered = true;
 				// D.println("viewQuery", viewQuery);
 			}
@@ -171,38 +162,37 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 				// D.println("viewQuery", viewQuery);
 			}
 
-			Object[] result = (Object[]) JDBCDataAccessObject.get().executeQuery(viewQuery, params, JDBCDataAccessObject.ListArrayResultSetProcessor, cmdCreator, getConnection(), true);
+//			Object[] result = (Object[]) JDBCDataAccessObject.get().executeQuery(viewQuery, params, JDBCDataAccessObject.ListArrayResultSetProcessor, cmdCreator, getConnection(), true);
 			// D.println("result", result);
-
-			ColumnMetaData[] cmds = (ColumnMetaData[]) result[0];
-			List<Object[]> columnsList = (List) result[1];
+//			ColumnMetaData[] cmds = (ColumnMetaData[]) result[0];
+//			List<Object[]> columnsList = (List) result[1];
 
 			// D.println("columnMetaDatas", columnMetaDatas);
 
-			RowMetaDataImpl rmd = new RowMetaDataImpl(cmds);
+//			RowMetaDataImpl rmd = new RowMetaDataImpl(cmds);
 
-			rmd.setIdColumnIndex(sqlvmd.getIdColumnIndex());
-			rmd.setDisplayColumnIndex(sqlvmd.getDisplayColumnIndex());
+//			rmd.setIdColumnIndex(sqlvmd.getIdColumnIndex());
+//			rmd.setDisplayColumnIndex(sqlvmd.getDisplayColumnIndex());
 
-			dataTable = new DataTableImpl(rmd);
+//			dataTable = new DataTableImpl(rmd);
 
-			for (Object[] columns : columnsList) {
-				Row row = new RowImpl(rmd);
-				// D.println("row", row);
-
-				List columnList = new ArrayList(columns.length);
-
-				for (int i = 0; i < columns.length; i++) {
-					if (columns[i] instanceof BigInteger) {
-						columns[i] = WrapperUtils.getLong(columns[i]);
-					}
-					columnList.add(columns[i]);
-				}
-
-				row.setColumns(columnList);
-
-				dataTable.addRow(row);
-			}
+//			for (Object[] columns : columnsList) {
+//				Row row = new RowImpl(rmd);
+//				// D.println("row", row);
+//
+//				List columnList = new ArrayList(columns.length);
+//
+//				for (int i = 0; i < columns.length; i++) {
+//					if (columns[i] instanceof BigInteger) {
+//						columns[i] = WrapperUtils.getLong(columns[i]);
+//					}
+//					columnList.add(columns[i]);
+//				}
+//
+//				row.setColumns(columnList);
+//
+//				dataTable.addRow(row);
+//			}
 			// D.println("dataTable", dataTable.getRowCount());
 			// D.println("dataTable", dataTable.getRows().toArray());
 
@@ -220,7 +210,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		// }
 	}
 
-	private static final ColumnMetaDataCreator cmdCreator = new ColumnMetaDataCreator();
+//	private static final ColumnMetaDataCreator cmdCreator = new ColumnMetaDataCreator();
 	
 	public static class ColumnMetaDataCreator implements ResultSetMetaDataProcessor {
 

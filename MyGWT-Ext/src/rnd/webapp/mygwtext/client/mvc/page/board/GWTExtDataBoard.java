@@ -18,7 +18,7 @@ import rnd.mywt.client.mvc.field.Table.RowTableModel;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
 import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.rpc.util.ARUtils;
-import rnd.util.WrapperUtils;
+import rnd.utils.WrapperUtils;
 import rnd.webapp.mygwt.client.ARBAsyncCallback;
 import rnd.webapp.mygwt.client.ARBUtils;
 

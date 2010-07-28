@@ -1,0 +1,9 @@
+<project name="MyWT" default="build-project">
+
+	<target name="build-project">
+
+		<jar destfile="MyWT.jar" includes="./bin" />
+
+	</target>
+
+</project>
