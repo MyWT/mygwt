@@ -3,6 +3,7 @@ package rnd.webapp.mygwt.server;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
 import rnd.mywt.server.application.ApplicationHandler;
+import rnd.mywt.server.application.DefaultApplicationHandler;
 import rnd.mywt.server.application.DefaultModuleHandler;
 import rnd.mywt.server.application.ModuleHandler;
 import rnd.webapp.mygwt.client.ARB;
@@ -15,31 +16,21 @@ public class ARBImpl extends RemoteServiceServlet implements ARB {
 
 	@Override
 	public void init() {
-//		initialiseApplication();
+		initialiseApplication();
 	}
 
-//	private void initialiseApplication() {
-//		// if (Debugger.D.pushCheck("rnd.webapp.mwt.server.ARBImpl.initialiseApplication")) {
-//		// Debugger.D.push(this, null);
-//		// }
-//		// try {
-//		try {
-//			this.appHandler = (ApplicationHandler) Class.forName(MyApplicationHandler.class.getName()).newInstance();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			// throw new RuntimeException(e);
-//		}
-//		// D.println("appHandler", this.appHandler);
-//
-//		if (this.appHandler == null) {
-//			this.appHandler = DefaultApplicationHandler.getSharedInstance();
-//		}
-//
-//		// }
-//		// finally {
-//		// Debugger.D.pop("rnd.webapp.mwt.server.ARBImpl.initialiseApplication");
-//		// }
-//	}
+	private void initialiseApplication() {
+		try {
+			this.appHandler = (ApplicationHandler) Class.forName("rnd.webapp.mwtapp.server.MyApplicationHandler").newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (this.appHandler == null) {
+			this.appHandler = DefaultApplicationHandler.getSharedInstance();
+		}
+
+	}
 
 	public ApplicationResponse executeRequest(ApplicationRequest req) {
 		// if (Debugger.D.pushCheck("rnd.webapp.mwt.server.ARBImpl.executeRequest")) {

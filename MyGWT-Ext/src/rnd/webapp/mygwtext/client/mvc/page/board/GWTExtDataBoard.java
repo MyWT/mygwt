@@ -22,8 +22,7 @@ import rnd.utils.WrapperUtils;
 import rnd.webapp.mygwt.client.ARBAsyncCallback;
 import rnd.webapp.mygwt.client.ARBUtils;
 
-import com.google.gwt.user.client.ui.Panel;
-
+import com.gwtext.client.widgets.Panel;
 
 public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 
@@ -82,7 +81,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 		((DataBoardModel) getModel()).setDataTableIntialized(false);
 
 		ARBUtils.getARB().executeRequest(ARUtils.createFetchRequest(getModuleName(), getApplicationBeanName(), getViewName(), filterInfo), new ARBAsyncCallback() {
-			
+
 			@Override
 			public void onSuccess(Serializable result) {
 				// re.printStackTrace();
@@ -100,8 +99,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 
 					((Table.RowTableModel) dataTable.getModel()).setDataTable(rowDataTable);
 					((DataBoardModel) getModel()).setDataTableIntialized(true);
-				}
-				catch (RuntimeException e) {
+				} catch (RuntimeException e) {
 					e.printStackTrace();
 					throw e;
 				}

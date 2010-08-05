@@ -1,7 +1,5 @@
 package rnd.mywt.client.bean;
 
-import java.util.List;
-
 import rnd.mywt.client.utils.ObjectUtils;
 
 public class DynaBoundBean extends DynaBean implements _BoundBean {
@@ -52,10 +50,6 @@ public class DynaBoundBean extends DynaBean implements _BoundBean {
 	}
 
 	// Indexed Property
-
-	protected List getListValue(String propertyName) {
-		return new BeanPropertyList(this, propertyName);
-	}
 
 	public void addElement(String propertyName, int index, Object element) {
 		getListValue(propertyName).add(index, element);
