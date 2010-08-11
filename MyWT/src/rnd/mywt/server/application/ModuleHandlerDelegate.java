@@ -99,9 +99,9 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		}
 		// Fetch Data Table
 		else if (method == Method.Fetch) {
-			// DataTable dataTable = fetchDataTable(ARUtils.getAppBeanName(req),
-			// ARUtils.getViewName(req), ARUtils.getFilter(req), null);
-			// resp.setResult((Serializable) dataTable);
+			 DataTable dataTable = fetchDataTable(ARUtils.getAppBeanName(req),
+			 ARUtils.getViewName(req), ARUtils.getFilter(req), null);
+			 resp.setResult((Serializable) dataTable);
 			return;
 		}
 		// Delete Object

@@ -21,7 +21,7 @@ public class ARBImpl extends RemoteServiceServlet implements ARB {
 
 	private void initialiseApplication() {
 		try {
-			this.appHandler = (ApplicationHandler) Class.forName("rnd.webapp.mwtapp.server.MyApplicationHandler").newInstance();
+			this.appHandler = (ApplicationHandler) Class.forName("rnd.webapp.mywtapp.server.MyApplicationHandler").newInstance();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

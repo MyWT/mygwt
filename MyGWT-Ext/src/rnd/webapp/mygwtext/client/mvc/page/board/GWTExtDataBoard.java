@@ -26,7 +26,7 @@ import com.gwtext.client.widgets.Panel;
 
 public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 
-	private Table dataTable;
+	private Table dataBoardTable;
 
 	private ReferenceField referenceField;
 
@@ -49,10 +49,10 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 	}
 
 	public Table getDataTable() {
-		if (this.dataTable == null) {
-			this.dataTable = createTable();
+		if (this.dataBoardTable == null) {
+			this.dataBoardTable = createTable();
 		}
-		return this.dataTable;
+		return this.dataBoardTable;
 	}
 
 	public void refreshDataTable() {
@@ -88,16 +88,16 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 				// new RuntimeException("inner").printStackTrace();
 
 				try {
-					DataTable rowDataTable = (DataTable) result;
+					DataTable dataTable = (DataTable) result;
 
 					if (refreshMetaData) {
 						((DataBoardModel) getModel()).setDataTableMetaDataIntialized(false);
-						ColumnMetaData[] columnMetaData = rowDataTable.getRowMetaData().getColumnMetaDatas();
-						dataTable.setColumnMetaDatas(columnMetaData);
+						ColumnMetaData[] columnMetaData = dataTable.getRowMetaData().getColumnMetaDatas();
+						dataBoardTable.setColumnMetaDatas(columnMetaData);
 						((DataBoardModel) getModel()).setDataTableMetaDataIntialized(true);
 					}
 
-					((Table.RowTableModel) dataTable.getModel()).setDataTable(rowDataTable);
+					((Table.RowTableModel) dataBoardTable.getModel()).setDataTable(dataTable);
 					((DataBoardModel) getModel()).setDataTableIntialized(true);
 				} catch (RuntimeException e) {
 					e.printStackTrace();
