@@ -1,11 +1,11 @@
 package rnd.mywt.server.application;
 
-import rnd.mywt.client.bean.ApplicationBean;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
 import rnd.op.ObjectLifeCycle;
+import rnd.op.ObjectPersistor;
 
-public interface ModuleHandler extends ObjectLifeCycle<ApplicationBean> {
+public interface ModuleHandler extends ObjectLifeCycle {
 
 	// Callback
 
@@ -25,6 +25,8 @@ public interface ModuleHandler extends ObjectLifeCycle<ApplicationBean> {
 
 	// Main
 
-	void executeRequest(ApplicationRequest req, ApplicationResponse resp);
+	void handleRequest(ApplicationRequest req, ApplicationResponse resp);
+	
+	ObjectPersistor getObjectPersistor();
 
 }

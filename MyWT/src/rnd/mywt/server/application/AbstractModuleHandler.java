@@ -1,20 +1,23 @@
 package rnd.mywt.server.application;
 
-import rnd.mywt.client.bean.ApplicationBean;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
+import rnd.op.ObjectPersistor;
+import rnd.op.dnap.DNAPJDObjectPersistor;
 
-public class AbstractModuleHandler implements ModuleHandler {
+public abstract class AbstractModuleHandler implements ModuleHandler {
 
+	private ObjectPersistor op;
 	private ModuleHandlerDelegate delegate = new ModuleHandlerDelegate(this);
-	
+
 	public AbstractModuleHandler() {
+		op = new DNAPJDObjectPersistor();
 		delegate.initModule();
 	}
 
 	@Override
-	public void executeRequest(ApplicationRequest req, ApplicationResponse resp) {
-		delegate.executeRequest(req, resp);
+	public void handleRequest(ApplicationRequest req, ApplicationResponse resp) {
+		delegate.handleRequest(req, resp);
 	}
 
 	@Override
@@ -38,27 +41,23 @@ public class AbstractModuleHandler implements ModuleHandler {
 	}
 
 	@Override
-	public void initModule() {
-		// TODO Auto-generated method stub
-		
+	public ObjectPersistor getObjectPersistor() {
+		return op;
 	}
 
 	@Override
 	public void deleteObject(Object id, Class objType) {
-		// TODO Auto-generated method stub
-		
+		delegate.deleteObject(id, objType);
 	}
 
 	@Override
-	public ApplicationBean findObject(Object id, Class<ApplicationBean> objType) {
-		// TODO Auto-generated method stub
-		return null;
+	public <T> T findObject(Object id, Class<T> objType) {
+		return delegate.findObject(id, objType);
 	}
 
 	@Override
-	public ApplicationBean saveObject(ApplicationBean object) {
-		// TODO Auto-generated method stub
-		return null;
+	public <T> T saveObject(T object) {
+		return delegate.saveObject(object);
 	}
 
 }

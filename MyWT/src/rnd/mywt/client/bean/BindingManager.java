@@ -45,7 +45,6 @@ public class BindingManager {
 				bindExpression(bean, beanExp, field, fieldExp);
 
 			}
-
 		}
 
 //		Logger.endMethod("BindingManager", "bindForm");

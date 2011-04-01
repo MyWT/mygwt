@@ -1,21 +1,27 @@
 package rnd.mywt.server.application;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import rnd.dao.DataAccessObject;
+import rnd.dao.rdbms.jdbc.JDBCDataAccessObject;
 import rnd.dao.rdbms.jdbc.rsmdp.ResultSetMetaDataProcessor;
 import rnd.mywt.client.bean.ApplicationBean;
-import rnd.mywt.client.bean._Bean;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
 import rnd.mywt.client.data.FilterInfo;
+import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.impl.ColumnMetaDataImpl;
+import rnd.mywt.client.data.impl.DataTableImpl;
+import rnd.mywt.client.data.impl.RowImpl;
+import rnd.mywt.client.data.impl.RowMetaDataImpl;
 import rnd.mywt.client.expression.RowColumnExpression;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
@@ -29,6 +35,8 @@ import rnd.mywt.server.util.ApplicationBeanUtils.BeanCopyHelper;
 import rnd.mywt.server.util.ApplicationBeanUtils.ClientBeanCopyHelper;
 import rnd.mywt.server.util.ApplicationBeanUtils.ServerBeanCopyHelper;
 import rnd.op.ObjectPersistor;
+import rnd.op.rdbms.JDBCObjectPersistor;
+import rnd.utils.WrapperUtils;
 
 public final class ModuleHandlerDelegate implements ModuleHandler {
 
@@ -73,7 +81,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	}
 
 	@Override
-	public void executeRequest(ApplicationRequest req, ApplicationResponse resp) {
+	public void handleRequest(ApplicationRequest req, ApplicationResponse resp) {
 
 		Method method = req.getMethod();
 		// D.println("method", method);
@@ -99,8 +107,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		}
 		// Fetch Data Table
 		else if (method == Method.Fetch) {
-			 DataTable dataTable = fetchDataTable(ARUtils.getAppBeanName(req),
-			 ARUtils.getViewName(req), ARUtils.getFilter(req), null);
+			 DataTable dataTable = fetchDataTable(ARUtils.getAppBeanName(req), ARUtils.getViewName(req), ARUtils.getFilter(req), null);
 			 resp.setResult((Serializable) dataTable);
 			return;
 		}
@@ -119,7 +126,8 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		// }
 	}
 
-	private void deleteObject(Long appBeanPKId, Class applicationBeanType) {
+	public void deleteObject(Object id, Class objType) {
+//	private void deleteObject(Long appBeanPKId, Class applicationBeanType) {
 		// getORMHelper().deleteObject(appBeanPKId, applicationBeanType);
 	}
 
@@ -162,37 +170,41 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 				// D.println("viewQuery", viewQuery);
 			}
 
-//			Object[] result = (Object[]) JDBCDataAccessObject.get().executeQuery(viewQuery, params, JDBCDataAccessObject.ListArrayResultSetProcessor, cmdCreator, getConnection(), true);
-			// D.println("result", result);
-//			ColumnMetaData[] cmds = (ColumnMetaData[]) result[0];
-//			List<Object[]> columnsList = (List) result[1];
+			JDBCDataAccessObject jdbcDAO = new JDBCDataAccessObject();
+			JDBCObjectPersistor jdbcOP = (JDBCObjectPersistor) getObjectPersistor(); 
+			
+			Object[] result = (Object[]) jdbcDAO.executeQuery(viewQuery, null, JDBCDataAccessObject.ListArrayResultSetProcessor, cmdCreator, jdbcOP.getConnection(), true);
+//			 D.println("result", result);
+			
+			ColumnMetaData[] cmds = (ColumnMetaData[]) result[0];
+			List<Object[]> columnsList = (List) result[1];
 
 			// D.println("columnMetaDatas", columnMetaDatas);
 
-//			RowMetaDataImpl rmd = new RowMetaDataImpl(cmds);
+			RowMetaDataImpl rmd = new RowMetaDataImpl(cmds);
 
-//			rmd.setIdColumnIndex(sqlvmd.getIdColumnIndex());
-//			rmd.setDisplayColumnIndex(sqlvmd.getDisplayColumnIndex());
+			rmd.setIdColumnIndex(sqlvmd.getIdColumnIndex());
+			rmd.setDisplayColumnIndex(sqlvmd.getDisplayColumnIndex());
 
-//			dataTable = new DataTableImpl(rmd);
+			dataTable = new DataTableImpl(rmd);
 
-//			for (Object[] columns : columnsList) {
-//				Row row = new RowImpl(rmd);
-//				// D.println("row", row);
-//
-//				List columnList = new ArrayList(columns.length);
-//
-//				for (int i = 0; i < columns.length; i++) {
-//					if (columns[i] instanceof BigInteger) {
-//						columns[i] = WrapperUtils.getLong(columns[i]);
-//					}
-//					columnList.add(columns[i]);
-//				}
-//
-//				row.setColumns(columnList);
-//
-//				dataTable.addRow(row);
-//			}
+			for (Object[] columns : columnsList) {
+				Row row = new RowImpl(rmd);
+				// D.println("row", row);
+
+				List columnList = new ArrayList(columns.length);
+
+				for (int i = 0; i < columns.length; i++) {
+					if (columns[i] instanceof BigInteger) {
+						columns[i] = WrapperUtils.getLong(columns[i]);
+					}
+					columnList.add(columns[i]);
+				}
+
+				row.setColumns(columnList);
+
+				dataTable.addRow(row);
+			}
 			// D.println("dataTable", dataTable.getRowCount());
 			// D.println("dataTable", dataTable.getRows().toArray());
 
@@ -210,7 +222,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		// }
 	}
 
-//	private static final ColumnMetaDataCreator cmdCreator = new ColumnMetaDataCreator();
+	private static final ColumnMetaDataCreator cmdCreator = new ColumnMetaDataCreator();
 	
 	public static class ColumnMetaDataCreator implements ResultSetMetaDataProcessor {
 
@@ -243,32 +255,31 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	// // return getORMHelper().getConnection();
 	// }
 
-	public _Bean findObject(Object id, Class beanType) {
+	public <T> T findObject(Object id, Class<T> objType) {
+//	public _Bean findObject(Object id, Class beanType) {
 		// ApplicationBean serverBean = (ApplicationBean) getORMHelper().findObject(id, beanType);
 		// serverBean.setApplicationBeanId((Long) id);
 		// D.println("serverBean", serverBean);
 
-		ApplicationBean clientBean = ApplicationBeanUtils.getNewClientBean(beanType);
+		ApplicationBean clientBean = ApplicationBeanUtils.getNewClientBean(objType);
 
 		// copy(serverBean, clientBean, this.serverCopyBeanHelper, this.clientBeanCopyHelper, new
 		// HashMap<ApplicationBean, ApplicationBean>());
 		// D.println("clientBean", clientBean);
 
-		return clientBean;
+		return (T) clientBean;
 	}
 
 	private BeanCopyHelper serverCopyBeanHelper = new ServerBeanCopyHelper();
 
 	private BeanCopyHelper clientBeanCopyHelper = new ClientBeanCopyHelper();
 
-	@Override
-	public ApplicationBean findObject(Object id, Class<ApplicationBean> objType) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public ApplicationBean saveObject(ApplicationBean clientBean) {
+	public <T> T saveObject(T object) {
+//	public ApplicationBean saveObject(ApplicationBean clientBean) {
+		
+		ApplicationBean clientBean = (ApplicationBean) object;
 
 		Long appBeanId = clientBean.getApplicationBeanId();
 		ApplicationBean serverBean = null;
@@ -276,29 +287,18 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		if (appBeanId == null) {
 			serverBean = ApplicationBeanUtils.getNewApplicationBean(ApplicationBeanUtils.getServerBeanType(clientBean.getClass()));
 		} else {
-			serverBean = getObjectPersistor().findObject(appBeanId, ApplicationBeanUtils.getServerBeanType(clientBean.getClass()));
+			serverBean = (ApplicationBean) getObjectPersistor().findObject(appBeanId, ApplicationBeanUtils.getServerBeanType(clientBean.getClass()));
 		}
 
 		ApplicationBeanUtils.copyBean(clientBean, serverBean, clientBeanCopyHelper, serverCopyBeanHelper, new HashMap<ApplicationBean, ApplicationBean>());
 
-		return getObjectPersistor().saveObject(serverBean);
+		return (T) getObjectPersistor().saveObject(serverBean);
 
 	}
 
-	@Override
-	public void deleteObject(Object id, Class objType) {
-		// TODO Auto-generated method stub
-
+	public ObjectPersistor getObjectPersistor() {
+		return moduleHandler.getObjectPersistor();
 	}
 
-	protected ObjectPersistor<ApplicationBean> getObjectPersistor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	protected DataAccessObject getDataAccessObject() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 }

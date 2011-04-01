@@ -3,7 +3,7 @@ package rnd.mywt.server.application;
 public class DefaultModuleHandler extends AbstractModuleHandler {
 
 	private static class DefaultModuleHandlerHolder {
-		static DefaultModuleHandler sharedInstace = new DefaultModuleHandler();
+		private static DefaultModuleHandler sharedInstace = new DefaultModuleHandler();
 	}
 
 	public static ModuleHandler getSharedInstance() {
