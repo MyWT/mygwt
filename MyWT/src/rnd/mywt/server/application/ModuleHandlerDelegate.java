@@ -31,9 +31,9 @@ import rnd.mywt.client.utils.ObjectUtils;
 import rnd.mywt.server.data.SQLViewMetaData;
 import rnd.mywt.server.data.ViewMetaData;
 import rnd.mywt.server.util.ApplicationBeanUtils;
-import rnd.mywt.server.util.ApplicationBeanUtils.BeanCopyHelper;
-import rnd.mywt.server.util.ApplicationBeanUtils.ClientBeanCopyHelper;
-import rnd.mywt.server.util.ApplicationBeanUtils.ServerBeanCopyHelper;
+import rnd.mywt.server.util.ApplicationBeanUtils.BeanCopyContext;
+import rnd.mywt.server.util.ApplicationBeanUtils.ClientBeanCopyContext;
+import rnd.mywt.server.util.ApplicationBeanUtils.ServerBeanCopyContext;
 import rnd.op.ObjectPersistor;
 import rnd.op.rdbms.JDBCObjectPersistor;
 import rnd.utils.WrapperUtils;
@@ -270,9 +270,9 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		return (T) clientBean;
 	}
 
-	private BeanCopyHelper serverCopyBeanHelper = new ServerBeanCopyHelper();
+	private BeanCopyContext serverCopyBeanHelper = new ServerBeanCopyContext();
 
-	private BeanCopyHelper clientBeanCopyHelper = new ClientBeanCopyHelper();
+	private BeanCopyContext clientBeanCopyHelper = new ClientBeanCopyContext();
 
 
 	@Override

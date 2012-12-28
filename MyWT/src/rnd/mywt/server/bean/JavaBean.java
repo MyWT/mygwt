@@ -28,33 +28,12 @@ public class JavaBean extends AbstractBean {
 	}
 
 	protected Object getValue0(String propertyName) {
-		// try {
-		// Method m = null;
-		// String s = capitialize(propertyName);
-		// try {
-		// m = getClass().getMethod("get" + s, (Class[])null);
-		// }
-		// catch (NoSuchMethodException e) {
-		// m = getClass().getMethod("is" + s, (Class[])null);
-		// }
-		// return m.invoke(this, (Object[])null);
-		// }
-		// catch (Exception e) {
-		// throw new RuntimeException(e);
-		// }
 		return BeanUtils.getValue(this, propertyName);
 	}
 
 	protected Object setValue0(String propertyName, Object value) {
 		return BeanUtils.setValue(this, propertyName, value);
-//		try {
-//			return getClass().getMethod("set" + capitialize(propertyName), getFieldType(propertyName)).invoke(this, value);
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
 	}
-
-
 
 	@Override
 	protected final List getListValue0(String propertyName) {

@@ -13,7 +13,7 @@ import rnd.mywt.client.utils.ExceptionUtils;
 
 public class ApplicationBeanUtils {
 
-	public static void copyBean(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyHelper sourceBeanCopyHelper, BeanCopyHelper targetBeanCopyHelper, Map<ApplicationBean, ApplicationBean> copyMap) {
+	public static void copyBean(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyContext sourceBeanCopyCtx, BeanCopyContext targetBeanCopyCtx, Map<ApplicationBean, ApplicationBean> copyMap) {
 		// if (Debugger.D.pushCheck("rnd.webapp.mwt.server.application.AbstractModuleHandler.copy"))
 		// {
 		// Debugger.D.push(this, new Object[] { "sourceBean", sourceBean, "targetBean", targetBean
@@ -44,7 +44,7 @@ public class ApplicationBeanUtils {
 
 				ApplicationBean sourceValue = (ApplicationBean) value;
 
-				Long sourceObjectId = sourceBeanCopyHelper.getApplicationBeanId(sourceValue);
+				Long sourceObjectId = sourceBeanCopyCtx.getApplicationBeanId(sourceValue);
 				sourceValue.setApplicationBeanId(sourceObjectId);
 				// D.println("sourceObjectId", sourceObjectId);
 
@@ -56,9 +56,9 @@ public class ApplicationBeanUtils {
 				// D.println("targetValue", targetValue);
 
 				if (targetValue == null) {
-					targetValue = getNewApplicationBean(sourceBeanCopyHelper.getTargetBeanType(sourceValue.getClass()));
+					targetValue = getNewApplicationBean(sourceBeanCopyCtx.getTargetBeanType(sourceValue.getClass()));
 					targetValue.setApplicationBeanId(sourceObjectId);
-					copyBean(sourceValue, targetValue, sourceBeanCopyHelper, targetBeanCopyHelper, copyMap);
+					copyBean(sourceValue, targetValue, sourceBeanCopyCtx, targetBeanCopyCtx, copyMap);
 				}
 				value = targetValue;
 			}
@@ -79,7 +79,7 @@ public class ApplicationBeanUtils {
 			int trtSize = targetBean.size(indexedPropertyName);
 			// D.println("trtSize", trtSize);
 
-			String inverseOwner = targetBeanCopyHelper.getInverseOwner(targetBean.getClass(), indexedPropertyName);
+			String inverseOwner = targetBeanCopyCtx.getInverseOwner(targetBean.getClass(), indexedPropertyName);
 			// D.println("inverseOwner", inverseOwner);
 
 			Map<Long, ApplicationBean> existingTargetElementMap = new HashMap();
@@ -87,7 +87,7 @@ public class ApplicationBeanUtils {
 			for (int i = 0; i < trtSize; i++) {
 
 				ApplicationBean targetElement = (ApplicationBean) targetBean.getElement(indexedPropertyName, i);
-				Long targetElementId = targetBeanCopyHelper.getApplicationBeanId(targetElement);
+				Long targetElementId = targetBeanCopyCtx.getApplicationBeanId(targetElement);
 				targetElement.setApplicationBeanId(targetElementId);
 
 				if (targetElementId != null) {
@@ -103,7 +103,7 @@ public class ApplicationBeanUtils {
 				ApplicationBean sourceElement = (ApplicationBean) sourceBean.getElement(indexedPropertyName, i);
 				// D.println("sourceElement", sourceElement);
 
-				Long sourceElementId = sourceBeanCopyHelper.getApplicationBeanId(sourceElement);
+				Long sourceElementId = sourceBeanCopyCtx.getApplicationBeanId(sourceElement);
 				sourceElement.setApplicationBeanId(sourceElementId);
 				// D.println("sourceElementId", sourceElementId);
 
@@ -115,14 +115,14 @@ public class ApplicationBeanUtils {
 				// D.println("targetElement", targetElement);
 
 				if (targetElement == null) {
-					targetElement = getNewApplicationBean(sourceBeanCopyHelper.getTargetBeanType(sourceElement.getClass()));
+					targetElement = getNewApplicationBean(sourceBeanCopyCtx.getTargetBeanType(sourceElement.getClass()));
 					newElements.add(targetElement);
 				}
 
-				copyBean(sourceElement, targetElement, sourceBeanCopyHelper, targetBeanCopyHelper, copyMap);
+				copyBean(sourceElement, targetElement, sourceBeanCopyCtx, targetBeanCopyCtx, copyMap);
 				// D.println("InverseOwnerRequired", targetBeanCopyHelper.isInverseOwnerRequired());
 
-				if (targetBeanCopyHelper.isInverseOwnerRequired()) {
+				if (targetBeanCopyCtx.isInverseOwnerRequired()) {
 					targetElement.setValue(inverseOwner, targetBean);
 				}
 			}
@@ -180,7 +180,7 @@ public class ApplicationBeanUtils {
 		return getNewApplicationBean(getClientBeanType(beanType));
 	}
 
-	public static class ClientBeanCopyHelper implements BeanCopyHelper {
+	public static class ClientBeanCopyContext implements BeanCopyContext {
 
 		public Long getApplicationBeanId(ApplicationBean clientBean) {
 			return clientBean.getApplicationBeanId();
@@ -200,7 +200,7 @@ public class ApplicationBeanUtils {
 		}
 	}
 
-	public static class ServerBeanCopyHelper implements BeanCopyHelper {
+	public static class ServerBeanCopyContext implements BeanCopyContext {
 
 		public Long getApplicationBeanId(ApplicationBean serverBean) {
 			return null;
@@ -224,7 +224,7 @@ public class ApplicationBeanUtils {
 		}
 	}
 
-	public interface BeanCopyHelper {
+	public interface BeanCopyContext {
 
 		Long getApplicationBeanId(ApplicationBean applicationBean);
 
