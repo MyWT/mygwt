@@ -3,7 +3,7 @@ package rnd.mywt.server.application;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
 import rnd.op.ObjectPersistor;
-import rnd.op.dnap.DNAPJDObjectPersistor;
+import rnd.op.jpersis.JPObjectPersistor;
 
 public abstract class AbstractModuleHandler implements ModuleHandler {
 
@@ -11,7 +11,7 @@ public abstract class AbstractModuleHandler implements ModuleHandler {
 	private ModuleHandlerDelegate delegate = new ModuleHandlerDelegate(this);
 
 	public AbstractModuleHandler() {
-		op = new DNAPJDObjectPersistor();
+		op = new JPObjectPersistor();
 		delegate.initModule();
 	}
 

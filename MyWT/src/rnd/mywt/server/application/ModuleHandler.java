@@ -2,10 +2,10 @@ package rnd.mywt.server.application;
 
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
-import rnd.op.ObjectLifeCycle;
+import rnd.op.ObjectLifeCycleSupport;
 import rnd.op.ObjectPersistor;
 
-public interface ModuleHandler extends ObjectLifeCycle {
+public interface ModuleHandler extends ObjectLifeCycleSupport {
 
 	// Callback
 
