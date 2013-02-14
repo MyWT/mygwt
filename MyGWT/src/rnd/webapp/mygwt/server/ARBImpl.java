@@ -46,7 +46,7 @@ public class ARBImpl extends RemoteServiceServlet implements ARB {
 			// D.println("moduleHandler", moduleHandler);
 
 			if (moduleHandler == null) {
-				moduleHandler = DefaultModuleHandler.getSharedInstance();
+				moduleHandler = DefaultModuleHandler.getInstance(module);
 			}
 			// D.println("moduleHandler", moduleHandler);
 			moduleHandler.handleRequest(req, resp);

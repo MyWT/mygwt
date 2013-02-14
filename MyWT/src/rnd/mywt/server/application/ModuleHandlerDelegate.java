@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -77,11 +76,6 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	public void registerApplicationBean(String appBeanName, Class appBeanType, ApplicationBeanHandler applicationBeanHandler) {
 		registerApplicationBean(appBeanName, appBeanType);
 		this.beanHandlerMap.put(appBeanName, applicationBeanHandler);
-	}
-
-	@Override
-	public Collection<ApplicationBeanHandler> getApplicationBeanHandlers() {
-		return this.beanHandlerMap.values();
 	}
 
 	public ApplicationBeanHandler getApplicationBeanHandler(String appBeanName) {

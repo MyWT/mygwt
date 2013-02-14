@@ -86,7 +86,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 
 					DataBoard currentDataBoard = getCurrentDataBoard();
 
-					Row currRow = ((Table.RowTableModel) currentDataBoard.getDataTable().getModel()).getCurrentRow();
+					Row currRow = ((Table.RowTableModel) currentDataBoard.getTable().getModel()).getCurrentRow();
 
 					if (currRow == null) {
 						Window.alert("No Row Selected");
@@ -109,7 +109,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 			public void onClick(Button button, EventObject e) {
 				try {
 
-					Row currRow = ((Table.RowTableModel) (getCurrentDataBoard()).getDataTable().getModel()).getCurrentRow();
+					Row currRow = ((Table.RowTableModel) (getCurrentDataBoard()).getTable().getModel()).getCurrentRow();
 
 					if (currRow == null) {
 						Window.alert("No Row Selected");
@@ -196,7 +196,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 
 		FormModel formModel = (FormModel) getCurrentFormBoard().getForm().getModel();
 
-		ApplicationRequest req = ARUtils.createSaveRequest(getCurrentFormBoard().getModuleName(), getCurrentFormBoard().getApplicationBeanName(), getCurrentFormBoard().getViewName(), formModel.getApplicationBean());
+		ApplicationRequest req = ARUtils.createSaveRequest(getCurrentFormBoard().getModuleName(), getCurrentFormBoard().getApplicationBeanName(), getCurrentFormBoard().getDataBoard().getViewName(), formModel.getApplicationBean());
 		ARBUtils.getARB().executeRequest(req, new ARBAsyncCallback() {
 
 			@Override
@@ -239,9 +239,10 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 
 	private void createFormBoard(Long appBeanId, String viewName) {
 
-		FormBoard formBoard = MVCHandlerFactory.getMVCHandler().createFormBoard(getCurrentDataBoard().getModuleName(), getCurrentDataBoard().getApplicationBeanName());
+		DataBoard dataBoard = getCurrentDataBoard();
+		FormBoard formBoard = MVCHandlerFactory.getMVCHandler().createFormBoard(dataBoard.getModuleName(), dataBoard.getApplicationBeanName());
 		formBoard.setApplicationBeanId(appBeanId);
-		formBoard.setViewName(viewName);
+		formBoard.setDataBoard(dataBoard);
 
 		getActionBoard().getActionBase().addBoard(formBoard);
 		getActionBoard().getActionBase().setCurrentBoard(formBoard);
@@ -249,7 +250,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 	}
 
 	private void performRefreshAction() {
-		getCurrentDataBoard().refreshDataTable();
+		getCurrentDataBoard().refreshTable();
 	}
 
 	private void performDeleteAction(Long appBeanId) {
@@ -279,7 +280,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 		DataBoard currentDataBoard = getCurrentDataBoard();
 		ReferenceField referenceField = currentDataBoard.getReferenceField();
 		if (referenceField != null) {
-			Row currRow = ((RowTableModel) currentDataBoard.getDataTable().getModel()).getCurrentRow();
+			Row currRow = ((RowTableModel) currentDataBoard.getTable().getModel()).getCurrentRow();
 
 			if (currRow == null) {
 				Window.alert("No Row Selected");

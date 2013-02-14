@@ -281,7 +281,7 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 			Logger.log("searchCriteria", searchCriteria);
 
 			Expression displayExpression = ((ReferenceFieldView) getView()).getDisplayExpression();
-			List<Row> rows = ((RowTableModel) getDataBoard().getDataTable().getModel()).getDataTable().getRows();
+			List<Row> rows = ((RowTableModel) getDataBoard().getTable().getModel()).getDataTable().getRows();
 
 			for (Row row : rows) {
 
