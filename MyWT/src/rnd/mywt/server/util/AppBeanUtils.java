@@ -11,12 +11,15 @@ import rnd.mywt.client.bean.ApplicationBean;
 import rnd.mywt.client.utils.Block;
 import rnd.mywt.client.utils.ExceptionUtils;
 
-public class ApplicationBeanUtils {
+public class AppBeanUtils {
 
-	public static void copyBean(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyContext sourceBeanCopyCtx, BeanCopyContext targetBeanCopyCtx, Map<ApplicationBean, ApplicationBean> copyMap) {
-		// if (Debugger.D.pushCheck("rnd.webapp.mwt.server.application.AbstractModuleHandler.copy"))
+	public static void copyBean(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx,
+			Map<ApplicationBean, ApplicationBean> copyMap) {
+		// if
+		// (Debugger.D.pushCheck("rnd.webapp.mwt.server.application.AbstractModuleHandler.copy"))
 		// {
-		// Debugger.D.push(this, new Object[] { "sourceBean", sourceBean, "targetBean", targetBean
+		// Debugger.D.push(this, new Object[] { "sourceBean", sourceBean,
+		// "targetBean", targetBean
 		// });
 		// }
 		// try {
@@ -44,9 +47,11 @@ public class ApplicationBeanUtils {
 
 				ApplicationBean sourceValue = (ApplicationBean) value;
 
-				Long sourceObjectId = sourceBeanCopyCtx.getApplicationBeanId(sourceValue);
-				sourceValue.setApplicationBeanId(sourceObjectId);
+				// Long sourceObjectId =
+				// sourceBeanCopyCtx.getApplicationBeanId(sourceValue);
+				// sourceValue.setApplicationBeanId(sourceObjectId);
 				// D.println("sourceObjectId", sourceObjectId);
+				Long sourceObjectId = sourceValue.getApplicationBeanId();
 
 				ApplicationBean targetValue = null;
 
@@ -57,7 +62,7 @@ public class ApplicationBeanUtils {
 
 				if (targetValue == null) {
 					targetValue = getNewApplicationBean(sourceBeanCopyCtx.getTargetBeanType(sourceValue.getClass()));
-					targetValue.setApplicationBeanId(sourceObjectId);
+					// targetValue.setApplicationBeanId(sourceObjectId);
 					copyBean(sourceValue, targetValue, sourceBeanCopyCtx, targetBeanCopyCtx, copyMap);
 				}
 				value = targetValue;
@@ -73,10 +78,10 @@ public class ApplicationBeanUtils {
 		for (String indexedPropertyName : indexedPropertyNames) {
 			// D.println("indexedPropertyName", indexedPropertyName);
 
-			int size = sourceBean.size(indexedPropertyName);
+			int srcSize = sourceBean.size(indexedPropertyName);
 			// D.println("size", size);
 
-			int trtSize = targetBean.size(indexedPropertyName);
+			int trgtSize = targetBean.size(indexedPropertyName);
 			// D.println("trtSize", trtSize);
 
 			String inverseOwner = targetBeanCopyCtx.getInverseOwner(targetBean.getClass(), indexedPropertyName);
@@ -84,43 +89,46 @@ public class ApplicationBeanUtils {
 
 			Map<Long, ApplicationBean> existingTargetElementMap = new HashMap();
 
-			for (int i = 0; i < trtSize; i++) {
+			for (int i = 0; i < trgtSize; i++) {
 
 				ApplicationBean targetElement = (ApplicationBean) targetBean.getElement(indexedPropertyName, i);
-				Long targetElementId = targetBeanCopyCtx.getApplicationBeanId(targetElement);
-				targetElement.setApplicationBeanId(targetElementId);
+				// Long targetElementId =
+				// targetBeanCopyCtx.getApplicationBeanId(targetElement);
+				// targetElement.setApplicationBeanId(targetElementId);
+				Long targetElementId = targetElement.getApplicationBeanId();
 
 				if (targetElementId != null) {
 					existingTargetElementMap.put(targetElementId, targetElement);
 				}
 			}
-			// D.println("targetElementMap_size", existingTargetElementMap.size());
+			// D.println("targetElementMap_size",
+			// existingTargetElementMap.size());
 
 			List<ApplicationBean> newElements = new ArrayList<ApplicationBean>();
 
-			for (int i = 0; i < size; i++) {
+			for (int i = 0; i < srcSize; i++) {
 
 				ApplicationBean sourceElement = (ApplicationBean) sourceBean.getElement(indexedPropertyName, i);
 				// D.println("sourceElement", sourceElement);
 
-				Long sourceElementId = sourceBeanCopyCtx.getApplicationBeanId(sourceElement);
-				sourceElement.setApplicationBeanId(sourceElementId);
+				// Long sourceElementId =
+				// sourceBeanCopyCtx.getApplicationBeanId(sourceElement);
+				// sourceElement.setApplicationBeanId(sourceElementId);
 				// D.println("sourceElementId", sourceElementId);
+				Long sourceElementId = sourceElement.getApplicationBeanId();
 
 				ApplicationBean targetElement = null;
 
 				if (sourceElementId != null) {
 					targetElement = existingTargetElementMap.remove(sourceElementId);
-				}
-				// D.println("targetElement", targetElement);
-
-				if (targetElement == null) {
+				} else {
 					targetElement = getNewApplicationBean(sourceBeanCopyCtx.getTargetBeanType(sourceElement.getClass()));
 					newElements.add(targetElement);
 				}
 
 				copyBean(sourceElement, targetElement, sourceBeanCopyCtx, targetBeanCopyCtx, copyMap);
-				// D.println("InverseOwnerRequired", targetBeanCopyHelper.isInverseOwnerRequired());
+				// D.println("InverseOwnerRequired",
+				// targetBeanCopyHelper.isInverseOwnerRequired());
 
 				if (targetBeanCopyCtx.isInverseOwnerRequired()) {
 					targetElement.setValue(inverseOwner, targetBean);
@@ -153,15 +161,15 @@ public class ApplicationBeanUtils {
 		return getTargetBeanType(clientBeanType, "client", "server");
 	}
 
-	private static Class getTargetBeanType(Class srcBeanType, String srcType, String trtType) {
+	private static Class getTargetBeanType(Class srcBeanType, String srcType, String trgtType) {
 
 		String srcBeanTypeName = srcBeanType.getName();
 
-		final String trtClassName = srcBeanTypeName.substring(0, srcBeanTypeName.lastIndexOf('.') - srcType.length()) + trtType + srcBeanTypeName.substring(srcBeanTypeName.lastIndexOf('.'));
+		final String trgtClassName = srcBeanTypeName.substring(0, srcBeanTypeName.lastIndexOf('.') - srcType.length()) + trgtType + srcBeanTypeName.substring(srcBeanTypeName.lastIndexOf('.'));
 
-		final Class targetClass = (Class) ExceptionUtils.makeUnchecked(new Block() {
+		final Class targetClass = (Class) ExceptionUtils.executeUnchecked(new Block() {
 			public Object execute() throws Throwable {
-				return Class.forName(trtClassName);
+				return Class.forName(trgtClassName);
 			}
 		});
 
@@ -169,7 +177,7 @@ public class ApplicationBeanUtils {
 	}
 
 	public static ApplicationBean getNewApplicationBean(final Class beanType) {
-		return (ApplicationBean) ExceptionUtils.makeUnchecked(new Block() {
+		return (ApplicationBean) ExceptionUtils.executeUnchecked(new Block() {
 			public Object execute() throws Throwable {
 				return beanType.newInstance();
 			}
@@ -180,11 +188,11 @@ public class ApplicationBeanUtils {
 		return getNewApplicationBean(getClientBeanType(beanType));
 	}
 
-	public static class ClientBeanCopyContext implements BeanCopyContext {
+	public static class ClientBeanCopyCtx implements BeanCopyCtx {
 
-		public Long getApplicationBeanId(ApplicationBean clientBean) {
-			return clientBean.getApplicationBeanId();
-		}
+		// public Long getApplicationBeanId(ApplicationBean clientBean) {
+		// return clientBean.getApplicationBeanId();
+		// }
 
 		public boolean isInverseOwnerRequired() {
 			return false;
@@ -200,14 +208,11 @@ public class ApplicationBeanUtils {
 		}
 	}
 
-	public static class ServerBeanCopyContext implements BeanCopyContext {
+	public static class ServerBeanCopyCtx implements BeanCopyCtx {
 
-		public Long getApplicationBeanId(ApplicationBean serverBean) {
-			return null;
-			// Long applicationBeanId = getORMHelper().getObjectId(serverBean);
-			// return applicationBeanId;
-
-		}
+		// public Long getApplicationBeanId(ApplicationBean serverBean) {
+		// return null;
+		// }
 
 		public boolean isInverseOwnerRequired() {
 			return true;
@@ -224,9 +229,9 @@ public class ApplicationBeanUtils {
 		}
 	}
 
-	public interface BeanCopyContext {
+	public interface BeanCopyCtx {
 
-		Long getApplicationBeanId(ApplicationBean applicationBean);
+		// Long getApplicationBeanId(ApplicationBean applicationBean);
 
 		boolean isInverseOwnerRequired();
 

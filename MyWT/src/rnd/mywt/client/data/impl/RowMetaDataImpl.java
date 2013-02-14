@@ -13,8 +13,11 @@ public class RowMetaDataImpl implements RowMetaData, Serializable {
 	private ColumnMetaData[] columnMetaDatas;
 
 	private int idColumnIndex;
-
 	private int displayColumnIndex;
+
+	private String moduleName;
+	private String applicationBeanName;
+	private String viewName;
 
 	public RowMetaDataImpl(ColumnMetaData[] columnMetaDatas) {
 		this.columnMetaDatas = columnMetaDatas;
@@ -42,6 +45,33 @@ public class RowMetaDataImpl implements RowMetaData, Serializable {
 
 	public ColumnMetaData[] getColumnMetaDatas() {
 		return this.columnMetaDatas;
+	}
+
+	@Override
+	public String getModuleName() {
+		return moduleName;
+	}
+
+	@Override
+	public String getApplicationBeanName() {
+		return applicationBeanName;
+	}
+
+	@Override
+	public String getViewName() {
+		return viewName;
+	}
+
+	public void setModuleName(String moduleName) {
+		this.moduleName = moduleName;
+	}
+
+	public void setApplicationBeanName(String applicationBeanName) {
+		this.applicationBeanName = applicationBeanName;
+	}
+
+	public void setViewName(String viewName) {
+		this.viewName = viewName;
 	}
 
 }

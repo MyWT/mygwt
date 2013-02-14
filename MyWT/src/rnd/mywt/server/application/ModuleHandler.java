@@ -1,17 +1,22 @@
 package rnd.mywt.server.application;
 
+import java.util.Collection;
+
+import rnd.mywt.client.bean.ApplicationBean;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
 import rnd.op.ObjectLifeCycleSupport;
 import rnd.op.ObjectPersistor;
 
-public interface ModuleHandler extends ObjectLifeCycleSupport {
+public interface ModuleHandler extends ObjectLifeCycleSupport<ApplicationBean> {
 
 	// Callback
 
 	void initModule();
 
 	// Intialization
+
+	void registerApplicationBean(String appBeanName);
 
 	void registerApplicationBean(String appBeanName, Class appBeanType);
 
@@ -28,5 +33,7 @@ public interface ModuleHandler extends ObjectLifeCycleSupport {
 	void handleRequest(ApplicationRequest req, ApplicationResponse resp);
 	
 	ObjectPersistor getObjectPersistor();
+
+	String getModuleName();
 
 }

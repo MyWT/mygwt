@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,15 +26,15 @@ import rnd.mywt.client.data.impl.RowMetaDataImpl;
 import rnd.mywt.client.expression.RowColumnExpression;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
-import rnd.mywt.client.rpc.ApplicationRequest.Method;
 import rnd.mywt.client.rpc.util.ARUtils;
 import rnd.mywt.client.utils.ObjectUtils;
+import rnd.mywt.server.bean.ProxyApplicationBean;
 import rnd.mywt.server.data.SQLViewMetaData;
 import rnd.mywt.server.data.ViewMetaData;
-import rnd.mywt.server.util.ApplicationBeanUtils;
-import rnd.mywt.server.util.ApplicationBeanUtils.BeanCopyContext;
-import rnd.mywt.server.util.ApplicationBeanUtils.ClientBeanCopyContext;
-import rnd.mywt.server.util.ApplicationBeanUtils.ServerBeanCopyContext;
+import rnd.mywt.server.util.AppBeanUtils;
+import rnd.mywt.server.util.AppBeanUtils.BeanCopyCtx;
+import rnd.mywt.server.util.AppBeanUtils.ClientBeanCopyCtx;
+import rnd.mywt.server.util.AppBeanUtils.ServerBeanCopyCtx;
 import rnd.op.ObjectPersistor;
 import rnd.op.rdbms.JDBCObjectPersistor;
 import rnd.utils.WrapperUtils;
@@ -56,6 +57,19 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		moduleHandler.initModule();
 	}
 
+	public ObjectPersistor getObjectPersistor() {
+		return moduleHandler.getObjectPersistor();
+	}
+
+	@Override
+	public String getModuleName() {
+		return moduleHandler.getModuleName();
+	}
+
+	public void registerApplicationBean(String appBeanName) {
+		this.beanTypeMap.put(appBeanName, ProxyApplicationBean.class);
+	}
+
 	public void registerApplicationBean(String appBeanName, Class appBeanType) {
 		this.beanTypeMap.put(appBeanName, appBeanType);
 	}
@@ -63,6 +77,11 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	public void registerApplicationBean(String appBeanName, Class appBeanType, ApplicationBeanHandler applicationBeanHandler) {
 		registerApplicationBean(appBeanName, appBeanType);
 		this.beanHandlerMap.put(appBeanName, applicationBeanHandler);
+	}
+
+	@Override
+	public Collection<ApplicationBeanHandler> getApplicationBeanHandlers() {
+		return this.beanHandlerMap.values();
 	}
 
 	public ApplicationBeanHandler getApplicationBeanHandler(String appBeanName) {
@@ -83,52 +102,58 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	@Override
 	public void handleRequest(ApplicationRequest req, ApplicationResponse resp) {
 
-		Method method = req.getMethod();
-		// D.println("method", method);
+		switch (req.getMethod()) {
 
-		// Save Object
-		if (method == Method.Save) {
-
-			ApplicationBean savedObject = saveObject(ARUtils.getApplicationBean(req));
-			Long savedObjectId = savedObject.getApplicationBeanId();
-			DataTable dataTable = fetchDataTable(ARUtils.getAppBeanName(req), ARUtils.getViewName(req), ARUtils.getFilter(req), Collections.singleton(savedObjectId));
-
-			if (dataTable.getRowCount() == 0) {
-				resp.setThrowable(new IllegalStateException("Row not found for saved object"));
-			} else {
-				resp.setResult((Serializable) dataTable.getRow(0));
+		case Save: {
+			DataTable dataTable = saveOrUpateObject(req);
+			if (dataTable != null) {
+				if (dataTable.getRowCount() == 0) {
+					resp.setThrowable(new IllegalStateException("Row not found for saved object"));
+				} else {
+					resp.setResult((Serializable) dataTable.getRow(0));
+				}
 			}
 			return;
 		}
-		// Find Object
-		else if (method == Method.Find) {
-			resp.setResult((Serializable) findObject(ARUtils.getAppBeanPKId(req), getApplicationBeanType(ARUtils.getAppBeanName(req))));
+		case Find: {
+			Serializable savedObject = (Serializable) findObject(ARUtils.getAppBeanPKId(req), getApplicationBeanType(ARUtils.getAppBeanName(req)));
+			resp.setResult(savedObject);
 			return;
 		}
-		// Fetch Data Table
-		else if (method == Method.Fetch) {
-			 DataTable dataTable = fetchDataTable(ARUtils.getAppBeanName(req), ARUtils.getViewName(req), ARUtils.getFilter(req), null);
-			 resp.setResult((Serializable) dataTable);
+		case Fetch: {
+			DataTable dataTable = fetchDataTable(ARUtils.getAppBeanName(req), ARUtils.getViewName(req), ARUtils.getFilter(req), null);
+			resp.setResult((Serializable) dataTable);
 			return;
 		}
-		// Delete Object
-		else if (method == Method.Delete) {
+		case Delete: {
 			deleteObject(ARUtils.getAppBeanPKId(req), getApplicationBeanType(ARUtils.getAppBeanName(req)));
 			return;
 		}
-		// Unknown Operation
-		else {
-			throw new UnsupportedOperationException(method.toString());
+		default: {
+			throw new UnsupportedOperationException(req.getMethod().toString());
 		}
-		// }
-		// finally {
-		// Debugger.D.pop("rnd.webapp.mwt.server.application.AbstractModuleHandler.executeRequest");
-		// }
+
+		}
+	}
+
+	private DataTable saveOrUpateObject(ApplicationRequest req) {
+
+		ApplicationBean applicationBean = ARUtils.getApplicationBean(req);
+		Long id = applicationBean.getApplicationBeanId();
+
+		if (id == null) {
+			saveObject(applicationBean);
+		} else {
+			updateObject(id, applicationBean);
+			DataTable dataTable = fetchDataTable(ARUtils.getAppBeanName(req), ARUtils.getViewName(req), ARUtils.getFilter(req), Collections.singleton(id));
+			return dataTable;
+		}
+		return null;
+
 	}
 
 	public void deleteObject(Object id, Class objType) {
-//	private void deleteObject(Long appBeanPKId, Class applicationBeanType) {
-		// getORMHelper().deleteObject(appBeanPKId, applicationBeanType);
+		getObjectPersistor().deleteObject(id, objType);
 	}
 
 	private DataTable fetchDataTable(String appBeanName, String viewName, FilterInfo filterInfo, Set<Long> ids) {
@@ -149,12 +174,12 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 			String viewQuery = sqlvmd.getViewQuery();
 			// D.println("viewQuery", viewQuery);
 
-//			Object[] params = null;
+			// Object[] params = null;
 			boolean filtered = false;
 
 			if (filterInfo != null) {
 				viewQuery = new StringBuffer(viewQuery).append(" where ").append(sqlvmd.getFilterExpression(filterInfo.getFilterName())).toString();
-//				params = filterInfo.getFilterParams().toArray();
+				// params = filterInfo.getFilterParams().toArray();
 				filtered = true;
 				// D.println("viewQuery", viewQuery);
 			}
@@ -170,18 +195,22 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 				// D.println("viewQuery", viewQuery);
 			}
 
-			JDBCDataAccessObject jdbcDAO = new JDBCDataAccessObject();
-			JDBCObjectPersistor jdbcOP = (JDBCObjectPersistor) getObjectPersistor(); 
-			
+			JDBCObjectPersistor jdbcOP = (JDBCObjectPersistor) getObjectPersistor();
+			JDBCDataAccessObject jdbcDAO = jdbcOP.getDataAccessObject();
+
 			Object[] result = (Object[]) jdbcDAO.executeQuery(viewQuery, null, JDBCDataAccessObject.ListArrayResultSetProcessor, cmdCreator, jdbcOP.getConnection(), true);
-//			 D.println("result", result);
-			
+			// D.println("result", result);
+
 			ColumnMetaData[] cmds = (ColumnMetaData[]) result[0];
 			List<Object[]> columnsList = (List) result[1];
 
 			// D.println("columnMetaDatas", columnMetaDatas);
 
 			RowMetaDataImpl rmd = new RowMetaDataImpl(cmds);
+
+			rmd.setModuleName(getModuleName());
+			rmd.setApplicationBeanName(appBeanName);
+			rmd.setViewName(viewName);
 
 			rmd.setIdColumnIndex(sqlvmd.getIdColumnIndex());
 			rmd.setDisplayColumnIndex(sqlvmd.getDisplayColumnIndex());
@@ -223,7 +252,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	}
 
 	private static final ColumnMetaDataCreator cmdCreator = new ColumnMetaDataCreator();
-	
+
 	public static class ColumnMetaDataCreator implements ResultSetMetaDataProcessor {
 
 		public ColumnMetaData[] processResultSetMetaData(ResultSetMetaData rs) throws SQLException {
@@ -242,7 +271,8 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 
 				columnMetaDatas[i - 1] = columnMetaData;
 
-				// D.println("columnMetaData[" + i + "]", columnMetaDatas[i - 1]);
+				// D.println("columnMetaData[" + i + "]", columnMetaDatas[i -
+				// 1]);
 			}
 
 			// D.println("columnMetaDatas", columnMetaDatas);
@@ -250,55 +280,37 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		}
 	}
 
-	// private Connection getConnection() {
-	// return null;
-	// // return getORMHelper().getConnection();
-	// }
+	public ApplicationBean findObject(Object id, Class<ApplicationBean> objType) {
 
-	public <T> T findObject(Object id, Class<T> objType) {
-//	public _Bean findObject(Object id, Class beanType) {
-		// ApplicationBean serverBean = (ApplicationBean) getORMHelper().findObject(id, beanType);
-		// serverBean.setApplicationBeanId((Long) id);
-		// D.println("serverBean", serverBean);
+		ApplicationBean serverBean = (ApplicationBean) getObjectPersistor().findObject(id, objType);
+		serverBean.setApplicationBeanId((Long) id);
 
-		ApplicationBean clientBean = ApplicationBeanUtils.getNewClientBean(objType);
+		ApplicationBean clientBean = AppBeanUtils.getNewClientBean(objType);
+		AppBeanUtils.copyBean(serverBean, clientBean, this.serverCopyBeanCtx, this.clientBeanCopyCtx, new HashMap<ApplicationBean, ApplicationBean>());
 
-		// copy(serverBean, clientBean, this.serverCopyBeanHelper, this.clientBeanCopyHelper, new
-		// HashMap<ApplicationBean, ApplicationBean>());
-		// D.println("clientBean", clientBean);
-
-		return (T) clientBean;
+		return clientBean;
 	}
 
-	private BeanCopyContext serverCopyBeanHelper = new ServerBeanCopyContext();
+	private BeanCopyCtx serverCopyBeanCtx = new ServerBeanCopyCtx();
 
-	private BeanCopyContext clientBeanCopyHelper = new ClientBeanCopyContext();
-
+	private BeanCopyCtx clientBeanCopyCtx = new ClientBeanCopyCtx();
 
 	@Override
-	public <T> T saveObject(T object) {
-//	public ApplicationBean saveObject(ApplicationBean clientBean) {
-		
-		ApplicationBean clientBean = (ApplicationBean) object;
+	public ApplicationBean saveObject(ApplicationBean clientBean) {
 
-		Long appBeanId = clientBean.getApplicationBeanId();
-		ApplicationBean serverBean = null;
+		ApplicationBean serverBean = AppBeanUtils.getNewApplicationBean(AppBeanUtils.getServerBeanType(clientBean.getClass()));
+		AppBeanUtils.copyBean(clientBean, serverBean, clientBeanCopyCtx, serverCopyBeanCtx, new HashMap<ApplicationBean, ApplicationBean>());
 
-		if (appBeanId == null) {
-			serverBean = ApplicationBeanUtils.getNewApplicationBean(ApplicationBeanUtils.getServerBeanType(clientBean.getClass()));
-		} else {
-			serverBean = (ApplicationBean) getObjectPersistor().findObject(appBeanId, ApplicationBeanUtils.getServerBeanType(clientBean.getClass()));
-		}
-
-		ApplicationBeanUtils.copyBean(clientBean, serverBean, clientBeanCopyHelper, serverCopyBeanHelper, new HashMap<ApplicationBean, ApplicationBean>());
-
-		return (T) getObjectPersistor().saveObject(serverBean);
+		return (ApplicationBean) getObjectPersistor().saveObject(serverBean);
 
 	}
 
-	public ObjectPersistor getObjectPersistor() {
-		return moduleHandler.getObjectPersistor();
+	public ApplicationBean updateObject(Object id, ApplicationBean clientBean) {
+
+		ApplicationBean serverBean = (ApplicationBean) getObjectPersistor().findObject(clientBean.getApplicationBeanId(), AppBeanUtils.getServerBeanType(clientBean.getClass()));
+		AppBeanUtils.copyBean(clientBean, serverBean, clientBeanCopyCtx, serverCopyBeanCtx, new HashMap<ApplicationBean, ApplicationBean>());
+
+		return (ApplicationBean) getObjectPersistor().updateObject(serverBean.getApplicationBeanId(), serverBean);
 	}
 
-	
 }

@@ -19,7 +19,7 @@ public class DefaultApplicationBeanHandler extends AbstractABHandler {
 	public ViewMetaData getViewMetaData(String viewName) {
 
 		SQLViewMetaDataImpl vmd = new SQLViewMetaDataImpl();
-		vmd.setViewQuery("Select * From " + viewName);
+		vmd.setViewQuery("Select * From [" + viewName + "]");
 		vmd.setViewName(viewName);
 
 		return vmd;

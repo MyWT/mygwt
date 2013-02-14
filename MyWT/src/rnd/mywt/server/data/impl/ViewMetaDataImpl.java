@@ -10,15 +10,12 @@ public class ViewMetaDataImpl implements ViewMetaData {
 	private String viewName;
 
 	private String[] viewColumnsNames;
-
 	private String[] viewColumnsExpressions;
 
 	private int idColumnIndex;
-
 	private String idColumnName;
 
 	private int displayColumnIndex;
-
 	private String displayColumnName;
 
 	private Map<String, String> filterMap;
@@ -29,14 +26,6 @@ public class ViewMetaDataImpl implements ViewMetaData {
 
 	public int getIdColumnIndex() {
 		return this.idColumnIndex;
-	}
-
-	public String getViewName() {
-		return this.viewName;
-	}
-
-	public void setViewName(String viewName) {
-		this.viewName = viewName;
 	}
 
 	public int getDisplayColumnIndex() {
@@ -95,6 +84,15 @@ public class ViewMetaDataImpl implements ViewMetaData {
 
 	public void setViewColumnsExpressions(String[] viewColumnsExpressions) {
 		this.viewColumnsExpressions = viewColumnsExpressions;
+	}
+
+	@Override
+	public String getViewName() {
+		return viewName;
+	}
+
+	public void setViewName(String viewName) {
+		this.viewName = viewName;
 	}
 
 }

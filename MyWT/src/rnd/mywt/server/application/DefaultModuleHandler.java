@@ -2,12 +2,8 @@ package rnd.mywt.server.application;
 
 public class DefaultModuleHandler extends AbstractModuleHandler {
 
-	private static class DefaultModuleHandlerHolder {
-		private static DefaultModuleHandler sharedInstace = new DefaultModuleHandler();
-	}
-
-	public static ModuleHandler getSharedInstance() {
-		return DefaultModuleHandlerHolder.sharedInstace;
+	public DefaultModuleHandler(String moduleName) {
+		setModuleName(moduleName);
 	}
 
 	@Override
@@ -18,6 +14,10 @@ public class DefaultModuleHandler extends AbstractModuleHandler {
 	@Override
 	public void initModule() {
 		// Default Module
+	}
+
+	public static ModuleHandler getInstance(String moduleName) {
+		return new DefaultModuleHandler(moduleName);
 	}
 
 }

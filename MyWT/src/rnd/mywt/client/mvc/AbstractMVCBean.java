@@ -40,7 +40,7 @@ public class AbstractMVCBean extends BoundBean implements MVCBean {
 
 	@Override
 	public Object setValue(String propertyName, Object newValue) {
-		if (newValue instanceof MVC) { throw new IllegalArgumentException("You cannot set a MVC as a Property"); }
+		// if (newValue instanceof MVC) { throw new IllegalArgumentException("You cannot set a MVC as a Property"); }
 		return super.setValue(propertyName, newValue);
 	}
 

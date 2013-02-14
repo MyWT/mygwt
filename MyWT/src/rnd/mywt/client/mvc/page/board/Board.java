@@ -10,8 +10,6 @@ public interface Board extends MVCBean {
 
 	BoardType getBoardType();
 
-	ActionBase getActionBase();
-
 	String MODULE_NAME = "moduleName";
 
 	String getModuleName();
@@ -19,9 +17,5 @@ public interface Board extends MVCBean {
 	String APPLICATION_BEAN_NAME = "appBeanName";
 
 	String getApplicationBeanName();
-
-	String VIEW_NAME = "viewName";
-
-	String getViewName();
 
 }

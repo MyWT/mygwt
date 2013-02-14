@@ -7,29 +7,26 @@ import rnd.mywt.client.rpc.ApplicationResponse;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public abstract class ARBAsyncCallback implements AsyncCallback {
+public class ARBAsyncCallback implements AsyncCallback<ApplicationResponse> {
+
+	@Override
+	public void onSuccess(ApplicationResponse resp) {
+		Throwable throwable = resp.getThrowable();
+		if (throwable != null) {
+			onFailure(throwable);
+			// throw new RuntimeException(throwable);
+		} else {
+			onSuccess(resp.getResult());
+		}
+	}
 
 	public void onFailure(Throwable caught) {
 		caught.printStackTrace();
 		Window.alert(caught.getMessage());
 	}
 
-	@Override
-	public void onSuccess(Object result) {
-		onSuccess(getSerializableResult(result));
-	}
-
-	public abstract void onSuccess(Serializable result);
-
-	public Serializable getSerializableResult(Object result) {
-		ApplicationResponse resp = (ApplicationResponse) result;
-		Throwable throwable = resp.getThrowable();
-		if (throwable != null) {
-			onFailure(throwable);
-			throw new RuntimeException(throwable);
-		} else {
-			return resp.getResult();
-		}
+	public void onSuccess(Serializable result) {
+		// To be overrided by Requesters
 	}
 
 }

@@ -2,10 +2,15 @@ package rnd.mywt.client.mvc.page.board;
 
 import rnd.mywt.client.mvc.page.form.Form;
 
-
 public interface FormBoard extends Board {
 
+	ActionBase getActionBase();
+
 	Form getForm();
+
+	void setDataBoard(DataBoard dataBoard);
+
+	DataBoard getDataBoard();
 
 	String APPLICATION_BEAN_ID = "applicationBeanId";
 
@@ -13,8 +18,7 @@ public interface FormBoard extends Board {
 
 	Long getApplicationBeanId();
 
-	void setViewName(String viewName);
-
 	public interface FormBoardView extends View {
 	}
+
 }

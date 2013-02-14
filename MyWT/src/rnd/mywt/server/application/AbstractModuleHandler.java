@@ -1,5 +1,8 @@
 package rnd.mywt.server.application;
 
+import java.util.Collection;
+
+import rnd.mywt.client.bean.ApplicationBean;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
 import rnd.op.ObjectPersistor;
@@ -7,8 +10,10 @@ import rnd.op.jpersis.JPObjectPersistor;
 
 public abstract class AbstractModuleHandler implements ModuleHandler {
 
+	private String moduleName;
+
 	private ObjectPersistor op;
-	private ModuleHandlerDelegate delegate = new ModuleHandlerDelegate(this);
+	private final ModuleHandlerDelegate delegate = new ModuleHandlerDelegate(this);
 
 	public AbstractModuleHandler() {
 		op = new JPObjectPersistor();
@@ -28,6 +33,11 @@ public abstract class AbstractModuleHandler implements ModuleHandler {
 	@Override
 	public Class getApplicationBeanType(String appBeanName) {
 		return delegate.getApplicationBeanType(appBeanName);
+	}
+
+	@Override
+	public void registerApplicationBean(String appBeanName) {
+		delegate.registerApplicationBean(appBeanName);
 	}
 
 	@Override
@@ -51,13 +61,25 @@ public abstract class AbstractModuleHandler implements ModuleHandler {
 	}
 
 	@Override
-	public <T> T findObject(Object id, Class<T> objType) {
+	public ApplicationBean findObject(Object id, Class<ApplicationBean> objType) {
 		return delegate.findObject(id, objType);
 	}
 
 	@Override
-	public <T> T saveObject(T object) {
+	public ApplicationBean saveObject(ApplicationBean object) {
 		return delegate.saveObject(object);
+	}
+
+	public ApplicationBean updateObject(Object id, ApplicationBean object) {
+		return delegate.saveObject(object);
+	}
+
+	public void setModuleName(String moduleName) {
+		this.moduleName = moduleName;
+	}
+
+	public String getModuleName() {
+		return moduleName;
 	}
 
 }

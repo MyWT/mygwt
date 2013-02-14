@@ -7,9 +7,17 @@ import rnd.mywt.client.mvc.field.data.ReferenceField;
 
 public interface DataBoard extends Board {
 
-	Table getDataTable();
+	String VIEW_NAME = "viewName";
 
-	void refreshDataTable();
+	String getViewName();
+
+	// Table Operation
+
+	Table getTable();
+
+	void refreshTable();
+
+	// Row Operation
 
 	void addRow(Row newRow);
 
@@ -17,15 +25,21 @@ public interface DataBoard extends Board {
 
 	void updateCurrentRow(Row updatedRow);
 
-	void setReferenceField(ReferenceField referenceField);
+	// Referenced Data Board
 
 	ReferenceField getReferenceField();
+
+	void setReferenceField(ReferenceField referenceField);
+
+	// Filter Operation
 
 	String FILTER = "filter";
 
 	FilterInfo getFilter();
 
 	void setFilter(FilterInfo filterInfo);
+
+	// Model
 
 	public interface DataBoardModel extends Model {
 
@@ -49,6 +63,8 @@ public interface DataBoard extends Board {
 
 	}
 
+	// View
+	
 	public interface DataBoardView extends View {
 	}
 

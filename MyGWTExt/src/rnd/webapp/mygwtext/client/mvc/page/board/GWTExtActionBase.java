@@ -5,6 +5,7 @@ import java.util.List;
 import rnd.mywt.client.mvc.page.board.ActionBase;
 import rnd.mywt.client.mvc.page.board.ActionBoard;
 import rnd.mywt.client.mvc.page.board.Board;
+import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.mvc.page.board.Board.BoardType;
 import rnd.webapp.mygwtext.client.mvc.page.GWTExtPage;
 
@@ -70,7 +71,9 @@ public class GWTExtActionBase extends GWTExtPage implements ActionBase {
 	}
 
 	public void setCurrentBoard(Board board) {
-		if (this.currentBoard == board) { return; }
+		if (this.currentBoard == board) {
+			return;
+		}
 		this.currentBoard = board;
 		activateView(board.getView());
 	}
@@ -111,8 +114,24 @@ public class GWTExtActionBase extends GWTExtPage implements ActionBase {
 
 	public Board getBoard(String moduleName, String appBeanName, String viewName, BoardType boardType) {
 		List<Board> boards = getListValue(BOARD);
-		for (Board board : boards) {
-			if (board.getModuleName().equals(moduleName) && board.getApplicationBeanName().equals(appBeanName) && board.getViewName().equals(viewName) && board.getBoardType() == boardType) { return board; }
+		switch (boardType) {
+		case FORM_BOARD:
+			for (Board board : boards) {
+				if (board.getBoardType() == BoardType.FORM_BOARD && //
+						board.getModuleName().equals(moduleName) && //
+						board.getApplicationBeanName().equals(appBeanName)) {
+					return board;
+				}
+			}
+		case DATA_BOARD:
+			for (Board board : boards) {
+				if (board.getBoardType() == BoardType.DATA_BOARD && //
+						board.getModuleName().equals(moduleName) && //
+						board.getApplicationBeanName().equals(appBeanName) && //
+						((DataBoard) board).getViewName().equals(viewName)) {
+					return board;
+				}
+			}
 		}
 		return null;
 	}

@@ -1,17 +1,19 @@
 package rnd.webapp.mygwtext.client.mvc.page.board;
 
 import java.io.Serializable;
+import java.util.List;
 
 import rnd.expression.Expression;
 import rnd.expression.XChangeEvent;
 import rnd.expression.XChangeListener;
-import rnd.mywt.client.Logger;
 import rnd.mywt.client.bean.ValueChangeEvent;
 import rnd.mywt.client.bean.ValueChangeListenerAdapter;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
 import rnd.mywt.client.data.FilterInfo;
 import rnd.mywt.client.data.Row;
+import rnd.mywt.client.data.RowCacheImpl;
+import rnd.mywt.client.data.RowMetaData;
 import rnd.mywt.client.mvc.MVCHandlerFactory;
 import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.mvc.field.Table.RowTableModel;
@@ -26,12 +28,13 @@ import com.gwtext.client.widgets.Panel;
 
 public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 
-	private Table dataBoardTable;
+	private Table table;
 
 	private ReferenceField referenceField;
 
 	public GWTExtDataBoard(String moduleName, String appBeanName, String viewName) {
-		super(moduleName, appBeanName, viewName);
+		super(moduleName, appBeanName);
+		setValue(VIEW_NAME, viewName);
 		setModel(new GWTExtDataBoardModel());
 		setView(new GWTExtDataBoardView());
 	}
@@ -48,24 +51,24 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 		this.referenceField = referenceField;
 	}
 
-	public Table getDataTable() {
-		if (this.dataBoardTable == null) {
-			this.dataBoardTable = createTable();
+	public Table getTable() {
+		if (this.table == null) {
+			this.table = createTable();
 		}
-		return this.dataBoardTable;
+		return this.table;
 	}
 
-	public void refreshDataTable() {
+	public void refreshTable() {
 		if (((DataBoardModel) getModel()).isDataTableMetaDataIntialized()) {
 			fetchDataTable(false);
 		}
 	}
 
 	private Table createTable() {
-		Table newDataTable = MVCHandlerFactory.getMVCHandler().createTable(Table.ROW_BASED);
-		newDataTable.setParent(this);
+		Table newTable = MVCHandlerFactory.getMVCHandler().createTable(Table.ROW_BASED);
+		newTable.setParent(this);
 		fetchDataTable(true);
-		return newDataTable;
+		return newTable;
 	}
 
 	private void fetchDataTable(final boolean refreshMetaData) {
@@ -93,12 +96,21 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 					if (refreshMetaData) {
 						((DataBoardModel) getModel()).setDataTableMetaDataIntialized(false);
 						ColumnMetaData[] columnMetaData = dataTable.getRowMetaData().getColumnMetaDatas();
-						dataBoardTable.setColumnMetaDatas(columnMetaData);
+						table.setColumnMetaDatas(columnMetaData);
 						((DataBoardModel) getModel()).setDataTableMetaDataIntialized(true);
 					}
 
-					((Table.RowTableModel) dataBoardTable.getModel()).setDataTable(dataTable);
+					((Table.RowTableModel) table.getModel()).setDataTable(dataTable);
 					((DataBoardModel) getModel()).setDataTableIntialized(true);
+
+					List<Row> rows = dataTable.getRows();
+					if (rows.size() > 0) {
+						RowMetaData rmd = rows.get(0).getRowMetaData();
+						for (Row row : rows) {
+							RowCacheImpl.get().addRow(rmd.getModuleName(), rmd.getApplicationBeanName(), rmd.getViewName(), row);
+						}
+					}
+
 				} catch (RuntimeException e) {
 					e.printStackTrace();
 					throw e;
@@ -110,17 +122,17 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 	}
 
 	public void addRow(Row newRow) {
-		((RowTableModel) getDataTable().getModel()).addRow(newRow);
+		((RowTableModel) getTable().getModel()).addRow(newRow);
 	}
 
 	public void removeCurrentRow() {
-		((RowTableModel) getDataTable().getModel()).removeCurrentRow();
+		((RowTableModel) getTable().getModel()).removeCurrentRow();
 	}
 
 	public void updateCurrentRow(Row updatedRow) {
-		Logger.startMethod("GWTExtDataBoard", "updateCurrentRow");
-		((RowTableModel) getDataTable().getModel()).updateCurrentRow(updatedRow);
-		Logger.endMethod("GWTExtDataBoard", "updateCurrentRow");
+		// Logger.startMethod("GWTExtDataBoard", "updateCurrentRow");
+		((RowTableModel) getTable().getModel()).updateCurrentRow(updatedRow);
+		// Logger.endMethod("GWTExtDataBoard", "updateCurrentRow");
 	}
 
 	public FilterInfo getFilter() {
@@ -134,13 +146,18 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 		// Logger.endMethod("GWTExtDataBoard", "setFilter");
 	}
 
+	@Override
+	public String getViewName() {
+		return (String) getValue(VIEW_NAME);
+	}
+
 	public class GWTExtDataBoardModel implements DataBoardModel {
 
 		private DataBoardRefresher dataBoardRefresher = new DataBoardRefresher();
 
 		private class DataBoardRefresher implements XChangeListener {
 			public void stateChanged(XChangeEvent changeEvent) {
-				refreshDataTable();
+				refreshTable();
 			}
 		}
 
@@ -174,7 +191,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 				public void valueChanged(ValueChangeEvent<Boolean> vce) {
 					if (isDataTableMetaDataIntialized()) {
 						if (isFilterReset()) {
-							refreshDataTable();
+							refreshTable();
 							setFilterReset(false);
 						}
 					}
@@ -200,7 +217,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 
 				public void valueChanged(ValueChangeEvent<FilterInfo> vce) {
 					setFilterReset(true);
-					refreshDataTable();
+					refreshTable();
 
 					FilterInfo oldFilterInfo = vce.getOldValue();
 					if (oldFilterInfo != null) {
@@ -235,7 +252,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 	public class GWTExtDataBoardView implements DataBoardView {
 
 		public Object getViewObject() {
-			Panel boardPanel = (Panel) getDataTable().getView().getViewObject();
+			Panel boardPanel = (Panel) getTable().getView().getViewObject();
 			boardPanel.setTitle(getViewName());
 			return boardPanel;
 		}

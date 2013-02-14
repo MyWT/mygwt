@@ -18,6 +18,6 @@ public class DefaultApplicationHandler extends AbstractApplicationHandler {
 
 	@Override
 	public ModuleHandler getModuleHandler(String moduleName) {
-		return DefaultModuleHandler.getSharedInstance();
+		return new DefaultModuleHandler(moduleName);
 	}
 }

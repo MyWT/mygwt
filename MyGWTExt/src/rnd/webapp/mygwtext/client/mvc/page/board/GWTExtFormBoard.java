@@ -8,6 +8,8 @@ import rnd.mywt.client.application.ModuleHelper;
 import rnd.mywt.client.bean.ApplicationBean;
 import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.RowCacheImpl;
+import rnd.mywt.client.mvc.page.board.ActionBase;
+import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.mvc.page.board.FormBoard;
 import rnd.mywt.client.mvc.page.form.Form;
 import rnd.mywt.client.mvc.page.form.Form.FormModel;
@@ -21,14 +23,11 @@ import com.gwtext.client.widgets.Panel;
 public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 
 	private Form form;
+	private DataBoard dataBoard;
 
 	public GWTExtFormBoard(String moduleName, String appBeanName) {
-		super(moduleName, appBeanName, null);
+		super(moduleName, appBeanName);
 		setView(new GWTExtFormBoardView());
-	}
-
-	public void setViewName(String viewName) {
-		setValue(VIEW_NAME, viewName);
 	}
 
 	public Form getForm() {
@@ -36,6 +35,15 @@ public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 			this.form = createForm();
 		}
 		return this.form;
+	}
+
+	@Override
+	public DataBoard getDataBoard() {
+		return dataBoard;
+	}
+
+	public void setDataBoard(DataBoard dataBoard) {
+		this.dataBoard = dataBoard;
 	}
 
 	public BoardType getBoardType() {
@@ -88,12 +96,17 @@ public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 			if (applicationBeanId == null) {
 				formPanel.setTitle("New " + getApplicationBeanName());
 			} else {
-				Row row = RowCacheImpl.get().getRow(getModuleName(), getApplicationBeanName(), getViewName(), applicationBeanId);
+				Row row = RowCacheImpl.get().getRow(getModuleName(), getApplicationBeanName(), getDataBoard().getViewName(), applicationBeanId);
 				formPanel.setTitle(getApplicationBeanName() + " ( " + row.getDisplayName() + " )");
 			}
 			return formPanel;
 		}
 
+	}
+
+	@Override
+	public ActionBase getActionBase() {
+		return (ActionBase) getParent();
 	}
 
 }
