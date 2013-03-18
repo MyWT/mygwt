@@ -7,7 +7,7 @@ import java.util.Map;
 public class ApplicationRequest implements Serializable {
 
 	public static enum Method {
-		Create, Save, Fetch, Find, Delete
+		Init, Save, Fetch, Find, Delete, Load, Destroy
 	}
 
 	private String moduleName;

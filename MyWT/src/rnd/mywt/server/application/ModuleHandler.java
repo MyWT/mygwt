@@ -14,11 +14,11 @@ public interface ModuleHandler extends ObjectLifeCycleSupport<ApplicationBean> {
 
 	// Intialization
 
-	void registerApplicationBean(String appBeanName);
+	//void registerApplicationBean(String appBeanName);
 
-	void registerApplicationBean(String appBeanName, Class appBeanType);
+	void registerApplicationBean(String appBeanName, Class<? extends ApplicationBean> appBeanType);
 
-	void registerApplicationBean(String appBeanName, Class appBeanType, ApplicationBeanHandler applicationBeanHandler);
+	void registerApplicationBean(String appBeanName, Class<? extends ApplicationBean> appBeanType, ApplicationBeanHandler applicationBeanHandler);
 
 	// Helper
 

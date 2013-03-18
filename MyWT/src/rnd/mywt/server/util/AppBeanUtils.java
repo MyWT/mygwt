@@ -13,8 +13,7 @@ import rnd.mywt.client.utils.ExceptionUtils;
 
 public class AppBeanUtils {
 
-	public static void copyBean(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx,
-			Map<ApplicationBean, ApplicationBean> copyMap) {
+	public static void copyBean(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx, Map<ApplicationBean, ApplicationBean> copyMap) {
 		// if
 		// (Debugger.D.pushCheck("rnd.webapp.mwt.server.application.AbstractModuleHandler.copy"))
 		// {
@@ -67,8 +66,8 @@ public class AppBeanUtils {
 				}
 				value = targetValue;
 			}
-
-			targetBean.setValue(propertyName, value);
+			if (!propertyName.equals("ClassName"))
+				targetBean.setValue(propertyName, value);
 		}
 
 		// Copy indexed properties
@@ -165,14 +164,18 @@ public class AppBeanUtils {
 
 		String srcBeanTypeName = srcBeanType.getName();
 
-		final String trgtClassName = srcBeanTypeName.substring(0, srcBeanTypeName.lastIndexOf('.') - srcType.length()) + trgtType + srcBeanTypeName.substring(srcBeanTypeName.lastIndexOf('.'));
+		int srcTypeIndex = srcBeanTypeName.lastIndexOf(srcType);
+		final String className = srcBeanTypeName.substring(0, srcTypeIndex) + trgtType + srcBeanTypeName.substring(srcTypeIndex + srcType.length());
 
+		return loadClass(className);
+	}
+
+	public static Class loadClass(final String className) {
 		final Class targetClass = (Class) ExceptionUtils.executeUnchecked(new Block() {
 			public Object execute() throws Throwable {
-				return Class.forName(trgtClassName);
+				return Class.forName(className);
 			}
 		});
-
 		return targetClass;
 	}
 

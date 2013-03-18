@@ -2,7 +2,7 @@ package rnd.mywt.server.bean;
 
 import java.lang.reflect.Method;
 
-public class BeanUtils {
+public class JavaBeanUtils {
 
 	public static Object getValue(Object bean, String propertyName) {
 		try {

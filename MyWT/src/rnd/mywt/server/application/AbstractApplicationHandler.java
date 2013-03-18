@@ -14,7 +14,7 @@ public abstract class AbstractApplicationHandler implements ApplicationHandler {
 	protected abstract void initialiseApplication();
 
 	public void registerModule(String moduleName, ModuleHandler moduleHandler) {
-		moduleHandlerMap.put(moduleName, moduleHandler);
+		moduleHandlerMap.put(moduleHandler.getModuleName(), moduleHandler);
 	}
 
 	public ModuleHandler getModuleHandler(String moduleName) {

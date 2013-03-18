@@ -28,11 +28,11 @@ public class JavaBean extends AbstractBean {
 	}
 
 	protected Object getValue0(String propertyName) {
-		return BeanUtils.getValue(this, propertyName);
+		return JavaBeanUtils.getValue(this, propertyName);
 	}
 
 	protected Object setValue0(String propertyName, Object value) {
-		return BeanUtils.setValue(this, propertyName, value);
+		return JavaBeanUtils.setValue(this, propertyName, value);
 	}
 
 	@Override

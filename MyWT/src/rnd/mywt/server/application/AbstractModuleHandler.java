@@ -1,5 +1,7 @@
 package rnd.mywt.server.application;
 
+import java.util.Collection;
+
 import rnd.mywt.client.bean.ApplicationBean;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
@@ -33,18 +35,18 @@ public abstract class AbstractModuleHandler implements ModuleHandler {
 		return delegate.getApplicationBeanType(appBeanName);
 	}
 
-	@Override
-	public void registerApplicationBean(String appBeanName) {
-		delegate.registerApplicationBean(appBeanName);
-	}
+	// @Override
+	// public void registerApplicationBean(String appBeanName) {
+	// delegate.registerApplicationBean(appBeanName);
+	// }
 
 	@Override
-	public void registerApplicationBean(String appBeanName, Class appBeanType) {
+	public void registerApplicationBean(String appBeanName, Class<? extends ApplicationBean> appBeanType) {
 		delegate.registerApplicationBean(appBeanName, appBeanType);
 	}
 
 	@Override
-	public void registerApplicationBean(String appBeanName, Class appBeanType, ApplicationBeanHandler applicationBeanHandler) {
+	public void registerApplicationBean(String appBeanName, Class<? extends ApplicationBean> appBeanType, ApplicationBeanHandler applicationBeanHandler) {
 		delegate.registerApplicationBean(appBeanName, appBeanType, applicationBeanHandler);
 	}
 
@@ -61,6 +63,11 @@ public abstract class AbstractModuleHandler implements ModuleHandler {
 	@Override
 	public ApplicationBean findObject(Object id, Class<ApplicationBean> objType) {
 		return delegate.findObject(id, objType);
+	}
+	
+	@Override
+	public Collection<ApplicationBean> findAllObject(Object[] criteria, Object[] params, Class<ApplicationBean> objType) {
+		return delegate.findAllObject(criteria, params, objType);
 	}
 
 	@Override

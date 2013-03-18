@@ -2,7 +2,7 @@ package rnd.webapp.mygwtext.client.mvc.page.board;
 
 import java.io.Serializable;
 
-import rnd.mywt.client.MWTHelper;
+import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.application.FormHelper;
 import rnd.mywt.client.application.ModuleHelper;
 import rnd.mywt.client.bean.ApplicationBean;
@@ -52,7 +52,7 @@ public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 
 	private Form createForm() {
 
-		ModuleHelper moduleHelper = MWTHelper.getApplicationHelper().getModuleHelper(getModuleName());
+		ModuleHelper moduleHelper = MyWTHelper.getApplicationHelper().getModuleHelper(getModuleName());
 		FormHelper formHelper = moduleHelper.getFormHelper(getApplicationBeanName());
 
 		// Create Form

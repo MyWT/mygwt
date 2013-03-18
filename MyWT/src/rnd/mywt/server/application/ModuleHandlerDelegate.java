@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Set;
 import rnd.dao.rdbms.jdbc.JDBCDataAccessObject;
 import rnd.dao.rdbms.jdbc.rsmdp.ResultSetMetaDataProcessor;
 import rnd.mywt.client.bean.ApplicationBean;
+import rnd.mywt.client.bean.ApplicationDynaBean;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
 import rnd.mywt.client.data.FilterInfo;
@@ -27,7 +29,6 @@ import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
 import rnd.mywt.client.rpc.util.ARUtils;
 import rnd.mywt.client.utils.ObjectUtils;
-import rnd.mywt.server.bean.ProxyApplicationBean;
 import rnd.mywt.server.data.SQLViewMetaData;
 import rnd.mywt.server.data.ViewMetaData;
 import rnd.mywt.server.util.AppBeanUtils;
@@ -65,15 +66,17 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		return moduleHandler.getModuleName();
 	}
 
-	public void registerApplicationBean(String appBeanName) {
-		this.beanTypeMap.put(appBeanName, ProxyApplicationBean.class);
-	}
+	// public void registerApplicationBean(String appBeanName) {
+	// this.beanTypeMap.put(appBeanName, ProxyApplicationBean.class);
+	// }
 
-	public void registerApplicationBean(String appBeanName, Class appBeanType) {
+	@Override
+	public void registerApplicationBean(String appBeanName, Class<? extends ApplicationBean> appBeanType) {
 		this.beanTypeMap.put(appBeanName, appBeanType);
 	}
 
-	public void registerApplicationBean(String appBeanName, Class appBeanType, ApplicationBeanHandler applicationBeanHandler) {
+	@Override
+	public void registerApplicationBean(String appBeanName, Class<? extends ApplicationBean> appBeanType, ApplicationBeanHandler applicationBeanHandler) {
 		registerApplicationBean(appBeanName, appBeanType);
 		this.beanHandlerMap.put(appBeanName, applicationBeanHandler);
 	}
@@ -285,6 +288,11 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		return clientBean;
 	}
 
+	@Override
+	public Collection<ApplicationBean> findAllObject(Object[] criteria, Object[] params, Class<ApplicationBean> objType) {
+		return getObjectPersistor().findAllObject(criteria, params, objType);
+	}
+
 	private BeanCopyCtx serverCopyBeanCtx = new ServerBeanCopyCtx();
 
 	private BeanCopyCtx clientBeanCopyCtx = new ClientBeanCopyCtx();
@@ -292,7 +300,14 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	@Override
 	public ApplicationBean saveObject(ApplicationBean clientBean) {
 
-		ApplicationBean serverBean = AppBeanUtils.getNewApplicationBean(AppBeanUtils.getServerBeanType(clientBean.getClass()));
+		Class serverBeanType;
+		if (clientBean instanceof ApplicationDynaBean) {
+			serverBeanType = AppBeanUtils.loadClass(((ApplicationDynaBean) clientBean).getClassName());
+		} else {
+			serverBeanType = AppBeanUtils.getServerBeanType(clientBean.getClass());
+		}
+
+		ApplicationBean serverBean = AppBeanUtils.getNewApplicationBean(serverBeanType);
 		AppBeanUtils.copyBean(clientBean, serverBean, clientBeanCopyCtx, serverCopyBeanCtx, new HashMap<ApplicationBean, ApplicationBean>());
 
 		return (ApplicationBean) getObjectPersistor().saveObject(serverBean);

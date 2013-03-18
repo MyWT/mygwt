@@ -165,11 +165,12 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 		});
 		toolBar.addButton(closeButton);
 
-		// ToolbarButton testButton = new ToolbarButton("Test", new ButtonListenerAdapter() {
+		// ToolbarButton testButton = new ToolbarButton("Test", new
+		// ButtonListenerAdapter() {
 		// @Override
 		// public void onClick(Button button, EventObject e) {
 		// try {
-		//					
+		//
 		// }
 		// catch (Throwable t) {
 		// t.printStackTrace();
@@ -194,9 +195,10 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 
 	private void performSaveAction() {
 
-		FormModel formModel = (FormModel) getCurrentFormBoard().getForm().getModel();
+		final FormBoard formBoard = getCurrentFormBoard();
+		FormModel formModel = (FormModel) formBoard.getForm().getModel();
 
-		ApplicationRequest req = ARUtils.createSaveRequest(getCurrentFormBoard().getModuleName(), getCurrentFormBoard().getApplicationBeanName(), getCurrentFormBoard().getDataBoard().getViewName(), formModel.getApplicationBean());
+		ApplicationRequest req = ARUtils.createSaveRequest(formBoard.getModuleName(), formBoard.getApplicationBeanName(), formBoard.getDataBoard().getViewName(), formModel.getApplicationBean());
 		ARBUtils.getARB().executeRequest(req, new ARBAsyncCallback() {
 
 			@Override
@@ -205,22 +207,24 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 				try {
 					Logger.startMethod("", "onSuccess");
 					Window.alert("Object Saved Successfully");
-					Long applicationBeanId = getCurrentFormBoard().getApplicationBeanId();
+					Long applicationBeanId = formBoard.getApplicationBeanId();
 					Logger.log("applicationBeanId", applicationBeanId);
 
 					Row savedRow = (Row) result;
 					Logger.log("savedRow", savedRow);
 
 					performCloseAction();
-					DataBoard dataBoard = getCurrentDataBoard();
+					DataBoard dataBoard = formBoard.getDataBoard();
 					// (DataBoard)
 					// getActionBoard().getActionBase().getBoard(getCurrentFormBoard().getModuleName(),
-					// getCurrentFormBoard().getApplicationBeanName(), BoardType.DATA_BOARD);
+					// getCurrentFormBoard().getApplicationBeanName(),
+					// BoardType.DATA_BOARD);
 					if (applicationBeanId == null) {
 						dataBoard.addRow(savedRow);
 					} else {
 						dataBoard.updateCurrentRow(savedRow);
 					}
+
 				} catch (RuntimeException e) {
 					e.printStackTrace();
 					throw e;
@@ -254,6 +258,11 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 	}
 
 	private void performDeleteAction(Long appBeanId) {
+
+		boolean sure = Window.confirm("Are you sure to Delete");
+		if (!sure) {
+			return;
+		}
 
 		ApplicationRequest req = ARUtils.createDeleteRequest(getCurrentDataBoard().getModuleName(), getCurrentDataBoard().getApplicationBeanName(), appBeanId);
 		ARBUtils.getARB().executeRequest(req, new ARBAsyncCallback() {

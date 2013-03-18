@@ -6,7 +6,9 @@ import static rnd.webapp.mygwtext.client.tree.NodeUtils.getViewName;
 
 import java.util.Collection;
 
-import rnd.mywt.client.MWTHelper;
+import rnd.mywt.client.MyWTHelper;
+import rnd.mywt.client.application.ApplicationHelper;
+import rnd.mywt.client.application.DefaultApplicationHelper;
 import rnd.mywt.client.application.FormHelper;
 import rnd.mywt.client.application.ModuleHelper;
 import rnd.mywt.client.mvc.MVCHandlerFactory;
@@ -142,7 +144,13 @@ public class GWTExtHomePage extends GWTExtPage implements Page {
 
 		RootNode root = new RootNode();
 
-		Collection<ModuleHelper> moduleHelpers = MWTHelper.getApplicationHelper().getModuleHelpers();
+		ApplicationHelper applicationHelper = MyWTHelper.getApplicationHelper();
+		
+		if(applicationHelper ==null ){
+			applicationHelper = new DefaultApplicationHelper(MyWTHelper.getApplicationName());
+		}
+		
+		Collection<ModuleHelper> moduleHelpers = applicationHelper.getModuleHelpers();
 		// System.out.println("module:" + moduleHelpers.size());
 
 		for (ModuleHelper moduleHelper : moduleHelpers) {
