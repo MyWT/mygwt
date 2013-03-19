@@ -8,8 +8,8 @@ public class Logger {
 	}
 
 	public static void log(String str) {
-		indent();
-		System.err.println(str);
+		// indent();
+		// System.err.println(str);
 	}
 
 	public static void startMethod(String scope, String className, String methodName) {

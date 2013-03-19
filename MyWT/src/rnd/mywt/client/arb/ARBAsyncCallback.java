@@ -1,15 +1,11 @@
-package rnd.webapp.mygwt.client;
+package rnd.mywt.client.arb;
 
 import java.io.Serializable;
 
 import rnd.mywt.client.rpc.ApplicationResponse;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+public class ARBAsyncCallback {
 
-public class ARBAsyncCallback implements AsyncCallback<ApplicationResponse> {
-
-	@Override
 	public void onSuccess(ApplicationResponse resp) {
 		Throwable throwable = resp.getThrowable();
 		if (throwable != null) {
@@ -22,7 +18,7 @@ public class ARBAsyncCallback implements AsyncCallback<ApplicationResponse> {
 
 	public void onFailure(Throwable caught) {
 		caught.printStackTrace();
-		Window.alert(caught.getMessage());
+		//Window.alert(caught.getMessage());
 	}
 
 	public void onSuccess(Serializable result) {

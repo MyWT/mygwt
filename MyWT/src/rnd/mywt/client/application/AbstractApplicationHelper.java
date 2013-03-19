@@ -9,9 +9,11 @@ import rnd.mywt.client.application.ModuleHelper;
 
 public abstract class AbstractApplicationHelper implements ApplicationHelper {
 
+	protected String applicationName;
 	protected Map moduleHelperMap = new HashMap();
 
-	public AbstractApplicationHelper() {
+	public AbstractApplicationHelper(String applicationName) {
+		setApplicationName(applicationName);
 		initialiseApplication();
 	}
 
@@ -25,6 +27,14 @@ public abstract class AbstractApplicationHelper implements ApplicationHelper {
 
 	public Collection getModuleHelpers() {
 		return this.moduleHelperMap.values();
+	}
+
+	public void setApplicationName(String applicationName) {
+		this.applicationName = applicationName;
+	}
+
+	public String getApplicationName() {
+		return applicationName;
 	}
 
 	public abstract void initialiseApplication();

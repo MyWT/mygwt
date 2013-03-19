@@ -32,9 +32,6 @@ import rnd.mywt.client.utils.ObjectUtils;
 import rnd.mywt.server.data.SQLViewMetaData;
 import rnd.mywt.server.data.ViewMetaData;
 import rnd.mywt.server.util.AppBeanUtils;
-import rnd.mywt.server.util.AppBeanUtils.BeanCopyCtx;
-import rnd.mywt.server.util.AppBeanUtils.ClientBeanCopyCtx;
-import rnd.mywt.server.util.AppBeanUtils.ServerBeanCopyCtx;
 import rnd.op.ObjectPersistor;
 import rnd.op.rdbms.JDBCObjectPersistor;
 import rnd.utils.WrapperUtils;
@@ -127,7 +124,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 			return;
 		}
 		default: {
-			throw new UnsupportedOperationException(req.getMethod().toString());
+			//throw new UnsupportedOperationException(req.getMethod().toString());
 		}
 
 		}
@@ -283,7 +280,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		serverBean.setApplicationBeanId((Long) id);
 
 		ApplicationBean clientBean = AppBeanUtils.getNewClientBean(objType);
-		AppBeanUtils.copyBean(serverBean, clientBean, this.serverCopyBeanCtx, this.clientBeanCopyCtx, new HashMap<ApplicationBean, ApplicationBean>());
+		AppBeanUtils.copyBean(serverBean, clientBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx(), new HashMap<ApplicationBean, ApplicationBean>());
 
 		return clientBean;
 	}
@@ -292,10 +289,6 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	public Collection<ApplicationBean> findAllObject(Object[] criteria, Object[] params, Class<ApplicationBean> objType) {
 		return getObjectPersistor().findAllObject(criteria, params, objType);
 	}
-
-	private BeanCopyCtx serverCopyBeanCtx = new ServerBeanCopyCtx();
-
-	private BeanCopyCtx clientBeanCopyCtx = new ClientBeanCopyCtx();
 
 	@Override
 	public ApplicationBean saveObject(ApplicationBean clientBean) {
@@ -308,7 +301,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		}
 
 		ApplicationBean serverBean = AppBeanUtils.getNewApplicationBean(serverBeanType);
-		AppBeanUtils.copyBean(clientBean, serverBean, clientBeanCopyCtx, serverCopyBeanCtx, new HashMap<ApplicationBean, ApplicationBean>());
+		AppBeanUtils.copyBean(clientBean, serverBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx(), new HashMap<ApplicationBean, ApplicationBean>());
 
 		return (ApplicationBean) getObjectPersistor().saveObject(serverBean);
 
@@ -317,7 +310,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	public ApplicationBean updateObject(Object id, ApplicationBean clientBean) {
 
 		ApplicationBean serverBean = (ApplicationBean) getObjectPersistor().findObject(clientBean.getApplicationBeanId(), AppBeanUtils.getServerBeanType(clientBean.getClass()));
-		AppBeanUtils.copyBean(clientBean, serverBean, clientBeanCopyCtx, serverCopyBeanCtx, new HashMap<ApplicationBean, ApplicationBean>());
+		AppBeanUtils.copyBean(clientBean, serverBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx(), new HashMap<ApplicationBean, ApplicationBean>());
 
 		return (ApplicationBean) getObjectPersistor().updateObject(serverBean.getApplicationBeanId(), serverBean);
 	}

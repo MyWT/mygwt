@@ -13,6 +13,28 @@ import rnd.mywt.client.utils.ExceptionUtils;
 
 public class AppBeanUtils {
 
+	protected static BeanCopyCtx serverCopyBeanCtx = new ServerBeanCopyCtx();
+	protected static BeanCopyCtx clientBeanCopyCtx = new ClientBeanCopyCtx();
+
+	public static BeanCopyCtx getServerCopyBeanCtx() {
+		return serverCopyBeanCtx;
+	}
+
+	public static BeanCopyCtx getClientBeanCopyCtx() {
+		return clientBeanCopyCtx;
+	}
+
+	public static void copyAllBean(Collection<ApplicationBean> sourceBeans, Collection<ApplicationBean> targetBeans, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx) {
+
+		Map copyMap = new HashMap();
+		for (ApplicationBean sourceBean : sourceBeans) {
+			ApplicationBean targetBean = AppBeanUtils.getNewClientBean(sourceBean.getClass());
+			copyBean(sourceBean, targetBean, sourceBeanCopyCtx, targetBeanCopyCtx, copyMap);
+			targetBeans.add(targetBean);
+		}
+
+	}
+
 	public static void copyBean(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx, Map<ApplicationBean, ApplicationBean> copyMap) {
 		// if
 		// (Debugger.D.pushCheck("rnd.webapp.mwt.server.application.AbstractModuleHandler.copy"))
@@ -193,10 +215,6 @@ public class AppBeanUtils {
 
 	public static class ClientBeanCopyCtx implements BeanCopyCtx {
 
-		// public Long getApplicationBeanId(ApplicationBean clientBean) {
-		// return clientBean.getApplicationBeanId();
-		// }
-
 		public boolean isInverseOwnerRequired() {
 			return false;
 		}
@@ -213,16 +231,11 @@ public class AppBeanUtils {
 
 	public static class ServerBeanCopyCtx implements BeanCopyCtx {
 
-		// public Long getApplicationBeanId(ApplicationBean serverBean) {
-		// return null;
-		// }
-
 		public boolean isInverseOwnerRequired() {
 			return true;
 		}
 
 		public String getInverseOwner(Class beanType, String indexedPrpName) {
-			// return getORMHelper().getInverseOwner(beanType, indexedPrpName);
 			return beanType.getSimpleName();
 		}
 

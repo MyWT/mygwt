@@ -13,11 +13,13 @@ public abstract class AbstractModuleHandler implements ModuleHandler {
 	private String moduleName;
 
 	private ObjectPersistor op;
+
 	private final ModuleHandlerDelegate delegate = new ModuleHandlerDelegate(this);
 
-	public AbstractModuleHandler() {
+	public AbstractModuleHandler(String moduleName) {
 		op = new JPObjectPersistor();
 		delegate.initModule();
+		setModuleName(moduleName);
 	}
 
 	@Override
@@ -64,7 +66,7 @@ public abstract class AbstractModuleHandler implements ModuleHandler {
 	public ApplicationBean findObject(Object id, Class<ApplicationBean> objType) {
 		return delegate.findObject(id, objType);
 	}
-	
+
 	@Override
 	public Collection<ApplicationBean> findAllObject(Object[] criteria, Object[] params, Class<ApplicationBean> objType) {
 		return delegate.findAllObject(criteria, params, objType);

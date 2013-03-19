@@ -3,7 +3,7 @@ package rnd.mywt.server.application;
 public class DefaultModuleHandler extends AbstractModuleHandler {
 
 	public DefaultModuleHandler(String moduleName) {
-		setModuleName(moduleName);
+		super(moduleName);
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package rnd.mywt.client.application;
 
 import rnd.mywt.client.application.FormHelper;
+import rnd.mywt.client.bean.ApplicationBean;
+import rnd.mywt.client.bean.ApplicationDynaBean;
 import rnd.mywt.client.expression.RowColumnExpression;
 import rnd.mywt.client.mvc.MVCHandlerFactory;
 import rnd.mywt.client.mvc.field.Table;
@@ -57,6 +59,11 @@ public abstract class AbstractFormHelper implements FormHelper {
 	protected void configureReferenceField(ReferenceField referenceField, String boundTo, String columnName) {
 		referenceField.setBoundTo(boundTo);
 		((ReferenceFieldView) referenceField.getView()).setDisplayExpresion(new RowColumnExpression(columnName));
+	}
+	
+	@Override
+	public ApplicationBean createApplicationBean() {
+		return new ApplicationDynaBean();
 	}
 
 }
