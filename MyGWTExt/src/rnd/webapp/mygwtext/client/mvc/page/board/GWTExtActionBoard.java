@@ -1,6 +1,6 @@
 package rnd.webapp.mygwtext.client.mvc.page.board;
 
-import rnd.mywt.client.mvc.MVCHandlerFactory;
+import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.mvc.page.board.ActionBar;
 import rnd.mywt.client.mvc.page.board.ActionBase;
 import rnd.mywt.client.mvc.page.board.ActionBoard;
@@ -16,11 +16,10 @@ import com.gwtext.client.widgets.layout.BorderLayoutData;
 public class GWTExtActionBoard extends GWTExtPage implements ActionBoard {
 
 	private ActionBar actionBar;
-
 	private ActionBase actionBase;
 
 	public GWTExtActionBoard() {
-		this(MVCHandlerFactory.getMVCHandler().createActionBar(), MVCHandlerFactory.getMVCHandler().createActionBase());
+		this(MyWTHelper.getMVCHandler().createActionBar(), MyWTHelper.getMVCHandler().createActionBase());
 	}
 
 	public GWTExtActionBoard(ActionBar actionBar, ActionBase actionBase) {

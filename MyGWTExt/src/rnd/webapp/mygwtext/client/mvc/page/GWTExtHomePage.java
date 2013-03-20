@@ -11,11 +11,10 @@ import rnd.mywt.client.application.ApplicationHelper;
 import rnd.mywt.client.application.DefaultApplicationHelper;
 import rnd.mywt.client.application.FormHelper;
 import rnd.mywt.client.application.ModuleHelper;
-import rnd.mywt.client.mvc.MVCHandlerFactory;
-import rnd.mywt.client.mvc.page.Page;
+import rnd.mywt.client.mvc.page.HomePage;
 import rnd.mywt.client.mvc.page.board.ActionBoard;
-import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.mvc.page.board.Board.BoardType;
+import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.webapp.mygwtext.client.tree.FormNode;
 import rnd.webapp.mygwtext.client.tree.ModuleNode;
 import rnd.webapp.mygwtext.client.tree.NodeUtils;
@@ -40,12 +39,12 @@ import com.gwtext.client.widgets.tree.TreeNode;
 import com.gwtext.client.widgets.tree.TreePanel;
 import com.gwtext.client.widgets.tree.event.TreePanelListenerAdapter;
 
-public class GWTExtHomePage extends GWTExtPage implements Page {
+public class GWTExtHomePage extends GWTExtPage implements HomePage {
 
 	private ActionBoard actionBoard;
 
 	public GWTExtHomePage() {
-		this(MVCHandlerFactory.getMVCHandler().createActionBoard());
+		this(MyWTHelper.getMVCHandler().createActionBoard());
 	}
 
 	public GWTExtHomePage(ActionBoard actionBoard) {
@@ -128,6 +127,7 @@ public class GWTExtHomePage extends GWTExtPage implements Page {
 	}
 
 	static int i = 0;
+	private RootNode root = new RootNode();;
 
 	private void addFormActionPanel(Panel borderPanel) {
 		final Panel formActionPanel = new Panel();
@@ -142,14 +142,54 @@ public class GWTExtHomePage extends GWTExtPage implements Page {
 		treePanel.setRootVisible(false);
 		treePanel.setBorder(false);
 
-		RootNode root = new RootNode();
+		ApplicationHelper applicationHelper = MyWTHelper.getApplicationHelper();
+
+		if (applicationHelper == null) {
+			MyWTHelper.setApplicationHelper(new DefaultApplicationHelper(MyWTHelper.getApplicationName()));
+		} else {
+			initializeFormAction();
+		}
+
+		treePanel.setRootNode(root);
+
+		treePanel.addListener(new TreePanelListenerAdapter() {
+
+			@Override
+			public void onDblClick(TreeNode node, EventObject e) {
+				// Logger.startMethod("", "onDblClick");
+				// Logger.log("node", node);
+
+				if (NodeUtils.isFormNode(node)) {
+					try {
+
+						String moduleName = getModuleName(node.getParentNode());
+						String formName = getFormName(node);
+						String viewName = getViewName(node);
+
+						DataBoard dataBoard = (DataBoard) actionBoard.getActionBase().getBoard(moduleName, formName, viewName, BoardType.DATA_BOARD);
+
+						if (dataBoard == null) {
+							dataBoard = MyWTHelper.getMVCHandler().createDataBoard(moduleName, formName, viewName);
+							actionBoard.getActionBase().addBoard(dataBoard);
+						}
+
+						actionBoard.getActionBase().setCurrentBoard(dataBoard);
+
+					} catch (RuntimeException re) {
+						re.printStackTrace();
+						throw re;
+					}
+				}
+				// Logger.endMethod("", "onDblClick");
+			}
+		});
+
+		formActionPanel.add(treePanel);
+	}
+
+	public void initializeFormAction() {
 
 		ApplicationHelper applicationHelper = MyWTHelper.getApplicationHelper();
-		
-		if(applicationHelper ==null ){
-			applicationHelper = new DefaultApplicationHelper(MyWTHelper.getApplicationName());
-		}
-		
 		Collection<ModuleHelper> moduleHelpers = applicationHelper.getModuleHelpers();
 		// System.out.println("module:" + moduleHelpers.size());
 
@@ -165,42 +205,5 @@ public class GWTExtHomePage extends GWTExtPage implements Page {
 				module.addFormNode(form);
 			}
 		}
-
-		treePanel.setRootNode(root);
-
-		treePanel.addListener(new TreePanelListenerAdapter() {
-
-			@Override
-			public void onDblClick(TreeNode node, EventObject e) {
-//				Logger.startMethod("", "onDblClick");
-//				Logger.log("node", node);
-				
-				if (NodeUtils.isFormNode(node)) {
-					try {
-
-						String moduleName = getModuleName(node.getParentNode());
-						String formName = getFormName(node);
-						String viewName = getViewName(node);
-
-						DataBoard dataBoard = (DataBoard) actionBoard.getActionBase().getBoard(moduleName, formName, viewName, BoardType.DATA_BOARD);
-
-						if (dataBoard == null) {
-							dataBoard = MVCHandlerFactory.getMVCHandler().createDataBoard(moduleName, formName, viewName);
-							actionBoard.getActionBase().addBoard(dataBoard);
-						}
-
-						actionBoard.getActionBase().setCurrentBoard(dataBoard);
-
-					}
-					catch (RuntimeException re) {
-						re.printStackTrace();
-						throw re;
-					}
-				}
-//				Logger.endMethod("", "onDblClick");
-			}
-		});
-
-		formActionPanel.add(treePanel);
 	}
 }

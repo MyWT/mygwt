@@ -133,7 +133,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	private DataTable saveOrUpateObject(ApplicationRequest req) {
 
 		ApplicationBean applicationBean = ARUtils.getApplicationBean(req);
-		Long id = applicationBean.getApplicationBeanId();
+		Long id = applicationBean.getId();
 
 		if (id == null) {
 			saveObject(applicationBean);
@@ -277,10 +277,10 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	public ApplicationBean findObject(Object id, Class<ApplicationBean> objType) {
 
 		ApplicationBean serverBean = (ApplicationBean) getObjectPersistor().findObject(id, objType);
-		serverBean.setApplicationBeanId((Long) id);
+		serverBean.setId((Long) id);
 
 		ApplicationBean clientBean = AppBeanUtils.getNewClientBean(objType);
-		AppBeanUtils.copyBean(serverBean, clientBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx(), new HashMap<ApplicationBean, ApplicationBean>());
+		AppBeanUtils.copyBean(serverBean, clientBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
 
 		return clientBean;
 	}
@@ -301,7 +301,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		}
 
 		ApplicationBean serverBean = AppBeanUtils.getNewApplicationBean(serverBeanType);
-		AppBeanUtils.copyBean(clientBean, serverBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx(), new HashMap<ApplicationBean, ApplicationBean>());
+		AppBeanUtils.copyBean(clientBean, serverBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
 
 		return (ApplicationBean) getObjectPersistor().saveObject(serverBean);
 
@@ -309,10 +309,10 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 
 	public ApplicationBean updateObject(Object id, ApplicationBean clientBean) {
 
-		ApplicationBean serverBean = (ApplicationBean) getObjectPersistor().findObject(clientBean.getApplicationBeanId(), AppBeanUtils.getServerBeanType(clientBean.getClass()));
-		AppBeanUtils.copyBean(clientBean, serverBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx(), new HashMap<ApplicationBean, ApplicationBean>());
+		ApplicationBean serverBean = (ApplicationBean) getObjectPersistor().findObject(clientBean.getId(), AppBeanUtils.getServerBeanType(clientBean.getClass()));
+		AppBeanUtils.copyBean(clientBean, serverBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
 
-		return (ApplicationBean) getObjectPersistor().updateObject(serverBean.getApplicationBeanId(), serverBean);
+		return (ApplicationBean) getObjectPersistor().updateObject(serverBean.getId(), serverBean);
 	}
 
 }

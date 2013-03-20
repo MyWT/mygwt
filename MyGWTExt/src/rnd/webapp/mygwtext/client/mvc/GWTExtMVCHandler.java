@@ -6,6 +6,7 @@ import rnd.mywt.client.mvc.field.data.ReferenceField;
 import rnd.mywt.client.mvc.field.data.text.Label;
 import rnd.mywt.client.mvc.field.data.text.TextArea;
 import rnd.mywt.client.mvc.field.data.text.TextField;
+import rnd.mywt.client.mvc.page.HomePage;
 import rnd.mywt.client.mvc.page.Page;
 import rnd.mywt.client.mvc.page.board.ActionBar;
 import rnd.mywt.client.mvc.page.board.ActionBase;
@@ -64,11 +65,11 @@ public class GWTExtMVCHandler implements MVCHandler {
 	}
 
 	// Home Page
-	public Page createHomePage() {
+	public HomePage createHomePage() {
 		return new GWTExtHomePage();
 	}
 
-	public Page createHomePage(ActionBoard actionBoard) {
+	public HomePage createHomePage(ActionBoard actionBoard) {
 		return new GWTExtHomePage(actionBoard);
 	}
 

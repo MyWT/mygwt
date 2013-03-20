@@ -4,17 +4,17 @@ import java.util.List;
 
 import rnd.expression.Expression;
 import rnd.mywt.client.Logger;
+import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.bean.ValueChangeEvent;
 import rnd.mywt.client.bean.ValueChangeListenerAdapter;
 import rnd.mywt.client.data.FilterInfo;
 import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.RowCacheImpl;
-import rnd.mywt.client.mvc.MVCHandlerFactory;
 import rnd.mywt.client.mvc.field.Table.RowTableModel;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
+import rnd.mywt.client.mvc.page.board.Board.BoardType;
 import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.mvc.page.board.FormBoard;
-import rnd.mywt.client.mvc.page.board.Board.BoardType;
 import rnd.mywt.client.utils.ObjectUtils;
 import rnd.webapp.mygwtext.client.mvc.field.data.text.GWTExtTextField;
 
@@ -312,7 +312,7 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 		DataBoard dataBoard = (DataBoard) getFormBoard().getActionBase().getBoard(getModuleName(), getApplicationBeanName(), getViewName(), BoardType.DATA_BOARD);
 
 		if (dataBoard == null) {
-			dataBoard = MVCHandlerFactory.getMVCHandler().createDataBoard(getModuleName(), getApplicationBeanName(), getViewName());
+			dataBoard = MyWTHelper.getMVCHandler().createDataBoard(getModuleName(), getApplicationBeanName(), getViewName());
 			getFormBoard().getActionBase().addBoard(dataBoard);
 		}
 

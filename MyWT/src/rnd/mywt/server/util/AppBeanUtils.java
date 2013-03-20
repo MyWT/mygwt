@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import rnd.mywt.client.bean.ApplicationBean;
+import rnd.mywt.client.bean.ApplicationDynaBean;
 import rnd.mywt.client.utils.Block;
 import rnd.mywt.client.utils.ExceptionUtils;
 
@@ -28,14 +29,18 @@ public class AppBeanUtils {
 
 		Map copyMap = new HashMap();
 		for (ApplicationBean sourceBean : sourceBeans) {
-			ApplicationBean targetBean = AppBeanUtils.getNewClientBean(sourceBean.getClass());
+			ApplicationBean targetBean = AppBeanUtils.getNewApplicationBean(sourceBeanCopyCtx.getTargetBeanType(sourceBean.getClass()));
 			copyBean(sourceBean, targetBean, sourceBeanCopyCtx, targetBeanCopyCtx, copyMap);
 			targetBeans.add(targetBean);
 		}
 
 	}
 
-	public static void copyBean(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx, Map<ApplicationBean, ApplicationBean> copyMap) {
+	public static void copyBean(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx) {
+		copyBean(sourceBean, targetBean, sourceBeanCopyCtx, targetBeanCopyCtx, new HashMap());
+	}
+		
+	private static void copyBean(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx, Map<ApplicationBean, ApplicationBean> copyMap) {
 		// if
 		// (Debugger.D.pushCheck("rnd.webapp.mwt.server.application.AbstractModuleHandler.copy"))
 		// {
@@ -51,7 +56,7 @@ public class AppBeanUtils {
 		copyMap.put(sourceBean, targetBean);
 
 		// Copy ApplicationBean Id
-		targetBean.setApplicationBeanId(sourceBean.getApplicationBeanId());
+		targetBean.setId(sourceBean.getId());
 
 		// Copy properties
 		Set<String> propertyNames = sourceBean.getPropertyNames();
@@ -72,7 +77,7 @@ public class AppBeanUtils {
 				// sourceBeanCopyCtx.getApplicationBeanId(sourceValue);
 				// sourceValue.setApplicationBeanId(sourceObjectId);
 				// D.println("sourceObjectId", sourceObjectId);
-				Long sourceObjectId = sourceValue.getApplicationBeanId();
+				Long sourceObjectId = sourceValue.getId();
 
 				ApplicationBean targetValue = null;
 
@@ -116,7 +121,7 @@ public class AppBeanUtils {
 				// Long targetElementId =
 				// targetBeanCopyCtx.getApplicationBeanId(targetElement);
 				// targetElement.setApplicationBeanId(targetElementId);
-				Long targetElementId = targetElement.getApplicationBeanId();
+				Long targetElementId = targetElement.getId();
 
 				if (targetElementId != null) {
 					existingTargetElementMap.put(targetElementId, targetElement);
@@ -136,7 +141,7 @@ public class AppBeanUtils {
 				// sourceBeanCopyCtx.getApplicationBeanId(sourceElement);
 				// sourceElement.setApplicationBeanId(sourceElementId);
 				// D.println("sourceElementId", sourceElementId);
-				Long sourceElementId = sourceElement.getApplicationBeanId();
+				Long sourceElementId = sourceElement.getId();
 
 				ApplicationBean targetElement = null;
 
@@ -175,7 +180,14 @@ public class AppBeanUtils {
 	}
 
 	public static Class getClientBeanType(Class serverBeanType) {
-		return getTargetBeanType(serverBeanType, "server", "client");
+		Class clientBeanType;
+		try {
+			clientBeanType = getTargetBeanType(serverBeanType, "server", "client");
+		} catch (Exception e) {
+			//e.printStackTrace();
+			clientBeanType = ApplicationDynaBean.class;
+		}
+		return clientBeanType;
 	}
 
 	public static Class getServerBeanType(Class clientBeanType) {

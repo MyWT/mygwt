@@ -6,8 +6,8 @@ import java.util.List;
 import rnd.expression.Expression;
 import rnd.expression.XChangeEvent;
 import rnd.expression.XChangeListener;
+import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.arb.ARBAsyncCallback;
-import rnd.mywt.client.arb.ARBUtils;
 import rnd.mywt.client.bean.ValueChangeEvent;
 import rnd.mywt.client.bean.ValueChangeListenerAdapter;
 import rnd.mywt.client.data.ColumnMetaData;
@@ -16,7 +16,6 @@ import rnd.mywt.client.data.FilterInfo;
 import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.RowCacheImpl;
 import rnd.mywt.client.data.RowMetaData;
-import rnd.mywt.client.mvc.MVCHandlerFactory;
 import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.mvc.field.Table.RowTableModel;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
@@ -65,7 +64,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 	}
 
 	private Table createTable() {
-		Table newTable = MVCHandlerFactory.getMVCHandler().createTable(Table.ROW_BASED);
+		Table newTable = MyWTHelper.getMVCHandler().createTable(Table.ROW_BASED);
 		newTable.setParent(this);
 		fetchDataTable(true);
 		return newTable;
@@ -83,7 +82,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 		// Logger.log("getFilter()", getFilter());
 		((DataBoardModel) getModel()).setDataTableIntialized(false);
 
-		ARBUtils.getARB().executeRequest(ARUtils.createFetchRequest(getModuleName(), getApplicationBeanName(), getViewName(), filterInfo), new ARBAsyncCallback() {
+		MyWTHelper.getARB().executeRequest(ARUtils.createFetchRequest(getModuleName(), getApplicationBeanName(), getViewName(), filterInfo), new ARBAsyncCallback() {
 
 			@Override
 			public void onSuccess(Serializable result) {

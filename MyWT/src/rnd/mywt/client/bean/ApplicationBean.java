@@ -3,9 +3,9 @@ package rnd.mywt.client.bean;
 
 public interface ApplicationBean extends _Bean {
 
-	String APPLICATION_BEAN_ID = "applicationBeanId";
+	String ID = "Id";
 
-	Long getApplicationBeanId();
+	Long getId();
 
-	void setApplicationBeanId(Long id);
+	void setId(Long id);
 }

@@ -11,12 +11,12 @@ public class ApplicationDynaBean extends DynaConstrainedBean implements Applicat
 		setClassName(className);
 	}
 
-	public Long getApplicationBeanId() {
-		return (Long) getValue(APPLICATION_BEAN_ID);
+	public Long getId() {
+		return (Long) getValue(ID);
 	}
 
-	public void setApplicationBeanId(Long id) {
-		setValue(APPLICATION_BEAN_ID, id);
+	public void setId(Long id) {
+		setValue(ID, id);
 	}
 
 	public String getClassName() {
@@ -29,6 +29,6 @@ public class ApplicationDynaBean extends DynaConstrainedBean implements Applicat
 
 	@Override
 	public String toString() {
-		return super.toString() + "-" + getApplicationBeanId();
+		return super.toString() + "-" + getId();
 	}
 }

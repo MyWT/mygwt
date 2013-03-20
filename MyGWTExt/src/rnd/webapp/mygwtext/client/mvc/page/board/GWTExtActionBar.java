@@ -3,12 +3,11 @@ package rnd.webapp.mygwtext.client.mvc.page.board;
 import java.io.Serializable;
 
 import rnd.mywt.client.Logger;
+import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.arb.ARBAsyncCallback;
-import rnd.mywt.client.arb.ARBUtils;
 import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.RowCacheImpl;
 import rnd.mywt.client.mvc.AbstractMVCBean;
-import rnd.mywt.client.mvc.MVCHandlerFactory;
 import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.mvc.field.Table.RowTableModel;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
@@ -199,7 +198,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 		FormModel formModel = (FormModel) formBoard.getForm().getModel();
 
 		ApplicationRequest req = ARUtils.createSaveRequest(formBoard.getModuleName(), formBoard.getApplicationBeanName(), formBoard.getDataBoard().getViewName(), formModel.getApplicationBean());
-		ARBUtils.getARB().executeRequest(req, new ARBAsyncCallback() {
+		MyWTHelper.getARB().executeRequest(req, new ARBAsyncCallback() {
 
 			@Override
 			public void onSuccess(Serializable result) {
@@ -244,7 +243,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 	private void createFormBoard(Long appBeanId, String viewName) {
 
 		DataBoard dataBoard = getCurrentDataBoard();
-		FormBoard formBoard = MVCHandlerFactory.getMVCHandler().createFormBoard(dataBoard.getModuleName(), dataBoard.getApplicationBeanName());
+		FormBoard formBoard = MyWTHelper.getMVCHandler().createFormBoard(dataBoard.getModuleName(), dataBoard.getApplicationBeanName());
 		formBoard.setApplicationBeanId(appBeanId);
 		formBoard.setDataBoard(dataBoard);
 
@@ -265,7 +264,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 		}
 
 		ApplicationRequest req = ARUtils.createDeleteRequest(getCurrentDataBoard().getModuleName(), getCurrentDataBoard().getApplicationBeanName(), appBeanId);
-		ARBUtils.getARB().executeRequest(req, new ARBAsyncCallback() {
+		MyWTHelper.getARB().executeRequest(req, new ARBAsyncCallback() {
 
 			public void onSuccess(Serializable result) {
 				try {

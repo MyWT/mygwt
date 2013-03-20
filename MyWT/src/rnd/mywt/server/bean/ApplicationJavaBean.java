@@ -6,11 +6,11 @@ public class ApplicationJavaBean extends JavaBean implements ApplicationBean {
 
 	private Long applicationBeanId;
 
-	public Long getApplicationBeanId() {
+	public Long getId() {
 		return this.applicationBeanId;
 	}
 
-	public void setApplicationBeanId(Long id) {
+	public void setId(Long id) {
 		this.applicationBeanId = id;
 	}
 
@@ -24,7 +24,7 @@ public class ApplicationJavaBean extends JavaBean implements ApplicationBean {
 
 	@Override
 	public String toString() {
-		return super.toString() + "-" + getApplicationBeanId();
+		return super.toString() + "-" + getId();
 	}
 
 }

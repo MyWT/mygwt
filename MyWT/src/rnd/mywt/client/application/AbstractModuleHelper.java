@@ -17,9 +17,9 @@ public abstract class AbstractModuleHelper extends AbstractApplicationHelper imp
 		initialiseModule();
 	}
 
-	public void addFormHelper(String formName, String viewName) {
-		this.formHelperMap.put(formName, new MetadataFormHelper(formName, viewName));
-	}
+//	public void addFormHelper(String formName, String viewName) {
+//		this.formHelperMap.put(formName, new MetadataFormHelper(formName, viewName));
+//	}
 
 	public void addFormHelper(String formName, String viewName, FormHelper formHelper) {
 		this.formHelperMap.put(formName, formHelper);

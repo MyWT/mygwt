@@ -18,9 +18,11 @@ public class ARUtils {
 	private static final String VIEW_NAME = "viewName";
 
 	private static final String FILTER = "filterInfo";
-	
+
 	private static final String PARENT = "parent";
 	
+	private static final String NAME = "name";
+
 	public static void setAppBeanName(ApplicationRequest req, String appBeanName) {
 		req.setParam(APP_BEAN_NAME, appBeanName);
 	}
@@ -60,7 +62,7 @@ public class ARUtils {
 	public static FilterInfo getFilter(ApplicationRequest req) {
 		return (FilterInfo) req.getParam(FILTER);
 	}
-	
+
 	public static void setParent(ApplicationRequest req, String parentName) {
 		req.setParam(PARENT, parentName);
 	}
@@ -68,8 +70,15 @@ public class ARUtils {
 	public static String getParent(ApplicationRequest req) {
 		return (String) req.getParam(PARENT);
 	}
-
 	
+	public static void setName(ApplicationRequest req, String name) {
+		req.setParam(NAME, name);
+	}
+
+	public static String getName(ApplicationRequest req) {
+		return (String) req.getParam(NAME);
+	}
+
 	public static ApplicationRequest createSaveRequest(String moduleName, String appBeanName, String viewName, ApplicationBean appBean) {
 		ApplicationRequest req = new ApplicationRequest(moduleName, Method.Save);
 		setAppBeanName(req, appBeanName);
@@ -100,12 +109,12 @@ public class ARUtils {
 		return req;
 	}
 
-	public static ApplicationRequest createLoadRequest(String moduleName, String appBeanName, String parentName) {
+	public static ApplicationRequest createLoadRequest(String moduleName, String appBeanName, String name) {
 		ApplicationRequest req = new ApplicationRequest(moduleName, Method.Load);
 		setAppBeanName(req, appBeanName);
-		setParent(req, parentName);
+		setName(req, name);
 		return req;
-		
+
 	}
 
 }

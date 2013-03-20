@@ -5,6 +5,7 @@ import rnd.mywt.client.mvc.field.data.ReferenceField;
 import rnd.mywt.client.mvc.field.data.text.Label;
 import rnd.mywt.client.mvc.field.data.text.TextArea;
 import rnd.mywt.client.mvc.field.data.text.TextField;
+import rnd.mywt.client.mvc.page.HomePage;
 import rnd.mywt.client.mvc.page.Page;
 import rnd.mywt.client.mvc.page.board.ActionBar;
 import rnd.mywt.client.mvc.page.board.ActionBase;
@@ -37,9 +38,9 @@ public interface MVCHandler {
 	Table createTable(int tableType);
 
 	// Home Page
-	Page createHomePage();
+	HomePage createHomePage();
 
-	Page createHomePage(ActionBoard actionBoard);
+	HomePage createHomePage(ActionBoard actionBoard);
 
 	// Action Board
 

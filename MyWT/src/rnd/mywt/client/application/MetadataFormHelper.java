@@ -1,31 +1,26 @@
 package rnd.mywt.client.application;
 
-import rnd.mywt.client.bean.ApplicationBean;
 import rnd.mywt.client.bean.ApplicationDynaBean;
+import rnd.mywt.client.mvc.page.form.Form;
 
 public class MetadataFormHelper extends AbstractFormHelper implements FormHelper {
 
-	private String formName;
-	private String viewName;
+	private ApplicationDynaBean formMetadata;
 
-	public MetadataFormHelper(String formName, String viewName) {
-		this.formName = formName;
-		this.viewName = viewName;
+	public MetadataFormHelper(String formName, String viewName, ApplicationDynaBean formMetadata) {
+		super(formName, viewName);
+		this.formMetadata = formMetadata;
 	}
 
 	@Override
-	public String getFormName() {
-		return formName;
+	public Form createForm() {
+		return buildForm(super.createForm(), formMetadata);
+
 	}
 
-	@Override
-	public String getViewName() {
-		return viewName;
+	private static Form buildForm(Form form, ApplicationDynaBean formMetadata) {
+		return form;
 	}
 
-	@Override
-	public ApplicationBean createApplicationBean() {
-		return new ApplicationDynaBean();
-	}
 
 }

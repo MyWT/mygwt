@@ -61,7 +61,7 @@ public class GWTExtForm extends GWTExtPage implements Form {
 
 					if (newAppBean != null) {
 
-						Long appBeanId = newAppBean.getApplicationBeanId();
+						Long appBeanId = newAppBean.getId();
 						// Logger.log("appBeanId", appBeanId);
 
 						if (appBeanId != null) {

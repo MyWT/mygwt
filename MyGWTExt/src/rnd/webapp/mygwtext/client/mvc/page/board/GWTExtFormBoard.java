@@ -6,7 +6,6 @@ import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.application.FormHelper;
 import rnd.mywt.client.application.ModuleHelper;
 import rnd.mywt.client.arb.ARBAsyncCallback;
-import rnd.mywt.client.arb.ARBUtils;
 import rnd.mywt.client.bean.ApplicationBean;
 import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.RowCacheImpl;
@@ -67,7 +66,7 @@ public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 
 			ApplicationRequest req = ARUtils.createFindRequest(getModuleName(), getApplicationBeanName(), appBeanId);
 
-			ARBUtils.getARB().executeRequest(req, new ARBAsyncCallback() {
+			MyWTHelper.getARB().executeRequest(req, new ARBAsyncCallback() {
 
 				@Override
 				public void onSuccess(Serializable result) {
