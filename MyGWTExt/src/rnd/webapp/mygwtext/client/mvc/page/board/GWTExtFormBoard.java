@@ -52,6 +52,9 @@ public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 	private Form createForm() {
 
 		ModuleHelper moduleHelper = MyWTHelper.getApplicationHelper().getModuleHelper(getModuleName());
+		if(moduleHelper == null){
+			moduleHelper = MyWTHelper.getDefaultApplicationHelper().getModuleHelper(getModuleName());
+		}
 		FormHelper formHelper = moduleHelper.getFormHelper(getApplicationBeanName());
 
 		// Create Form

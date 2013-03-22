@@ -16,6 +16,7 @@ import rnd.mywt.client.mvc.page.board.FormBoard;
 import rnd.mywt.client.mvc.page.form.Form;
 import rnd.webapp.mygwtext.client.mvc.field.GWTExtTable;
 import rnd.webapp.mygwtext.client.mvc.field.data.GWTExtReferenceField;
+import rnd.webapp.mygwtext.client.mvc.field.data.text.GWTExtLabel;
 import rnd.webapp.mygwtext.client.mvc.field.data.text.GWTExtTextArea;
 import rnd.webapp.mygwtext.client.mvc.field.data.text.GWTExtTextField;
 import rnd.webapp.mygwtext.client.mvc.page.GWTExtHomePage;
@@ -36,8 +37,8 @@ public class GWTExtMVCHandler implements MVCFactory {
 
 	// Label
 	public Label createLabel(String text) {
-		throw new UnsupportedOperationException("createLabel");
-		// return new GWTExtLabel(text);
+		//throw new UnsupportedOperationException("createLabel");
+		return new GWTExtLabel(text);
 	}
 
 	// Page
