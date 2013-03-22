@@ -6,11 +6,17 @@ import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.arb.ARBAsyncCallback;
 import rnd.mywt.client.bean.ApplicationDynaBean;
 import rnd.mywt.client.rpc.ApplicationRequest;
-import rnd.mywt.client.rpc.ApplicationResponse;
 import rnd.mywt.client.rpc.util.ARUtils;
 
 public class DefaultApplicationHelper extends AbstractApplicationHelper implements ApplicationHelper {
 
+//	private ApplicationHelper parentApplicationHelper;
+
+//	public DefaultApplicationHelper(String applicationName, ApplicationHelper parentApplicationHelper) {
+//		super(applicationName);
+//		this.parentApplicationHelper = parentApplicationHelper;
+//	}
+	
 	public DefaultApplicationHelper(String applicationName) {
 		super(applicationName);
 	}
@@ -20,13 +26,10 @@ public class DefaultApplicationHelper extends AbstractApplicationHelper implemen
 
 		ApplicationRequest loadReq = ARUtils.createLoadRequest("AD", "Application", applicationName);
 
-		MyWTHelper.getARB().executeRequest(loadReq, new ARBAsyncCallback() {
+		MyWTHelper.getARB().executeRequest(loadReq, new ARBAsyncCallback<ApplicationDynaBean>() {
 
 			@Override
-			public void onSuccess(ApplicationResponse resp) {
-				super.onSuccess(resp);
-
-				ApplicationDynaBean app = (ApplicationDynaBean) resp.getResult();
+			public void processResult(ApplicationDynaBean app) {
 
 				Collection<ApplicationDynaBean> modules = (Collection<ApplicationDynaBean>) app.getListValueReadOnly("module");
 				for (ApplicationDynaBean module : modules) {
@@ -39,14 +42,15 @@ public class DefaultApplicationHelper extends AbstractApplicationHelper implemen
 						Collection<ApplicationDynaBean> forms = (Collection<ApplicationDynaBean>) appBean.getListValueReadOnly("form");
 						for (ApplicationDynaBean form : forms) {
 
-							MetadataFormHelper formHelper = new MetadataFormHelper((String) form.getValue("name"), (String) form.getValue("viewName"), form);
+							MetadataFormHelper formHelper = new MetadataFormHelper((String) form.getValue("name"), (String) appBean.getValue("name"), form);
 							moduleHelper.addFormHelper(formHelper);
 						}
 					}
 					addModuleHelper(moduleHelper);
 				}
 
-				MyWTHelper.getHomePage().initializeFormAction();
+				MyWTHelper.getHomePage().initializeFormAction(MyWTHelper.getApplicationHelper(), true);
+				MyWTHelper.getHomePage().initializeFormAction(DefaultApplicationHelper.this, false);
 
 			}
 

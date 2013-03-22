@@ -2,15 +2,17 @@ package rnd.mywt.client;
 
 import rnd.mywt.client.application.ApplicationHelper;
 import rnd.mywt.client.arb.ARBAsync;
-import rnd.mywt.client.mvc.MVCHandler;
+import rnd.mywt.client.mvc.MVCFactory;
 import rnd.mywt.client.mvc.page.HomePage;
 
 public class MyWTHelper {
 
 	private static String applicationName;
 	private static ApplicationHelper applicationHelper;
+	private static ApplicationHelper defaultApplicationHelper;
+
 	private static HomePage homePage;
-	private static MVCHandler sharedHandler;
+	private static MVCFactory mvcFactory;
 	private static ARBAsync arb;
 
 	public static ARBAsync getARB() {
@@ -21,12 +23,12 @@ public class MyWTHelper {
 		MyWTHelper.arb = arb;
 	}
 
-	public static MVCHandler getMVCHandler() {
-		return sharedHandler;
+	public static MVCFactory getMVCFactory() {
+		return mvcFactory;
 	}
 
-	public static void setMVCHandler(MVCHandler handler) {
-		MyWTHelper.sharedHandler = handler;
+	public static void setMVCFactory(MVCFactory handler) {
+		MyWTHelper.mvcFactory = handler;
 	}
 
 	public static ApplicationHelper getApplicationHelper() {
@@ -35,6 +37,14 @@ public class MyWTHelper {
 
 	public static void setApplicationHelper(ApplicationHelper applicationHelper) {
 		MyWTHelper.applicationHelper = applicationHelper;
+	}
+
+	public static ApplicationHelper getDefaultApplicationHelper() {
+		return defaultApplicationHelper;
+	}
+
+	public static void setDefaultApplicationHelper(ApplicationHelper defaultApplicationHelper) {
+		MyWTHelper.defaultApplicationHelper = defaultApplicationHelper;
 	}
 
 	public static String getApplicationName() {

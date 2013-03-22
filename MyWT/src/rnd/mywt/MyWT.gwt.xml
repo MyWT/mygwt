@@ -6,4 +6,6 @@
 	<inherits name="rnd.java.util.JavaUtil" />
 	<inherits name="rnd.expression.Expressions" />
 	
+	<inherits name="ad.AD" />
+	
 </module>

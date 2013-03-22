@@ -37,6 +37,4 @@ public abstract class AbstractApplicationHelper implements ApplicationHelper {
 		return applicationName;
 	}
 
-	public abstract void initialiseApplication();
-
 }

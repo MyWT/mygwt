@@ -22,12 +22,15 @@ import rnd.webapp.mygwtext.client.tree.RootNode;
 
 import com.gwtext.client.core.EventObject;
 import com.gwtext.client.core.RegionPosition;
+import com.gwtext.client.data.Node;
+import com.gwtext.client.widgets.Button;
 import com.gwtext.client.widgets.MessageBox;
 import com.gwtext.client.widgets.MessageBoxConfig;
 import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.Toolbar;
 import com.gwtext.client.widgets.ToolbarButton;
 import com.gwtext.client.widgets.Viewport;
+import com.gwtext.client.widgets.event.ButtonListenerAdapter;
 import com.gwtext.client.widgets.layout.BorderLayout;
 import com.gwtext.client.widgets.layout.BorderLayoutData;
 import com.gwtext.client.widgets.layout.FitLayout;
@@ -44,7 +47,7 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 	private ActionBoard actionBoard;
 
 	public GWTExtHomePage() {
-		this(MyWTHelper.getMVCHandler().createActionBoard());
+		this(MyWTHelper.getMVCFactory().createActionBoard());
 	}
 
 	public GWTExtHomePage(ActionBoard actionBoard) {
@@ -107,6 +110,17 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 		helpButton.setMenu(helpMenu);
 		menuBar.addButton(helpButton);
 
+		// Help Menu
+		ToolbarButton reloadButton = new ToolbarButton("Reload");
+
+		reloadButton.addListener(new ButtonListenerAdapter() {
+			@Override
+			public void onClick(Button button, EventObject e) {
+				initializeApplication();
+			}
+		});
+		menuBar.addButton(reloadButton);
+
 		borderPanel.setTopToolbar(menuBar);
 
 	}
@@ -127,7 +141,9 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 	}
 
 	static int i = 0;
-	private RootNode root = new RootNode();;
+
+	private TreePanel treePanel = new TreePanel("");;
+	RootNode root = new RootNode();
 
 	private void addFormActionPanel(Panel borderPanel) {
 		final Panel formActionPanel = new Panel();
@@ -138,20 +154,12 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 		westData.setSplit(true);
 		borderPanel.add(formActionPanel, westData);
 
-		TreePanel treePanel = new TreePanel("");
 		treePanel.setRootVisible(false);
 		treePanel.setBorder(false);
 
-		ApplicationHelper applicationHelper = MyWTHelper.getApplicationHelper();
-
-		if (applicationHelper == null) {
-			MyWTHelper.setApplicationHelper(new DefaultApplicationHelper(MyWTHelper.getApplicationName()));
-		} else {
-			initializeFormAction();
-		}
+		initializeApplication();
 
 		treePanel.setRootNode(root);
-
 		treePanel.addListener(new TreePanelListenerAdapter() {
 
 			@Override
@@ -169,7 +177,7 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 						DataBoard dataBoard = (DataBoard) actionBoard.getActionBase().getBoard(moduleName, formName, viewName, BoardType.DATA_BOARD);
 
 						if (dataBoard == null) {
-							dataBoard = MyWTHelper.getMVCHandler().createDataBoard(moduleName, formName, viewName);
+							dataBoard = MyWTHelper.getMVCFactory().createDataBoard(moduleName, formName, viewName);
 							actionBoard.getActionBase().addBoard(dataBoard);
 						}
 
@@ -187,9 +195,23 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 		formActionPanel.add(treePanel);
 	}
 
-	public void initializeFormAction() {
+	public void initializeApplication() {
+		DefaultApplicationHelper defaultApplicationHelper = new DefaultApplicationHelper(MyWTHelper.getApplicationName());
+		MyWTHelper.setDefaultApplicationHelper(defaultApplicationHelper);
+	}
 
-		ApplicationHelper applicationHelper = MyWTHelper.getApplicationHelper();
+	@Override
+	public void initializeFormAction(ApplicationHelper applicationHelper, boolean reload) {
+
+		// treePanel.removeAll();
+		// RootNode root = new RootNode();
+		// treePanel.setRootNode(root);
+		if (reload) {
+			for (Node firstChild = root.getFirstChild(); firstChild != null; firstChild = root.getFirstChild()) {
+				root.removeChild(firstChild);
+			}
+		}
+
 		Collection<ModuleHelper> moduleHelpers = applicationHelper.getModuleHelpers();
 		// System.out.println("module:" + moduleHelpers.size());
 
@@ -205,5 +227,6 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 				module.addFormNode(form);
 			}
 		}
+		treePanel.expandAll();
 	}
 }

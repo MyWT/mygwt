@@ -1,6 +1,6 @@
 package rnd.webapp.mygwtext.client.mvc;
 
-import rnd.mywt.client.mvc.MVCHandler;
+import rnd.mywt.client.mvc.MVCFactory;
 import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
 import rnd.mywt.client.mvc.field.data.text.Label;
@@ -27,7 +27,7 @@ import rnd.webapp.mygwtext.client.mvc.page.board.GWTExtDataBoard;
 import rnd.webapp.mygwtext.client.mvc.page.board.GWTExtFormBoard;
 import rnd.webapp.mygwtext.client.mvc.page.form.GWTExtForm;
 
-public class GWTExtMVCHandler implements MVCHandler {
+public class GWTExtMVCHandler implements MVCFactory {
 
 	// Form
 	public Form createForm() {

@@ -6,7 +6,6 @@ import rnd.mywt.client.Logger;
 import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.arb.ARBAsyncCallback;
 import rnd.mywt.client.data.Row;
-import rnd.mywt.client.data.RowCacheImpl;
 import rnd.mywt.client.mvc.AbstractMVCBean;
 import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.mvc.field.Table.RowTableModel;
@@ -92,7 +91,9 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 						return;
 					}
 
-					RowCacheImpl.get().addRow(currentDataBoard.getModuleName(), currentDataBoard.getApplicationBeanName(), currentDataBoard.getViewName(), currRow);
+					// RowCacheImpl.get().addRow(currentDataBoard.getModuleName(),
+					// currentDataBoard.getApplicationBeanName(),
+					// currentDataBoard.getViewName(), currRow);
 
 					performUpdateAction(currRow.getId(), currentDataBoard.getViewName());
 				} catch (Throwable t) {
@@ -201,7 +202,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 		MyWTHelper.getARB().executeRequest(req, new ARBAsyncCallback() {
 
 			@Override
-			public void onSuccess(Serializable result) {
+			public void processResult(Serializable result) {
 
 				try {
 					Logger.startMethod("", "onSuccess");
@@ -243,7 +244,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 	private void createFormBoard(Long appBeanId, String viewName) {
 
 		DataBoard dataBoard = getCurrentDataBoard();
-		FormBoard formBoard = MyWTHelper.getMVCHandler().createFormBoard(dataBoard.getModuleName(), dataBoard.getApplicationBeanName());
+		FormBoard formBoard = MyWTHelper.getMVCFactory().createFormBoard(dataBoard.getModuleName(), dataBoard.getApplicationBeanName());
 		formBoard.setApplicationBeanId(appBeanId);
 		formBoard.setDataBoard(dataBoard);
 
@@ -266,7 +267,8 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 		ApplicationRequest req = ARUtils.createDeleteRequest(getCurrentDataBoard().getModuleName(), getCurrentDataBoard().getApplicationBeanName(), appBeanId);
 		MyWTHelper.getARB().executeRequest(req, new ARBAsyncCallback() {
 
-			public void onSuccess(Serializable result) {
+			@Override
+			public void processResult(Serializable result) {
 				try {
 					Window.alert("Object Delete Successfully");
 					getCurrentDataBoard().removeCurrentRow();

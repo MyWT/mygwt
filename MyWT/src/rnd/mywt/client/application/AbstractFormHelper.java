@@ -31,25 +31,25 @@ public abstract class AbstractFormHelper implements FormHelper {
 	}
 
 	public Form createForm() {
-		Form newForm = MyWTHelper.getMVCHandler().createForm();
+		Form newForm = MyWTHelper.getMVCFactory().createForm();
 		// newForm.setName(getFormName());
 		return newForm;
 	}
 
 	protected TextField createTextField(String label, String boundTo) {
-		TextField textField = MyWTHelper.getMVCHandler().createTextField(label);
+		TextField textField = MyWTHelper.getMVCFactory().createTextField(label);
 		textField.setBoundTo(boundTo);
 		return textField;
 	}
 
 	protected TextArea createTextArea(String label, String boundTo) {
-		TextArea textArea = MyWTHelper.getMVCHandler().createTextArea(label);
+		TextArea textArea = MyWTHelper.getMVCFactory().createTextArea(label);
 		textArea.setBoundTo(boundTo);
 		return textArea;
 	}
 
 	protected ReferenceField createReferenceField(String label, String moduleName, String applicationBeanName, String viewName) {
-		return MyWTHelper.getMVCHandler().createReferenceField(label, moduleName, applicationBeanName, viewName);
+		return MyWTHelper.getMVCFactory().createReferenceField(label, moduleName, applicationBeanName, viewName);
 	}
 
 	protected ReferenceField createReferenceField(String label, String boundTo, String moduleName, String applicationBeanName, String viewName, String columnName) {
@@ -59,7 +59,7 @@ public abstract class AbstractFormHelper implements FormHelper {
 	}
 
 	protected Table createTable() {
-		return MyWTHelper.getMVCHandler().createTable(Table.BEAN_BASED);
+		return MyWTHelper.getMVCFactory().createTable(Table.BEAN_BASED);
 	}
 
 	protected void configureReferenceField(ReferenceField referenceField, String boundTo, String columnName) {

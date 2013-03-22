@@ -64,7 +64,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 	}
 
 	private Table createTable() {
-		Table newTable = MyWTHelper.getMVCHandler().createTable(Table.ROW_BASED);
+		Table newTable = MyWTHelper.getMVCFactory().createTable(Table.ROW_BASED);
 		newTable.setParent(this);
 		fetchDataTable(true);
 		return newTable;
@@ -85,7 +85,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 		MyWTHelper.getARB().executeRequest(ARUtils.createFetchRequest(getModuleName(), getApplicationBeanName(), getViewName(), filterInfo), new ARBAsyncCallback() {
 
 			@Override
-			public void onSuccess(Serializable result) {
+			public void processResult(Serializable result) {
 				// re.printStackTrace();
 				// new RuntimeException("inner").printStackTrace();
 

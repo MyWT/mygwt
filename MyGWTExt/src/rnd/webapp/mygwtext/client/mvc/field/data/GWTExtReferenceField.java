@@ -312,7 +312,7 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 		DataBoard dataBoard = (DataBoard) getFormBoard().getActionBase().getBoard(getModuleName(), getApplicationBeanName(), getViewName(), BoardType.DATA_BOARD);
 
 		if (dataBoard == null) {
-			dataBoard = MyWTHelper.getMVCHandler().createDataBoard(getModuleName(), getApplicationBeanName(), getViewName());
+			dataBoard = MyWTHelper.getMVCFactory().createDataBoard(getModuleName(), getApplicationBeanName(), getViewName());
 			getFormBoard().getActionBase().addBoard(dataBoard);
 		}
 

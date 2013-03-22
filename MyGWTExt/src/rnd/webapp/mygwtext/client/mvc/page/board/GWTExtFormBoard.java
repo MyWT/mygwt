@@ -69,7 +69,7 @@ public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 			MyWTHelper.getARB().executeRequest(req, new ARBAsyncCallback() {
 
 				@Override
-				public void onSuccess(Serializable result) {
+				public void processResult(Serializable result) {
 					((FormModel) getForm().getModel()).setApplicationBean((ApplicationBean) result);
 				}
 			});

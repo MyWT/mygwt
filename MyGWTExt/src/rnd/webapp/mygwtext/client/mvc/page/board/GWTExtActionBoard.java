@@ -19,7 +19,7 @@ public class GWTExtActionBoard extends GWTExtPage implements ActionBoard {
 	private ActionBase actionBase;
 
 	public GWTExtActionBoard() {
-		this(MyWTHelper.getMVCHandler().createActionBar(), MyWTHelper.getMVCHandler().createActionBase());
+		this(MyWTHelper.getMVCFactory().createActionBar(), MyWTHelper.getMVCFactory().createActionBase());
 	}
 
 	public GWTExtActionBoard(ActionBar actionBar, ActionBase actionBase) {
