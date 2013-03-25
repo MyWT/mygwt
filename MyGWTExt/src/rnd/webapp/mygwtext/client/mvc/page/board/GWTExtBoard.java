@@ -1,9 +1,9 @@
 package rnd.webapp.mygwtext.client.mvc.page.board;
 
-import rnd.mywt.client.mvc.AbstractMVCBean;
 import rnd.mywt.client.mvc.page.board.Board;
+import rnd.webapp.mygwtext.client.mvc.page.GWTExtPage;
 
-public abstract class GWTExtBoard extends AbstractMVCBean implements Board {
+public abstract class GWTExtBoard extends GWTExtPage implements Board {
 
 	public GWTExtBoard(String moduleName, String appBeanName) {
 		setValue(MODULE_NAME, moduleName);

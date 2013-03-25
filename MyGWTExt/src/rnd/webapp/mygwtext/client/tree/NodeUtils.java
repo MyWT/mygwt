@@ -24,6 +24,10 @@ public class NodeUtils implements NodeConstants {
 		return node.getAttribute(FORM_NAME);
 	}
 
+	public static String getAppBeanName(Node node) {
+		return node.getAttribute(APP_BEAN_NAME);
+	}
+
 	public static String getModuleName(Node node) {
 		return node.getAttribute(MODULE_NAME);
 	}
@@ -42,6 +46,10 @@ public class NodeUtils implements NodeConstants {
 
 	public static void setFormName(Node node, String formName) {
 		node.setAttribute(FORM_NAME, formName);
+	}
+
+	public static void setAppBeanName(Node node, String appBeanName) {
+		node.setAttribute(APP_BEAN_NAME, appBeanName);
 	}
 
 	public static void setModuleName(Node node, String moduleName) {

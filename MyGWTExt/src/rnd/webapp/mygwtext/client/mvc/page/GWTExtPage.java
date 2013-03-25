@@ -12,7 +12,7 @@ import com.gwtext.client.widgets.Panel;
 public class GWTExtPage extends AbstractMVCBean implements Page {
 
 	protected Panel panel;
-
+	
 	public GWTExtPage() {
 		setView(new GWTExtPageView());
 	}
@@ -54,11 +54,6 @@ public class GWTExtPage extends AbstractMVCBean implements Page {
 		return ((PageView) getView());
 	}
 
-	// Model
-
-	// public class GWTExtPageModel implements PageModel {
-	// }
-
 	// View
 
 	public class GWTExtPageView implements PageView {
@@ -84,8 +79,4 @@ public class GWTExtPage extends AbstractMVCBean implements Page {
 
 	}
 
-	// @Override
-	// public String toString() {
-	// return "Page:" + (getName() == null ? "" : getName());
-	// }
 }

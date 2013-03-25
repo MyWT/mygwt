@@ -16,9 +16,6 @@ public interface Page extends MVCBean {
 
 	List getChildren();
 
-	// public interface PageModel extends Model {
-	// }
-
 	public interface PageView extends View {
 
 		View addChild(View childView);

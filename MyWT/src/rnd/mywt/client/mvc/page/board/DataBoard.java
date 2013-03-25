@@ -1,11 +1,13 @@
 package rnd.mywt.client.mvc.page.board;
 
+import rnd.mywt.client.Context;
 import rnd.mywt.client.data.FilterInfo;
 import rnd.mywt.client.data.Row;
+import rnd.mywt.client.mvc.field.Field;
 import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
 
-public interface DataBoard extends Board {
+public interface DataBoard extends Board, Context {
 
 	String VIEW_NAME = "viewName";
 
@@ -64,8 +66,10 @@ public interface DataBoard extends Board {
 	}
 
 	// View
-	
-	public interface DataBoardView extends View {
+
+	public interface DataBoardView extends PageView {
 	}
+
+	void addContextField(String key, Field field);
 
 }

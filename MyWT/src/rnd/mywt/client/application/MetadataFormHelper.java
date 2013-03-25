@@ -15,8 +15,8 @@ public class MetadataFormHelper extends AbstractFormHelper implements FormHelper
 
 	private ApplicationDynaBean formMetadata;
 
-	public MetadataFormHelper(String formName, String viewName, ApplicationDynaBean formMetadata) {
-		super(formName, viewName);
+	public MetadataFormHelper(String appBeanName, String formName, String viewName, ApplicationDynaBean formMetadata) {
+		super(appBeanName, formName, viewName);
 		this.formMetadata = formMetadata;
 	}
 
@@ -24,7 +24,7 @@ public class MetadataFormHelper extends AbstractFormHelper implements FormHelper
 	public Form createForm() {
 
 		final Form form = super.createForm();
-		
+
 		Label label = MyWTHelper.getMVCFactory().createLabel(getFormName());
 		form.addField(label);
 

@@ -10,13 +10,14 @@ import rnd.mywt.client.rpc.util.ARUtils;
 
 public class DefaultApplicationHelper extends AbstractApplicationHelper implements ApplicationHelper {
 
-//	private ApplicationHelper parentApplicationHelper;
+	// private ApplicationHelper parentApplicationHelper;
 
-//	public DefaultApplicationHelper(String applicationName, ApplicationHelper parentApplicationHelper) {
-//		super(applicationName);
-//		this.parentApplicationHelper = parentApplicationHelper;
-//	}
-	
+	// public DefaultApplicationHelper(String applicationName, ApplicationHelper
+	// parentApplicationHelper) {
+	// super(applicationName);
+	// this.parentApplicationHelper = parentApplicationHelper;
+	// }
+
 	public DefaultApplicationHelper(String applicationName) {
 		super(applicationName);
 	}
@@ -42,7 +43,7 @@ public class DefaultApplicationHelper extends AbstractApplicationHelper implemen
 						Collection<ApplicationDynaBean> forms = (Collection<ApplicationDynaBean>) appBean.getListValueReadOnly("form");
 						for (ApplicationDynaBean form : forms) {
 
-							MetadataFormHelper formHelper = new MetadataFormHelper((String) form.getValue("name"), (String) appBean.getValue("name"), form);
+							MetadataFormHelper formHelper = new MetadataFormHelper((String) appBean.getValue("name"), (String) form.getValue("name"), (String) appBean.getValue("name"), form);
 							moduleHelper.addFormHelper(formHelper);
 						}
 					}

@@ -4,7 +4,6 @@ import java.util.List;
 
 import rnd.mywt.client.bean.ApplicationBean;
 import rnd.mywt.client.mvc.field.Field;
-import rnd.mywt.client.mvc.field.Field.FieldView;
 import rnd.mywt.client.mvc.page.Page;
 
 public interface Form extends Page {
@@ -26,11 +25,4 @@ public interface Form extends Page {
 		ApplicationBean getApplicationBean();
 	}
 
-	public interface FormView extends PageView {
-
-		FieldView add(FieldView childView);
-
-		FieldView remove(FieldView childView);
-
-	}
 }

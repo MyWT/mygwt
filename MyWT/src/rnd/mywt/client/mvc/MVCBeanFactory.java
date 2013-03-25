@@ -14,7 +14,7 @@ import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.mvc.page.board.FormBoard;
 import rnd.mywt.client.mvc.page.form.Form;
 
-public interface MVCFactory {
+public interface MVCBeanFactory {
 
 	// Page
 	Page createPage();

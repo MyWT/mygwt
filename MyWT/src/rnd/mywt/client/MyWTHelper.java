@@ -2,7 +2,7 @@ package rnd.mywt.client;
 
 import rnd.mywt.client.application.ApplicationHelper;
 import rnd.mywt.client.arb.ARBAsync;
-import rnd.mywt.client.mvc.MVCFactory;
+import rnd.mywt.client.mvc.MVCBeanFactory;
 import rnd.mywt.client.mvc.page.HomePage;
 
 public class MyWTHelper {
@@ -12,7 +12,7 @@ public class MyWTHelper {
 	private static ApplicationHelper defaultApplicationHelper;
 
 	private static HomePage homePage;
-	private static MVCFactory mvcFactory;
+	private static MVCBeanFactory mvcFactory;
 	private static ARBAsync arb;
 
 	public static ARBAsync getARB() {
@@ -23,11 +23,11 @@ public class MyWTHelper {
 		MyWTHelper.arb = arb;
 	}
 
-	public static MVCFactory getMVCFactory() {
+	public static MVCBeanFactory getMVCFactory() {
 		return mvcFactory;
 	}
 
-	public static void setMVCFactory(MVCFactory handler) {
+	public static void setMVCFactory(MVCBeanFactory handler) {
 		MyWTHelper.mvcFactory = handler;
 	}
 

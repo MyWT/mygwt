@@ -1,13 +1,16 @@
 package rnd.webapp.mygwtext.client.mvc.page.board;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rnd.expression.Expression;
 import rnd.expression.XChangeEvent;
 import rnd.expression.XChangeListener;
 import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.arb.ARBAsyncCallback;
+import rnd.mywt.client.bean.BindingManager;
 import rnd.mywt.client.bean.ValueChangeEvent;
 import rnd.mywt.client.bean.ValueChangeListenerAdapter;
 import rnd.mywt.client.data.ColumnMetaData;
@@ -16,6 +19,9 @@ import rnd.mywt.client.data.FilterInfo;
 import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.RowCacheImpl;
 import rnd.mywt.client.data.RowMetaData;
+import rnd.mywt.client.expression.BeanPropertyExpression;
+import rnd.mywt.client.expression.ContextValueExpression;
+import rnd.mywt.client.mvc.field.Field;
 import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.mvc.field.Table.RowTableModel;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
@@ -23,19 +29,23 @@ import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.rpc.util.ARUtils;
 import rnd.utils.WrapperUtils;
 
+import com.google.gwt.user.client.ui.Widget;
 import com.gwtext.client.widgets.Panel;
 
 public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
+
+	private Panel contextPanel;
 
 	private Table table;
 
 	private ReferenceField referenceField;
 
+	private Map context = new HashMap();
+
 	public GWTExtDataBoard(String moduleName, String appBeanName, String viewName) {
 		super(moduleName, appBeanName);
 		setValue(VIEW_NAME, viewName);
 		setModel(new GWTExtDataBoardModel());
-		setView(new GWTExtDataBoardView());
 	}
 
 	public BoardType getBoardType() {
@@ -61,6 +71,37 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 		if (((DataBoardModel) getModel()).isDataTableMetaDataIntialized()) {
 			fetchDataTable(false);
 		}
+	}
+
+	private Panel getContextPanel() {
+
+		if (contextPanel == null) {
+			contextPanel = new Panel();
+			contextPanel.setBorder(false);
+		}
+		return contextPanel;
+
+	}
+
+	@Override
+	public void addContextField(String key, Field field) {
+		addChild(field);
+		getContextPanel().add((Widget) field.getView().getViewObject());
+		BindingManager.bindExpression(field, new BeanPropertyExpression(field.getFieldProperty()), this, new ContextValueExpression(key));
+	}
+
+	@Override
+	protected Panel createPanel() {
+
+		Panel dataBoardPanel = super.createPanel();
+		dataBoardPanel.setTitle(getViewName());
+		dataBoardPanel.setBorder(false);
+
+		dataBoardPanel.add(getContextPanel());
+
+		dataBoardPanel.add((Panel) getTable().getView().getViewObject());
+
+		return dataBoardPanel;
 	}
 
 	private Table createTable() {
@@ -248,13 +289,14 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 		}
 	}
 
-	public class GWTExtDataBoardView implements DataBoardView {
+	@Override
+	public Object getContext(String key) {
+		return context.get(key);
+	}
 
-		public Object getViewObject() {
-			Panel boardPanel = (Panel) getTable().getView().getViewObject();
-			boardPanel.setTitle(getViewName());
-			return boardPanel;
-		}
+	@Override
+	public Object setContext(String key, Object value) {
+		return context.put(key, value);
 	}
 
 }

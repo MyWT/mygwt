@@ -9,14 +9,17 @@ import rnd.mywt.client.mvc.field.data.ReferenceField;
 import rnd.mywt.client.mvc.field.data.ReferenceField.ReferenceFieldView;
 import rnd.mywt.client.mvc.field.data.text.TextArea;
 import rnd.mywt.client.mvc.field.data.text.TextField;
+import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.mvc.page.form.Form;
 
 public abstract class AbstractFormHelper implements FormHelper {
 
-	private String formName;
-	private String viewName;
+	private final String appBeanName;
+	private final String formName;
+	private final String viewName;
 
-	public AbstractFormHelper(String formName, String viewName) {
+	public AbstractFormHelper(String appBeanName, String formName, String viewName) {
+		this.appBeanName = appBeanName;
 		this.formName = formName;
 		this.viewName = viewName;
 	}
@@ -32,8 +35,17 @@ public abstract class AbstractFormHelper implements FormHelper {
 
 	public Form createForm() {
 		Form newForm = MyWTHelper.getMVCFactory().createForm();
-		// newForm.setName(getFormName());
 		return newForm;
+	}
+
+	@Override
+	public DataBoard createDataBoard() {
+		return null;
+	}
+
+	protected DataBoard createDataBoard(String moduleName, String applicationBeanName, String viewName) {
+		DataBoard newDataBoard = MyWTHelper.getMVCFactory().createDataBoard(moduleName, applicationBeanName, viewName);
+		return newDataBoard;
 	}
 
 	protected TextField createTextField(String label, String boundTo) {
@@ -52,9 +64,16 @@ public abstract class AbstractFormHelper implements FormHelper {
 		return MyWTHelper.getMVCFactory().createReferenceField(label, moduleName, applicationBeanName, viewName);
 	}
 
+	protected ReferenceField createReferenceField(String label, String moduleName, String applicationBeanName, String viewName, String columnName) {
+		ReferenceField referenceField = createReferenceField(label, moduleName, applicationBeanName, viewName);
+		((ReferenceFieldView) referenceField.getView()).setDisplayExpresion(new RowColumnExpression(columnName));
+		return referenceField;
+	}
+
 	protected ReferenceField createReferenceField(String label, String boundTo, String moduleName, String applicationBeanName, String viewName, String columnName) {
 		ReferenceField referenceField = createReferenceField(label, moduleName, applicationBeanName, viewName);
-		configureReferenceField(referenceField, boundTo, columnName);
+		referenceField.setBoundTo(boundTo);
+		((ReferenceFieldView) referenceField.getView()).setDisplayExpresion(new RowColumnExpression(columnName));
 		return referenceField;
 	}
 
@@ -62,16 +81,16 @@ public abstract class AbstractFormHelper implements FormHelper {
 		return MyWTHelper.getMVCFactory().createTable(Table.BEAN_BASED);
 	}
 
-	protected void configureReferenceField(ReferenceField referenceField, String boundTo, String columnName) {
-		referenceField.setBoundTo(boundTo);
-		((ReferenceFieldView) referenceField.getView()).setDisplayExpresion(new RowColumnExpression(columnName));
-	}
-
 	@Override
 	public ApplicationBean createApplicationBean() {
 		return new ApplicationDynaBean();
 	}
-	
+
+	@Override
+	public String getAppBeanName() {
+		return appBeanName;
+	}
+
 	@Override
 	public String getFormName() {
 		return formName;

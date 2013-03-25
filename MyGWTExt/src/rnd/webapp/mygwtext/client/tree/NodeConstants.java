@@ -11,6 +11,8 @@ public interface NodeConstants {
 	String VIEW_NAME = "viewName";
 
 	String FORM_NAME = "formName";
+	
+	String APP_BEAN_NAME = "appBeanName";
 
 	String MODULE_NAME = "moduleName";
 }

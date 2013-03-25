@@ -1,9 +1,5 @@
 package rnd.webapp.mygwtext.client.mvc.page;
 
-import static rnd.webapp.mygwtext.client.tree.NodeUtils.getFormName;
-import static rnd.webapp.mygwtext.client.tree.NodeUtils.getModuleName;
-import static rnd.webapp.mygwtext.client.tree.NodeUtils.getViewName;
-
 import java.util.Collection;
 
 import rnd.mywt.client.MyWTHelper;
@@ -52,6 +48,10 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 
 	public GWTExtHomePage(ActionBoard actionBoard) {
 		this.actionBoard = actionBoard;
+	}
+
+	public ActionBoard getActionBoard() {
+		return actionBoard;
 	}
 
 	@Override
@@ -170,14 +170,25 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 				if (NodeUtils.isFormNode(node)) {
 					try {
 
-						String moduleName = getModuleName(node.getParentNode());
-						String formName = getFormName(node);
-						String viewName = getViewName(node);
+						String moduleName = NodeUtils.getModuleName(node.getParentNode());
+						String appBeanName = NodeUtils.getAppBeanName(node);
+						String formName = NodeUtils.getFormName(node);
+						String viewName = NodeUtils.getViewName(node);
 
 						DataBoard dataBoard = (DataBoard) actionBoard.getActionBase().getBoard(moduleName, formName, viewName, BoardType.DATA_BOARD);
 
 						if (dataBoard == null) {
-							dataBoard = MyWTHelper.getMVCFactory().createDataBoard(moduleName, formName, viewName);
+
+							ModuleHelper moduleHelper = MyWTHelper.getApplicationHelper().getModuleHelper(moduleName);
+							if (moduleHelper != null) {
+
+								FormHelper formHelper = moduleHelper.getFormHelper(appBeanName);
+								dataBoard = formHelper.createDataBoard();
+
+							}
+							if (dataBoard == null) {
+								dataBoard = MyWTHelper.getMVCFactory().createDataBoard(moduleName, appBeanName, viewName);
+							}
 							actionBoard.getActionBase().addBoard(dataBoard);
 						}
 
@@ -203,9 +214,6 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 	@Override
 	public void initializeFormAction(ApplicationHelper applicationHelper, boolean reload) {
 
-		// treePanel.removeAll();
-		// RootNode root = new RootNode();
-		// treePanel.setRootNode(root);
 		if (reload) {
 			for (Node firstChild = root.getFirstChild(); firstChild != null; firstChild = root.getFirstChild()) {
 				root.removeChild(firstChild);
@@ -223,7 +231,7 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 			root.addModuleNode(module);
 
 			for (FormHelper formHelper : formHelpers) {
-				FormNode form = new FormNode(formHelper.getFormName(), formHelper.getViewName());
+				FormNode form = new FormNode(formHelper.getAppBeanName(), formHelper.getFormName(), formHelper.getViewName());
 				module.addFormNode(form);
 			}
 		}

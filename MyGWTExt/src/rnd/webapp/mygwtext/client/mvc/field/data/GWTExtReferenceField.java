@@ -12,9 +12,9 @@ import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.RowCacheImpl;
 import rnd.mywt.client.mvc.field.Table.RowTableModel;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
+import rnd.mywt.client.mvc.page.board.ActionBase;
 import rnd.mywt.client.mvc.page.board.Board.BoardType;
 import rnd.mywt.client.mvc.page.board.DataBoard;
-import rnd.mywt.client.mvc.page.board.FormBoard;
 import rnd.mywt.client.utils.ObjectUtils;
 import rnd.webapp.mygwtext.client.mvc.field.data.text.GWTExtTextField;
 
@@ -50,7 +50,8 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 
 	public class GWTExtReferenceFieldModel extends GWTExtTextFieldModel implements ReferenceFieldModel {
 		//
-		// private FilterResetTracker filterResetTracker = new FilterResetTracker();
+		// private FilterResetTracker filterResetTracker = new
+		// FilterResetTracker();
 		//
 		// private class FilterResetTracker implements XChangeListener {
 		// public void stateChanged(XChangeEvent changeEvent) {
@@ -62,30 +63,37 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 		// }
 		//
 		// public GWTExtReferenceFieldModel() {
-		// addValueChangeListener(FILTER, new ValueChangeListenerAdapter<FilterInfo>() {
+		// addValueChangeListener(FILTER, new
+		// ValueChangeListenerAdapter<FilterInfo>() {
 		//
 		// public void valueChanged(ValueChangeEvent<FilterInfo> vce) {
 		// FilterInfo oldFilterInfo = vce.getOldValue();
 		// if (oldFilterInfo != null) {
 		//
-		// Object[] filterParamExpressionObjects = oldFilterInfo.getFilterParamExpressionObjects();
-		// Expression[] filterParamExpressions = oldFilterInfo.getFilterParamExpressions();
+		// Object[] filterParamExpressionObjects =
+		// oldFilterInfo.getFilterParamExpressionObjects();
+		// Expression[] filterParamExpressions =
+		// oldFilterInfo.getFilterParamExpressions();
 		//
 		// for (int i = 0; i < filterParamExpressions.length; i++) {
 		// Expression expression = filterParamExpressions[i];
-		// expression.removeXChangeListener(filterParamExpressionObjects[i], filterResetTracker);
+		// expression.removeXChangeListener(filterParamExpressionObjects[i],
+		// filterResetTracker);
 		// }
 		// }
 		//
 		// FilterInfo newFilterInfo = vce.getNewValue();
 		// if (newFilterInfo != null) {
 		//
-		// Object[] filterParamExpressionObjects = newFilterInfo.getFilterParamExpressionObjects();
-		// Expression[] filterParamExpressions = newFilterInfo.getFilterParamExpressions();
+		// Object[] filterParamExpressionObjects =
+		// newFilterInfo.getFilterParamExpressionObjects();
+		// Expression[] filterParamExpressions =
+		// newFilterInfo.getFilterParamExpressions();
 		//
 		// for (int i = 0; i < filterParamExpressions.length; i++) {
 		// Expression expression = filterParamExpressions[i];
-		// expression.addXChangeListener(filterParamExpressionObjects[i], filterResetTracker);
+		// expression.addXChangeListener(filterParamExpressionObjects[i],
+		// filterResetTracker);
 		// }
 		// }
 		//
@@ -102,7 +110,9 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 
 	private String getDisplayText() {
 		Object reference = getReference();
-		if (reference == null) { return ""; }
+		if (reference == null) {
+			return "";
+		}
 		String displayText = (String) ((ReferenceFieldView) getView()).getDisplayExpression().getValue(reference);
 		return displayText;
 	}
@@ -183,8 +193,7 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 							Logger.log("setting new ref");
 							setReference(searchResult);
 						}
-					}
-					finally {
+					} finally {
 						Logger.endMethod("", "onBlur");
 					}
 				}
@@ -228,8 +237,7 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 			public void onClick(Button button, EventObject e) {
 				try {
 					showDataBoard();
-				}
-				catch (RuntimeException re) {
+				} catch (RuntimeException re) {
 					re.printStackTrace();
 				}
 			}
@@ -296,24 +304,22 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 			}
 			Logger.log("returning null");
 			return null;
-		}
-		catch (RuntimeException re) {
+		} catch (RuntimeException re) {
 			re.printStackTrace();
 			Logger.log("returning null");
 			return null;
-		}
-		finally {
+		} finally {
 			Logger.endMethod("GWTExtReferenceField", "search");
 		}
 
 	}
 
 	private DataBoard getDataBoard() {
-		DataBoard dataBoard = (DataBoard) getFormBoard().getActionBase().getBoard(getModuleName(), getApplicationBeanName(), getViewName(), BoardType.DATA_BOARD);
+		DataBoard dataBoard = (DataBoard) getActionBase().getBoard(getModuleName(), getApplicationBeanName(), getViewName(), BoardType.DATA_BOARD);
 
 		if (dataBoard == null) {
 			dataBoard = MyWTHelper.getMVCFactory().createDataBoard(getModuleName(), getApplicationBeanName(), getViewName());
-			getFormBoard().getActionBase().addBoard(dataBoard);
+			getActionBase().addBoard(dataBoard);
 		}
 
 		dataBoard.setReferenceField(GWTExtReferenceField.this);
@@ -322,14 +328,14 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 		return dataBoard;
 	}
 
-	private FormBoard getFormBoard() {
-		return (FormBoard) getParent().getParent();
-	}
-
 	private DataBoard showDataBoard() {
 		DataBoard dataBoard = getDataBoard();
-		getFormBoard().getActionBase().setCurrentBoard(dataBoard);
+		getActionBase().setCurrentBoard(dataBoard);
 		return dataBoard;
+	}
+
+	private ActionBase getActionBase() {
+		return MyWTHelper.getHomePage().getActionBoard().getActionBase();
 	}
 
 }
