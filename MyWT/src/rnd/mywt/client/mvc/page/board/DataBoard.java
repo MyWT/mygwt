@@ -1,5 +1,6 @@
 package rnd.mywt.client.mvc.page.board;
 
+import rnd.expression.Expression;
 import rnd.mywt.client.Context;
 import rnd.mywt.client.data.FilterInfo;
 import rnd.mywt.client.data.Row;
@@ -7,7 +8,7 @@ import rnd.mywt.client.mvc.field.Field;
 import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
 
-public interface DataBoard extends Board, Context {
+public interface DataBoard extends Board {
 
 	String VIEW_NAME = "viewName";
 
@@ -43,7 +44,7 @@ public interface DataBoard extends Board, Context {
 
 	// Model
 
-	public interface DataBoardModel extends Model {
+	public interface DataBoardModel extends Model, Context {
 
 		String DATA_TABLE_INTIALIZED = "dataTableIntialized";
 
@@ -70,6 +71,6 @@ public interface DataBoard extends Board, Context {
 	public interface DataBoardView extends PageView {
 	}
 
-	void addContextField(String key, Field field);
+	Expression addContextField(String key, Field field);
 
 }

@@ -10,9 +10,11 @@ import rnd.mywt.client.bean.ValueChangeListenerAdapter;
 import rnd.mywt.client.data.FilterInfo;
 import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.RowCacheImpl;
+import rnd.mywt.client.mvc.MVC;
 import rnd.mywt.client.mvc.field.Table.RowTableModel;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
 import rnd.mywt.client.mvc.page.board.ActionBase;
+import rnd.mywt.client.mvc.page.board.Board;
 import rnd.mywt.client.mvc.page.board.Board.BoardType;
 import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.utils.ObjectUtils;
@@ -338,4 +340,15 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 		return MyWTHelper.getHomePage().getActionBoard().getActionBase();
 	}
 
+	@Override
+	public Board getBoard() {
+		Board board;
+		MVC parent = getParent();
+		if (parent instanceof DataBoard) {
+			board = (Board) parent;
+		} else {// Form
+			board = (Board) parent.getParent();
+		}
+		return board;
+	}
 }

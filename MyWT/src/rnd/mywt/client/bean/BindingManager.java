@@ -17,9 +17,7 @@ public class BindingManager {
 		for (Field field : form.getFields()) {
 
 			Expression beanExp = field instanceof Table ? new BeanListPropertyExpression(field.getBoundTo()) : new BeanPropertyExpression(field.getBoundTo());
-			Expression fieldExp = new BeanPropertyExpression(field.getFieldProperty());
-
-			fieldExp.setValue(field, beanExp.getValue(bean));
+			field.setValue(field.getFieldProperty(), beanExp.getValue(bean));
 
 		}
 
@@ -27,13 +25,13 @@ public class BindingManager {
 	}
 
 	public static void bindForm(Form form, _BoundBean bean) {
-//		Logger.startMethod("BindingManager", "bindForm");
+		// Logger.startMethod("BindingManager", "bindForm");
 
 		for (Field field : form.getFields()) {
 
-//			Logger.log("field", field);
-//			Logger.log("FieldProperty", field.getFieldProperty());
-//			Logger.log("BoundTo", field.getBoundTo());
+			// Logger.log("field", field);
+			// Logger.log("FieldProperty", field.getFieldProperty());
+			// Logger.log("BoundTo", field.getBoundTo());
 
 			if (field instanceof Table) {
 				Expression beanExp = new BeanListPropertyExpression(field.getBoundTo());
@@ -47,7 +45,7 @@ public class BindingManager {
 			}
 		}
 
-//		Logger.endMethod("BindingManager", "bindForm");
+		// Logger.endMethod("BindingManager", "bindForm");
 	}
 
 	// TODO unbindForm

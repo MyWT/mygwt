@@ -300,8 +300,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 			referenceField.setReference(currRow);
 			currentDataBoard.setReferenceField(null);
 
-			FormBoard formBoard = (FormBoard) referenceField.getParent().getParent();
-			formBoard.getActionBase().setCurrentBoard(formBoard);
+			MyWTHelper.getHomePage().getActionBoard().getActionBase().setCurrentBoard(referenceField.getBoard());
 		}
 	}
 

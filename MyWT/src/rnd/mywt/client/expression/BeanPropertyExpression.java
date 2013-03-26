@@ -36,12 +36,12 @@ public class BeanPropertyExpression extends PropertyExpression {
 
 	private class BeanPropertyExpressionValueChangeListener extends XChangeListenerDelegate implements ValueChangeListener {
 
-		BeanPropertyExpressionValueChangeListener(XChangeListener xcl) {
+		private BeanPropertyExpressionValueChangeListener(XChangeListener xcl) {
 			super(xcl);
 		}
 
 		public void valueChanged(ValueChangeEvent vce) {
-			BeanPropertyExpression.this.valueChanged(this.delegate, vce);
+			delegate.stateChanged(new XChangeEvent(vce.getSource(), vce.getOldValue(), vce.getNewValue(), BeanPropertyExpression.this));
 		}
 
 		public void indexedValueChanged(IndexedValueChangedEvent ivce) {
@@ -54,10 +54,5 @@ public class BeanPropertyExpression extends PropertyExpression {
 		return new BeanPropertyExpressionValueChangeListener(xcl);
 	}
 
-	protected void valueChanged(XChangeListener xcl, ValueChangeEvent vce) {
-//		Logger.startMethod("BeanPropertyExpression", "valueChanged");
-		xcl.stateChanged(new XChangeEvent(vce.getSource(), vce.getOldValue(), vce.getNewValue(), this));
-//		Logger.endMethod("BeanPropertyExpression", "valueChanged");
-	}
 
 }

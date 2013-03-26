@@ -3,6 +3,7 @@ package rnd.mywt.client.mvc.field.data;
 import rnd.expression.Expression;
 import rnd.mywt.client.data.FilterInfo;
 import rnd.mywt.client.mvc.field.data.text.TextField;
+import rnd.mywt.client.mvc.page.board.Board;
 
 public interface ReferenceField extends TextField {
 
@@ -49,4 +50,6 @@ public interface ReferenceField extends TextField {
 
 		Expression getDisplayExpression();
 	}
+
+	Board getBoard();
 }

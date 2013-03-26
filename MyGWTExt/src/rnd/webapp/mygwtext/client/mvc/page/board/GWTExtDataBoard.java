@@ -1,17 +1,17 @@
 package rnd.webapp.mygwtext.client.mvc.page.board;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import rnd.expression.Expression;
 import rnd.expression.XChangeEvent;
 import rnd.expression.XChangeListener;
 import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.arb.ARBAsyncCallback;
+import rnd.mywt.client.bean.ApplicationDynaBean;
 import rnd.mywt.client.bean.BindingManager;
 import rnd.mywt.client.bean.ValueChangeEvent;
+import rnd.mywt.client.bean.ValueChangeListener;
 import rnd.mywt.client.bean.ValueChangeListenerAdapter;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
@@ -37,10 +37,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 	private Panel contextPanel;
 
 	private Table table;
-
 	private ReferenceField referenceField;
-
-	private Map context = new HashMap();
 
 	public GWTExtDataBoard(String moduleName, String appBeanName, String viewName) {
 		super(moduleName, appBeanName);
@@ -84,10 +81,12 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 	}
 
 	@Override
-	public void addContextField(String key, Field field) {
+	public Expression addContextField(String key, Field field) {
 		addChild(field);
 		getContextPanel().add((Widget) field.getView().getViewObject());
-		BindingManager.bindExpression(field, new BeanPropertyExpression(field.getFieldProperty()), this, new ContextValueExpression(key));
+		ContextValueExpression ctxExp = new ContextValueExpression(key);
+		BindingManager.bindExpression(field, new BeanPropertyExpression(field.getFieldProperty()), this.getModel(), ctxExp);
+		return ctxExp;
 	}
 
 	@Override
@@ -196,9 +195,11 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 		private DataBoardRefresher dataBoardRefresher = new DataBoardRefresher();
 
 		private class DataBoardRefresher implements XChangeListener {
+
 			public void stateChanged(XChangeEvent changeEvent) {
 				refreshTable();
 			}
+
 		}
 
 		public boolean isDataTableIntialized() {
@@ -225,6 +226,26 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 			setValue(FILTER_RESET, filterReset);
 		}
 
+		private ApplicationDynaBean context = new ApplicationDynaBean();
+
+		public Object getContext(String key) {
+			return context.getValue(key);
+		}
+
+		public Object setContext(String key, Object value) {
+			return context.setValue(key, value);
+		}
+
+		@Override
+		public void addValueChangeListener(String propertyName, ValueChangeListener vcl) {
+			context.addValueChangeListener(propertyName, vcl);
+		}
+
+		@Override
+		public void removeValueChangeListener(String propertyName, ValueChangeListener vcl) {
+			context.removeValueChangeListener(propertyName, vcl);
+		}
+
 		public GWTExtDataBoardModel() {
 
 			addValueChangeListener(DATA_TABLE_META_DATA_INTIALIZED, new ValueChangeListenerAdapter<Boolean>() {
@@ -238,20 +259,22 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 				}
 			});
 
-			addValueChangeListener(DATA_TABLE_INTIALIZED, new ValueChangeListenerAdapter<Boolean>() {
-				public void valueChanged(ValueChangeEvent<Boolean> vce) {
-					if (isDataTableIntialized()) {
-						if (referenceField != null) {
-							if (referenceField.getText() != null && referenceField.getText().trim().length() != 0) {
-								Object search = referenceField.search(referenceField.getText());
-								if (search == null) {
-									referenceField.setValue(null);
-								}
-							}
-						}
-					}
-				}
-			});
+			// addValueChangeListener(DATA_TABLE_INTIALIZED, new
+			// ValueChangeListenerAdapter<Boolean>() {
+			// public void valueChanged(ValueChangeEvent<Boolean> vce) {
+			// if (isDataTableIntialized()) {
+			// if (referenceField != null) {
+			// if (referenceField.getText() != null &&
+			// referenceField.getText().trim().length() != 0) {
+			// Object search = referenceField.search(referenceField.getText());
+			// if (search == null) {
+			// referenceField.setValue(null);
+			// }
+			// }
+			// }
+			// }
+			// }
+			// });
 
 			addValueChangeListener(FILTER, new ValueChangeListenerAdapter<FilterInfo>() {
 
@@ -287,16 +310,6 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 
 			});
 		}
-	}
-
-	@Override
-	public Object getContext(String key) {
-		return context.get(key);
-	}
-
-	@Override
-	public Object setContext(String key, Object value) {
-		return context.put(key, value);
 	}
 
 }

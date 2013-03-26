@@ -124,7 +124,8 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 			return;
 		}
 		default: {
-			//throw new UnsupportedOperationException(req.getMethod().toString());
+			// throw new
+			// UnsupportedOperationException(req.getMethod().toString());
 		}
 
 		}
@@ -168,12 +169,12 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 			String viewQuery = sqlvmd.getViewQuery();
 			// D.println("viewQuery", viewQuery);
 
-			// Object[] params = null;
+			Object[] params = null;
 			boolean filtered = false;
 
 			if (filterInfo != null) {
 				viewQuery = new StringBuffer(viewQuery).append(" where ").append(sqlvmd.getFilterExpression(filterInfo.getFilterName())).toString();
-				// params = filterInfo.getFilterParams().toArray();
+				params = filterInfo.getFilterParams().toArray();
 				filtered = true;
 				// D.println("viewQuery", viewQuery);
 			}
@@ -192,7 +193,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 			JDBCObjectPersistor jdbcOP = (JDBCObjectPersistor) getObjectPersistor();
 			JDBCDataAccessObject jdbcDAO = jdbcOP.getDataAccessObject();
 
-			Object[] result = (Object[]) jdbcDAO.executeQuery(viewQuery, null, JDBCDataAccessObject.ListArrayResultSetProcessor, cmdCreator, jdbcOP.getConnection(), true);
+			Object[] result = (Object[]) jdbcDAO.executeQuery(viewQuery, params, JDBCDataAccessObject.ListArrayResultSetProcessor, cmdCreator, jdbcOP.getConnection(), true);
 			// D.println("result", result);
 
 			ColumnMetaData[] cmds = (ColumnMetaData[]) result[0];
