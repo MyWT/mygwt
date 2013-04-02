@@ -1,6 +1,7 @@
 package rnd.mywt.client;
 
-import rnd.mywt.client.bean.ValueChangeListener;
+import rnd.bean.ValueChangeListener;
+import rnd.bean._Bean;
 
 public interface Context {
 
@@ -11,5 +12,7 @@ public interface Context {
 	void addValueChangeListener(String propertyName, ValueChangeListener vcl);
 
 	void removeValueChangeListener(String propertyName, ValueChangeListener vcl);
+
+	_Bean getContextBean();
 
 }

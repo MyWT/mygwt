@@ -1,6 +1,6 @@
 package rnd.mywt.client.mvc.field;
 
-import rnd.mywt.client.bean._BoundList;
+import rnd.bean._BoundList;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
 import rnd.mywt.client.data.Row;

@@ -1,16 +1,16 @@
 package rnd.webapp.mygwt.client;
 
-import rnd.mywt.client.arb.ARBAsyncCallback;
+import rnd.mywt.client.arb.ARBServiceResponseHandler;
 import rnd.mywt.client.rpc.ApplicationResponse;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class ARBRemoteServiceAsyncCallback implements AsyncCallback<ApplicationResponse> {
+public class ARBRemoteServiceResponseHandler implements AsyncCallback<ApplicationResponse> {
 
-	private ARBAsyncCallback delegate;
+	private ARBServiceResponseHandler delegate;
 
-	public ARBRemoteServiceAsyncCallback(ARBAsyncCallback delegate) {
+	public ARBRemoteServiceResponseHandler(ARBServiceResponseHandler delegate) {
 		this.delegate = delegate;
 	}
 

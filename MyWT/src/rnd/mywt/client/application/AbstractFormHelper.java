@@ -1,8 +1,8 @@
 package rnd.mywt.client.application;
 
+import rnd.bean.ApplicationBean;
+import rnd.bean.ApplicationDynaBean;
 import rnd.mywt.client.MyWTHelper;
-import rnd.mywt.client.bean.ApplicationBean;
-import rnd.mywt.client.bean.ApplicationDynaBean;
 import rnd.mywt.client.expression.RowColumnExpression;
 import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.mvc.field.data.ReferenceField;

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import rnd.mywt.client.bean.AbstractBean;
+import rnd.bean.AbstractBean;
 
 public class JavaBean extends AbstractBean {
 

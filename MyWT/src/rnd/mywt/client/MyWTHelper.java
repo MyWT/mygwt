@@ -1,7 +1,7 @@
 package rnd.mywt.client;
 
 import rnd.mywt.client.application.ApplicationHelper;
-import rnd.mywt.client.arb.ARBAsync;
+import rnd.mywt.client.arb.ARBServiceProvider;
 import rnd.mywt.client.mvc.MVCBeanFactory;
 import rnd.mywt.client.mvc.page.HomePage;
 
@@ -13,13 +13,13 @@ public class MyWTHelper {
 
 	private static HomePage homePage;
 	private static MVCBeanFactory mvcFactory;
-	private static ARBAsync arb;
+	private static ARBServiceProvider arb;
 
-	public static ARBAsync getARB() {
+	public static ARBServiceProvider getARB() {
 		return arb;
 	}
 
-	public static void setARB(ARBAsync arb) {
+	public static void setARB(ARBServiceProvider arb) {
 		MyWTHelper.arb = arb;
 	}
 

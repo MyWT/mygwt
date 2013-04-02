@@ -1,6 +1,6 @@
 package rnd.mywt.server.bean;
 
-import rnd.mywt.client.bean.ApplicationBean;
+import rnd.bean.ApplicationBean;
 
 public class ApplicationJavaBean extends JavaBean implements ApplicationBean {
 

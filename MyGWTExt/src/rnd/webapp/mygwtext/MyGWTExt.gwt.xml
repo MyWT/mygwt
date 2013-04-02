@@ -4,6 +4,7 @@
 	
 	<inherits name="rnd.utils.Utils"/>
 	<inherits name="rnd.expression.Expressions"/>
+	<inherits name="rnd.mywt.MyWT"/>
 	<inherits name="rnd.webapp.mygwt.MyGWT"/>
 	<inherits name="com.gwtext.GwtExt"/>
 	

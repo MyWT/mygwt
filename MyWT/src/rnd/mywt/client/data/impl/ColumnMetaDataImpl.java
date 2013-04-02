@@ -2,8 +2,8 @@ package rnd.mywt.client.data.impl;
 
 import java.io.Serializable;
 
+import rnd.bean.impl.DynaBean;
 import rnd.expression.Expression;
-import rnd.mywt.client.bean.DynaBean;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.utils.WrapperUtils;
 

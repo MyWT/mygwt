@@ -1,6 +1,6 @@
 package rnd.mywt.client.mvc;
 
-import rnd.mywt.client.bean.impl.BoundBean;
+import rnd.bean.impl.BoundBean;
 
 public class AbstractMVCBean extends BoundBean implements MVCBean {
 

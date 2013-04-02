@@ -2,7 +2,7 @@ package rnd.mywt.client.mvc.page.form;
 
 import java.util.List;
 
-import rnd.mywt.client.bean.ApplicationBean;
+import rnd.bean.ApplicationBean;
 import rnd.mywt.client.mvc.field.Field;
 import rnd.mywt.client.mvc.page.Page;
 

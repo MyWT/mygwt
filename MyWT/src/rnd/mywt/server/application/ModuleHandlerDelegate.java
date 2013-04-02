@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import rnd.bean.ApplicationBean;
+import rnd.bean.ApplicationDynaBean;
 import rnd.dao.rdbms.jdbc.JDBCDataAccessObject;
 import rnd.dao.rdbms.jdbc.rsmdp.ResultSetMetaDataProcessor;
-import rnd.mywt.client.bean.ApplicationBean;
-import rnd.mywt.client.bean.ApplicationDynaBean;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
 import rnd.mywt.client.data.FilterInfo;
@@ -28,12 +28,12 @@ import rnd.mywt.client.expression.RowColumnExpression;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
 import rnd.mywt.client.rpc.util.ARUtils;
-import rnd.mywt.client.utils.ObjectUtils;
 import rnd.mywt.server.data.SQLViewMetaData;
 import rnd.mywt.server.data.ViewMetaData;
 import rnd.mywt.server.util.AppBeanUtils;
 import rnd.op.ObjectPersistor;
 import rnd.op.rdbms.JDBCObjectPersistor;
+import rnd.utils.ObjectUtils;
 import rnd.utils.WrapperUtils;
 
 public final class ModuleHandlerDelegate implements ModuleHandler {

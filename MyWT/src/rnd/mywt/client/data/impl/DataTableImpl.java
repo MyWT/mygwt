@@ -3,7 +3,7 @@ package rnd.mywt.client.data.impl;
 import java.util.Collection;
 import java.util.List;
 
-import rnd.mywt.client.bean.DynaBean;
+import rnd.bean.impl.DynaBean;
 import rnd.mywt.client.data.DataTable;
 import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.RowMetaData;

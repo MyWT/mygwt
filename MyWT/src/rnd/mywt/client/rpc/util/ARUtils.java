@@ -2,7 +2,7 @@ package rnd.mywt.client.rpc.util;
 
 import java.io.Serializable;
 
-import rnd.mywt.client.bean.ApplicationBean;
+import rnd.bean.ApplicationBean;
 import rnd.mywt.client.data.FilterInfo;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationRequest.Method;

@@ -1,6 +1,6 @@
 package rnd.mywt.client.mvc;
 
-import rnd.mywt.client.bean._BoundBean;
+import rnd.bean._BoundBean;
 
 public interface MVCBean extends MVC, _BoundBean {
 

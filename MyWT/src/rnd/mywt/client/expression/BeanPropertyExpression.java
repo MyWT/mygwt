@@ -1,15 +1,12 @@
 package rnd.mywt.client.expression;
 
-import rnd.expression.PropertyExpression;
-import rnd.expression.XChangeEvent;
+import rnd.bean.ValueChangeListener;
+import rnd.bean._Bean;
+import rnd.bean._BoundBean;
+import rnd.bean.expression.ValueExpression;
 import rnd.expression.XChangeListener;
-import rnd.mywt.client.bean.IndexedValueChangedEvent;
-import rnd.mywt.client.bean.ValueChangeEvent;
-import rnd.mywt.client.bean.ValueChangeListener;
-import rnd.mywt.client.bean._Bean;
-import rnd.mywt.client.bean._BoundBean;
 
-public class BeanPropertyExpression extends PropertyExpression {
+public class BeanPropertyExpression extends ValueExpression {
 
 	public BeanPropertyExpression() {
 	}
@@ -33,26 +30,5 @@ public class BeanPropertyExpression extends PropertyExpression {
 	public void removeXChangeListener(Object object, XChangeListener xcl) {
 		((_BoundBean) object).removeValueChangeListener(this.propertyName, (ValueChangeListener) getXChangeListenerDelegate(xcl, true));
 	}
-
-	private class BeanPropertyExpressionValueChangeListener extends XChangeListenerDelegate implements ValueChangeListener {
-
-		private BeanPropertyExpressionValueChangeListener(XChangeListener xcl) {
-			super(xcl);
-		}
-
-		public void valueChanged(ValueChangeEvent vce) {
-			delegate.stateChanged(new XChangeEvent(vce.getSource(), vce.getOldValue(), vce.getNewValue(), BeanPropertyExpression.this));
-		}
-
-		public void indexedValueChanged(IndexedValueChangedEvent ivce) {
-			throw new UnsupportedOperationException("BeanPropertyExpression does not support IndexedValueChangedEvent");
-		}
-	}
-
-	@Override
-	protected XChangeListenerDelegate getNewXChangeListenerDelegate(XChangeListener xcl) {
-		return new BeanPropertyExpressionValueChangeListener(xcl);
-	}
-
 
 }

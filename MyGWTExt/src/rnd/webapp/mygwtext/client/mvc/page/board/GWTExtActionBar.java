@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import rnd.mywt.client.Logger;
 import rnd.mywt.client.MyWTHelper;
-import rnd.mywt.client.arb.ARBAsyncCallback;
+import rnd.mywt.client.arb.ARBServiceResponseHandler;
 import rnd.mywt.client.data.Row;
 import rnd.mywt.client.mvc.AbstractMVCBean;
 import rnd.mywt.client.mvc.field.Table;
@@ -199,7 +199,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 		FormModel formModel = (FormModel) formBoard.getForm().getModel();
 
 		ApplicationRequest req = ARUtils.createSaveRequest(formBoard.getModuleName(), formBoard.getApplicationBeanName(), formBoard.getDataBoard().getViewName(), formModel.getApplicationBean());
-		MyWTHelper.getARB().executeRequest(req, new ARBAsyncCallback() {
+		MyWTHelper.getARB().executeRequest(req, new ARBServiceResponseHandler() {
 
 			@Override
 			public void processResult(Serializable result) {
@@ -265,7 +265,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 		}
 
 		ApplicationRequest req = ARUtils.createDeleteRequest(getCurrentDataBoard().getModuleName(), getCurrentDataBoard().getApplicationBeanName(), appBeanId);
-		MyWTHelper.getARB().executeRequest(req, new ARBAsyncCallback() {
+		MyWTHelper.getARB().executeRequest(req, new ARBServiceResponseHandler() {
 
 			@Override
 			public void processResult(Serializable result) {

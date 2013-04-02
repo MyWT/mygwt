@@ -2,11 +2,11 @@ package rnd.webapp.mygwtext.client.mvc.page.board;
 
 import java.io.Serializable;
 
+import rnd.bean.ApplicationBean;
 import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.application.FormHelper;
 import rnd.mywt.client.application.ModuleHelper;
-import rnd.mywt.client.arb.ARBAsyncCallback;
-import rnd.mywt.client.bean.ApplicationBean;
+import rnd.mywt.client.arb.ARBServiceResponseHandler;
 import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.RowCacheImpl;
 import rnd.mywt.client.mvc.page.board.ActionBase;
@@ -69,7 +69,7 @@ public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 
 			ApplicationRequest req = ARUtils.createFindRequest(getModuleName(), getApplicationBeanName(), appBeanId);
 
-			MyWTHelper.getARB().executeRequest(req, new ARBAsyncCallback() {
+			MyWTHelper.getARB().executeRequest(req, new ARBServiceResponseHandler() {
 
 				@Override
 				public void processResult(Serializable result) {

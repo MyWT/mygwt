@@ -5,6 +5,7 @@
 	<inherits name="rnd.utils.Utils"/>
 	<inherits name="rnd.java.util.JavaUtil" />
 	<inherits name="rnd.expression.Expressions" />
+	<inherits name="rnd.bean.Beans" />
 	
 	<inherits name="ad.AD" />
 	

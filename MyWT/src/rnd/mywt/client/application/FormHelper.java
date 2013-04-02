@@ -1,6 +1,6 @@
 package rnd.mywt.client.application;
 
-import rnd.mywt.client.bean.ApplicationBean;
+import rnd.bean.ApplicationBean;
 import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.mvc.page.form.Form;
 

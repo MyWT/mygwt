@@ -1,13 +1,17 @@
 package rnd.webapp.mygwtext.client.mvc.page.form;
 
 import java.util.List;
+import java.util.Set;
 
-import rnd.mywt.client.bean.ApplicationBean;
-import rnd.mywt.client.bean.BindingManager;
-import rnd.mywt.client.bean.ValueChangeEvent;
-import rnd.mywt.client.bean.ValueChangeListenerAdapter;
-import rnd.mywt.client.bean._BoundBean;
+import rnd.bean.ApplicationBean;
+import rnd.bean.ValueChangeEvent;
+import rnd.bean.ValueChangeListenerAdapter;
+import rnd.bean._Bean;
+import rnd.bean._BoundBean;
+import rnd.mywt.client.expression.BindingManager;
 import rnd.mywt.client.mvc.field.Field;
+import rnd.mywt.client.mvc.page.board.DataBoard.DataBoardModel;
+import rnd.mywt.client.mvc.page.board.FormBoard;
 import rnd.mywt.client.mvc.page.form.Form;
 import rnd.webapp.mygwtext.client.mvc.page.GWTExtPage;
 
@@ -61,12 +65,22 @@ public class GWTExtForm extends GWTExtPage implements Form {
 
 					if (newAppBean != null) {
 
+						// Copy Context
+						_Bean contextBean = ((DataBoardModel) (((FormBoard) getParent()).getDataBoard().getModel())).getContextBean();
+						Set<String> propertyNames = contextBean.getPropertyNames();
+
+						for (String prpName : propertyNames) {
+							newAppBean.setValue(prpName, contextBean.getValue(prpName));
+						}
+
 						Long appBeanId = newAppBean.getId();
 						// Logger.log("appBeanId", appBeanId);
 
+						// Init Form
 						if (appBeanId != null) {
 							BindingManager.initForm(GWTExtForm.this, (_BoundBean) newAppBean);
 						}
+						// Bind Form
 						BindingManager.bindForm(GWTExtForm.this, (_BoundBean) newAppBean);
 					}
 					// Logger.endMethod("FM", "valueChanged");

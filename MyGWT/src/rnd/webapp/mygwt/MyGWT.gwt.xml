@@ -5,6 +5,7 @@
 	<inherits name="com.google.gwt.i18n.I18N" />
 	<inherits name='com.google.gwt.user.theme.standard.Standard' />
 	
+	<inherits name="rnd.bean.Beans" />
 	<inherits name="rnd.mywt.MyWT" />
 
 	<servlet path="/ARB" class="rnd.webapp.mygwt.server.ARBRemoteServiceServlet" />

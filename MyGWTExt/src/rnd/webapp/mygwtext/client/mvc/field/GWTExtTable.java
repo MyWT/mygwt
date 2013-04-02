@@ -2,15 +2,15 @@ package rnd.webapp.mygwtext.client.mvc.field;
 
 import java.util.Collection;
 
+import rnd.bean.IndexedValueChangedEvent;
+import rnd.bean.ValueChangeEvent;
+import rnd.bean.ValueChangeListenerAdapter;
+import rnd.bean._Bean;
+import rnd.bean._BoundList;
 import rnd.expression.Expression;
 import rnd.expression.XChangeEvent;
 import rnd.expression.XChangeListener;
 import rnd.mywt.client.Logger;
-import rnd.mywt.client.bean.IndexedValueChangedEvent;
-import rnd.mywt.client.bean.ValueChangeEvent;
-import rnd.mywt.client.bean.ValueChangeListenerAdapter;
-import rnd.mywt.client.bean._Bean;
-import rnd.mywt.client.bean._BoundList;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
 import rnd.mywt.client.data.Row;

@@ -2,7 +2,7 @@ package rnd.mywt.server.application;
 
 import java.util.Collection;
 
-import rnd.mywt.client.bean.ApplicationBean;
+import rnd.bean.ApplicationBean;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.ApplicationResponse;
 import rnd.op.ObjectPersistor;

@@ -2,16 +2,16 @@ package rnd.mywt.client.application;
 
 import java.util.Collection;
 
+import rnd.bean.ApplicationDynaBean;
 import rnd.mywt.client.MyWTHelper;
-import rnd.mywt.client.arb.ARBAsyncCallback;
-import rnd.mywt.client.bean.ApplicationDynaBean;
+import rnd.mywt.client.arb.ARBServiceResponseHandler;
 import rnd.mywt.client.mvc.field.data.text.Label;
 import rnd.mywt.client.mvc.field.data.text.TextField;
 import rnd.mywt.client.mvc.page.form.Form;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.util.ARUtils;
 
-public class MetadataFormHelper extends AbstractFormHelper implements FormHelper {
+public class MetadataFormHelper extends AbstractFormHelper {
 
 	private ApplicationDynaBean formMetadata;
 
@@ -30,7 +30,7 @@ public class MetadataFormHelper extends AbstractFormHelper implements FormHelper
 
 		ApplicationRequest loadReq = ARUtils.createLoadRequest("AD", "Form", getFormName());
 
-		MyWTHelper.getARB().executeRequest(loadReq, new ARBAsyncCallback<ApplicationDynaBean>() {
+		MyWTHelper.getARB().executeRequest(loadReq, new ARBServiceResponseHandler<ApplicationDynaBean>() {
 
 			@Override
 			public void processResult(ApplicationDynaBean app) {

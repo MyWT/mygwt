@@ -1,7 +1,7 @@
 package rnd.mywt.client.expression;
 
-import rnd.mywt.client.bean.BeanPropertyList;
-import rnd.mywt.client.bean._BoundBean;
+import rnd.bean.BeanPropertyList;
+import rnd.bean._BoundBean;
 
 public class BeanListPropertyExpression extends BeanPropertyExpression {
 

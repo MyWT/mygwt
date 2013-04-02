@@ -2,9 +2,9 @@ package rnd.mywt.client.application;
 
 import java.util.Collection;
 
+import rnd.bean.ApplicationDynaBean;
 import rnd.mywt.client.MyWTHelper;
-import rnd.mywt.client.arb.ARBAsyncCallback;
-import rnd.mywt.client.bean.ApplicationDynaBean;
+import rnd.mywt.client.arb.ARBServiceResponseHandler;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.util.ARUtils;
 
@@ -27,7 +27,7 @@ public class DefaultApplicationHelper extends AbstractApplicationHelper implemen
 
 		ApplicationRequest loadReq = ARUtils.createLoadRequest("AD", "Application", applicationName);
 
-		MyWTHelper.getARB().executeRequest(loadReq, new ARBAsyncCallback<ApplicationDynaBean>() {
+		MyWTHelper.getARB().executeRequest(loadReq, new ARBServiceResponseHandler<ApplicationDynaBean>() {
 
 			@Override
 			public void processResult(ApplicationDynaBean app) {

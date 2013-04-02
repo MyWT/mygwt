@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import rnd.mywt.client.bean.ApplicationBean;
-import rnd.mywt.client.bean.ApplicationDynaBean;
+import rnd.bean.ApplicationBean;
+import rnd.bean.ApplicationDynaBean;
 import rnd.mywt.client.utils.Block;
 import rnd.mywt.client.utils.ExceptionUtils;
 

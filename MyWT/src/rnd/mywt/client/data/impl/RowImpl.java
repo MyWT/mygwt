@@ -3,7 +3,7 @@ package rnd.mywt.client.data.impl;
 import java.io.Serializable;
 import java.util.List;
 
-import rnd.mywt.client.bean.DynaBean;
+import rnd.bean.impl.DynaBean;
 import rnd.mywt.client.data.Row;
 import rnd.mywt.client.data.RowMetaData;
 
