@@ -2,22 +2,22 @@ package rnd.mywt.client.application;
 
 import java.util.Collection;
 
+import rnd.bean.ApplicationBean;
 import rnd.bean.ApplicationDynaBean;
 import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.arb.ARBServiceResponseHandler;
 import rnd.mywt.client.mvc.field.data.text.Label;
-import rnd.mywt.client.mvc.field.data.text.TextField;
 import rnd.mywt.client.mvc.page.form.Form;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.util.ARUtils;
 
 public class MetadataFormHelper extends AbstractFormHelper {
 
-	private ApplicationDynaBean formMetadata;
+	private String className;
 
-	public MetadataFormHelper(String appBeanName, String formName, String viewName, ApplicationDynaBean formMetadata) {
+	public MetadataFormHelper(String appBeanName, String formName, String viewName, String className) {
 		super(appBeanName, formName, viewName);
-		this.formMetadata = formMetadata;
+		this.className = className;
 	}
 
 	@Override
@@ -32,18 +32,20 @@ public class MetadataFormHelper extends AbstractFormHelper {
 
 		MyWTHelper.getARB().executeRequest(loadReq, new ARBServiceResponseHandler<ApplicationDynaBean>() {
 
-			@Override
-			public void processResult(ApplicationDynaBean app) {
+			public void processResult(ApplicationDynaBean formMetadata) {
 
 				Collection<ApplicationDynaBean> fields = (Collection<ApplicationDynaBean>) formMetadata.getListValueReadOnly("field");
 				for (ApplicationDynaBean field : fields) {
 
-					TextField name_TF = MyWTHelper.getMVCFactory().createTextField((String) field.getValue("lable"));
-					name_TF.setBoundTo((String) field.getValue("boundTo"));
-					form.addField(name_TF);
+					form.addField(createTextField((String) field.getValue("label"), (String) field.getValue("boundTo")));
 				}
 			}
 		});
 		return form;
+	}
+
+	@Override
+	public ApplicationBean createApplicationBean() {
+		return new ApplicationDynaBean(className);
 	}
 }

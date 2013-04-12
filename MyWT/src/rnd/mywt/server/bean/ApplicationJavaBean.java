@@ -4,14 +4,14 @@ import rnd.bean.ApplicationBean;
 
 public class ApplicationJavaBean extends JavaBean implements ApplicationBean {
 
-	private Long applicationBeanId;
+	private Long id;
 
 	public Long getId() {
-		return this.applicationBeanId;
+		return this.id;
 	}
 
 	public void setId(Long id) {
-		this.applicationBeanId = id;
+		this.id = id;
 	}
 
 	// Due to no-access to applicationId by JavaBean

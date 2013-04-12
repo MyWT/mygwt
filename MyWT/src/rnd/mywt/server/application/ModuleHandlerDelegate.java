@@ -282,7 +282,8 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 
 		ApplicationBean clientBean = AppBeanUtils.getNewClientBean(objType);
 		AppBeanUtils.copyBean(serverBean, clientBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
-
+		clientBean.setValue("ClassName", serverBean.getClass().getName());
+		
 		return clientBean;
 	}
 
@@ -294,13 +295,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	@Override
 	public ApplicationBean saveObject(ApplicationBean clientBean) {
 
-		Class serverBeanType;
-		if (clientBean instanceof ApplicationDynaBean) {
-			serverBeanType = AppBeanUtils.loadClass(((ApplicationDynaBean) clientBean).getClassName());
-		} else {
-			serverBeanType = AppBeanUtils.getServerBeanType(clientBean.getClass());
-		}
-
+		Class serverBeanType = getServerBeanType(clientBean);
 		ApplicationBean serverBean = AppBeanUtils.getNewApplicationBean(serverBeanType);
 		AppBeanUtils.copyBean(clientBean, serverBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
 
@@ -310,10 +305,21 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 
 	public ApplicationBean updateObject(Object id, ApplicationBean clientBean) {
 
-		ApplicationBean serverBean = (ApplicationBean) getObjectPersistor().findObject(clientBean.getId(), AppBeanUtils.getServerBeanType(clientBean.getClass()));
+		Class serverBeanType = getServerBeanType(clientBean);
+		ApplicationBean serverBean = (ApplicationBean) getObjectPersistor().findObject(clientBean.getId(), serverBeanType);
 		AppBeanUtils.copyBean(clientBean, serverBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
 
 		return (ApplicationBean) getObjectPersistor().updateObject(serverBean.getId(), serverBean);
+	}
+
+	private Class getServerBeanType(ApplicationBean clientBean) {
+		Class serverBeanType;
+		if (clientBean instanceof ApplicationDynaBean) {
+			serverBeanType = AppBeanUtils.loadClass(((ApplicationDynaBean) clientBean).getClassName());
+		} else {
+			serverBeanType = AppBeanUtils.getServerBeanType(clientBean.getClass());
+		}
+		return serverBeanType;
 	}
 
 }

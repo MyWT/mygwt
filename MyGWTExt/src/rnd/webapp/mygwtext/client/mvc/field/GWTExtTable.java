@@ -537,8 +537,8 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 				this.gridBase = new Panel();
 				this.gridBase.setLayout(new FitLayout());
 				this.gridBase.setBorder(false);
-				// this.gridBase.setWidth("100%");
-				// this.gridBase.setHeight("100%");
+				this.gridBase.setWidth("100%");
+				this.gridBase.setHeight("100%");
 			}
 			return this.gridBase;
 		}

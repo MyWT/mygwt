@@ -2,10 +2,14 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.1//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.1/distro-source/core/src/gwt-module.dtd">
 <module>
 	
+	<inherits name="com.gwtext.GwtExt"/>
+	
 	<inherits name="rnd.utils.Utils"/>
 	<inherits name="rnd.expression.Expressions"/>
+	<inherits name="rnd.bean.Beans"/>
+	
 	<inherits name="rnd.mywt.MyWT"/>
 	<inherits name="rnd.webapp.mygwt.MyGWT"/>
-	<inherits name="com.gwtext.GwtExt"/>
+	
 	
 </module>
