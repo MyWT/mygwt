@@ -52,7 +52,7 @@ public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 	private Form createForm() {
 
 		ModuleHelper moduleHelper = MyWTHelper.getApplicationHelper().getModuleHelper(getModuleName());
-		if(moduleHelper == null){
+		if (moduleHelper == null) {
 			moduleHelper = MyWTHelper.getDefaultApplicationHelper().getModuleHelper(getModuleName());
 		}
 		FormHelper formHelper = moduleHelper.getFormHelper(getApplicationBeanName());
@@ -60,11 +60,14 @@ public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 		// Create Form
 		Form newForm = formHelper.createForm();
 		newForm.setParent(this);
+		newForm.setCallback(formHelper);
 
 		Long appBeanId = getApplicationBeanId();
 		if (appBeanId == null) {
+
 			ApplicationBean appBean = formHelper.createApplicationBean();
 			((FormModel) newForm.getModel()).setApplicationBean(appBean);
+
 		} else {
 
 			ApplicationRequest req = ARUtils.createFindRequest(getModuleName(), getApplicationBeanName(), appBeanId);

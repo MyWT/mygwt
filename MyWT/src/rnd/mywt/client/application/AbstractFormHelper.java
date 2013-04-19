@@ -1,7 +1,5 @@
 package rnd.mywt.client.application;
 
-import rnd.bean.ApplicationBean;
-import rnd.bean.ApplicationDynaBean;
 import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.expression.RowColumnExpression;
 import rnd.mywt.client.mvc.field.Table;
@@ -11,6 +9,7 @@ import rnd.mywt.client.mvc.field.data.text.TextArea;
 import rnd.mywt.client.mvc.field.data.text.TextField;
 import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.mvc.page.form.Form;
+import rnd.mywt.client.mvc.page.form.Form.FormModel;
 
 public abstract class AbstractFormHelper implements FormHelper {
 
@@ -24,17 +23,18 @@ public abstract class AbstractFormHelper implements FormHelper {
 		this.viewName = viewName;
 	}
 
-	private Form form;
+	// private Form form;
 
-	public Form getForm() {
-		if (this.form == null) {
-			this.form = createForm();
-		}
-		return this.form;
-	}
+	// public Form getForm() {
+	// if (this.form == null) {
+	// this.form = createForm();
+	// }
+	// return this.form;
+	// }
 
 	public Form createForm() {
 		Form newForm = MyWTHelper.getMVCFactory().createForm();
+		((FormModel) newForm.getModel()).setShouldAutoBind(shouldAutoBind());
 		return newForm;
 	}
 
@@ -44,11 +44,10 @@ public abstract class AbstractFormHelper implements FormHelper {
 	}
 
 	protected DataBoard createDataBoard(String moduleName, String applicationBeanName, String viewName) {
-		DataBoard newDataBoard = MyWTHelper.getMVCFactory().createDataBoard(moduleName, applicationBeanName, viewName);
-		return newDataBoard;
+		return MyWTHelper.getMVCFactory().createDataBoard(moduleName, applicationBeanName, viewName);
 	}
 
-	protected TextField createTextField(String label, String boundTo) {
+	protected static TextField createTextField(String label, String boundTo) {
 		TextField textField = MyWTHelper.getMVCFactory().createTextField(label);
 		textField.setBoundTo(boundTo);
 		return textField;
@@ -82,8 +81,8 @@ public abstract class AbstractFormHelper implements FormHelper {
 	}
 
 	@Override
-	public ApplicationBean createApplicationBean() {
-		return new ApplicationDynaBean();
+	public boolean shouldAutoBind() {
+		return true;
 	}
 
 	@Override
@@ -99,6 +98,10 @@ public abstract class AbstractFormHelper implements FormHelper {
 	@Override
 	public String getViewName() {
 		return viewName;
+	}
+
+	@Override
+	public void initForm(Form form) {
 	}
 
 }

@@ -63,9 +63,15 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		return moduleHandler.getModuleName();
 	}
 
-	// public void registerApplicationBean(String appBeanName) {
-	// this.beanTypeMap.put(appBeanName, ProxyApplicationBean.class);
-	// }
+	@Override
+	public ApplicationHandler getApplicationHandler() {
+		return moduleHandler.getApplicationHandler();
+	}
+
+	@Override
+	public void setApplicationHandler(ApplicationHandler applicationHandler) {
+		moduleHandler.setApplicationHandler(applicationHandler);
+	}
 
 	@Override
 	public void registerApplicationBean(String appBeanName, Class<? extends ApplicationBean> appBeanType) {
@@ -283,7 +289,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		ApplicationBean clientBean = AppBeanUtils.getNewClientBean(objType);
 		AppBeanUtils.copyBean(serverBean, clientBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
 		clientBean.setValue("ClassName", serverBean.getClass().getName());
-		
+
 		return clientBean;
 	}
 

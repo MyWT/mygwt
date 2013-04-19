@@ -95,7 +95,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 					// currentDataBoard.getApplicationBeanName(),
 					// currentDataBoard.getViewName(), currRow);
 
-					performUpdateAction(currRow.getId(), currentDataBoard.getViewName());
+					performUpdateAction(currRow.getId());
 				} catch (Throwable t) {
 					t.printStackTrace();
 				}
@@ -190,7 +190,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 	}
 
 	private void performNewAction() {
-		createFormBoard(null, null);
+		create_And_ShowFormBoard(null);
 	}
 
 	private void performSaveAction() {
@@ -237,11 +237,11 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 
 	}
 
-	private void performUpdateAction(Long appBeanId, String viewName) {
-		createFormBoard(appBeanId, viewName);
+	private void performUpdateAction(Long appBeanId) {
+		create_And_ShowFormBoard(appBeanId);
 	}
 
-	private void createFormBoard(Long appBeanId, String viewName) {
+	private void create_And_ShowFormBoard(Long appBeanId) {
 
 		DataBoard dataBoard = getCurrentDataBoard();
 		FormBoard formBoard = MyWTHelper.getMVCFactory().createFormBoard(dataBoard.getModuleName(), dataBoard.getApplicationBeanName());

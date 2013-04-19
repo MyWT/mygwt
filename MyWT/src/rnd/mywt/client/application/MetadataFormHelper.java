@@ -4,10 +4,13 @@ import java.util.Collection;
 
 import rnd.bean.ApplicationBean;
 import rnd.bean.ApplicationDynaBean;
+import rnd.bean._BoundBean;
 import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.arb.ARBServiceResponseHandler;
+import rnd.mywt.client.expression.BindingManager;
 import rnd.mywt.client.mvc.field.data.text.Label;
 import rnd.mywt.client.mvc.page.form.Form;
+import rnd.mywt.client.mvc.page.form.Form.FormModel;
 import rnd.mywt.client.rpc.ApplicationRequest;
 import rnd.mywt.client.rpc.util.ARUtils;
 
@@ -28,6 +31,12 @@ public class MetadataFormHelper extends AbstractFormHelper {
 		Label label = MyWTHelper.getMVCFactory().createLabel(getFormName());
 		form.addField(label);
 
+		// loadForm(getFormName(), form);
+
+		return form;
+	}
+
+	public void initForm(final Form form) {
 		ApplicationRequest loadReq = ARUtils.createLoadRequest("AD", "Form", getFormName());
 
 		MyWTHelper.getARB().executeRequest(loadReq, new ARBServiceResponseHandler<ApplicationDynaBean>() {
@@ -39,13 +48,25 @@ public class MetadataFormHelper extends AbstractFormHelper {
 
 					form.addField(createTextField((String) field.getValue("label"), (String) field.getValue("boundTo")));
 				}
+				
+				ApplicationBean appBean = ((FormModel) form.getModel()).getApplicationBean();
+				// after creating Fields
+				// Init Update Form
+				BindingManager.initForm(form, (_BoundBean) appBean);
+				// Bind Form after creating Fields
+				BindingManager.bindForm(form, (_BoundBean) appBean);
 			}
 		});
-		return form;
 	}
 
 	@Override
 	public ApplicationBean createApplicationBean() {
 		return new ApplicationDynaBean(className);
 	}
+
+	@Override
+	public boolean shouldAutoBind() {
+		return false;
+	}
+
 }

@@ -37,7 +37,6 @@ public class GWTExtMVCBeanFactory implements MVCBeanFactory {
 
 	// Label
 	public Label createLabel(String text) {
-		//throw new UnsupportedOperationException("createLabel");
 		return new GWTExtLabel(text);
 	}
 

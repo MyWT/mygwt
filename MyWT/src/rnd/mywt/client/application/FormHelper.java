@@ -4,10 +4,10 @@ import rnd.bean.ApplicationBean;
 import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.mvc.page.form.Form;
 
-public interface FormHelper {
+public interface FormHelper extends FormHelperCallback {
 
 	String getAppBeanName();
-	
+
 	String getFormName();
 
 	String getViewName();
@@ -17,5 +17,7 @@ public interface FormHelper {
 	ApplicationBean createApplicationBean();
 
 	DataBoard createDataBoard();
+
+	boolean shouldAutoBind();
 
 }

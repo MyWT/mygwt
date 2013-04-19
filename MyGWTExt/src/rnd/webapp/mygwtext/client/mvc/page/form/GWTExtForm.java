@@ -8,6 +8,7 @@ import rnd.bean.ValueChangeEvent;
 import rnd.bean.ValueChangeListenerAdapter;
 import rnd.bean._Bean;
 import rnd.bean._BoundBean;
+import rnd.mywt.client.application.FormHelperCallback;
 import rnd.mywt.client.expression.BindingManager;
 import rnd.mywt.client.mvc.field.Field;
 import rnd.mywt.client.mvc.page.board.DataBoard.DataBoardModel;
@@ -19,6 +20,8 @@ import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.form.FormPanel;
 
 public class GWTExtForm extends GWTExtPage implements Form {
+
+	private FormHelperCallback callback;
 
 	public GWTExtForm() {
 		setModel(new GWTExtFormModel());
@@ -46,21 +49,40 @@ public class GWTExtForm extends GWTExtPage implements Form {
 		return getChildren();
 	}
 
+	public void setCallback(FormHelperCallback callback) {
+		this.callback = callback;
+	}
+
+	public FormHelperCallback getCallback() {
+		return callback;
+	}
+
 	public class GWTExtFormModel implements FormModel {
+
+		boolean shouldAutoBind;
+
+		@Override
+		public boolean shoudAutoBind() {
+			return shouldAutoBind;
+		}
+
+		public void setShouldAutoBind(boolean shouldAutoBind) {
+			this.shouldAutoBind = shouldAutoBind;
+		}
 
 		public GWTExtFormModel() {
 			addValueChangeListener(APPLICATION_BEAN, new ValueChangeListenerAdapter() {
 
 				public void valueChanged(ValueChangeEvent vce) {
 					// Logger.startMethod("FM", "valueChanged");
-					// Unbind Old App _Bean
+					// Unbind old AppBean
 					ApplicationBean oldAppBean = (ApplicationBean) vce.getOldValue();
 
 					if (oldAppBean != null) {
 						BindingManager.unbindForm(GWTExtForm.this, (_BoundBean) oldAppBean);
 					}
 
-					// Bind new _Bean
+					// Bind new AppBean
 					ApplicationBean newAppBean = (ApplicationBean) vce.getNewValue();
 
 					if (newAppBean != null) {
@@ -73,15 +95,21 @@ public class GWTExtForm extends GWTExtPage implements Form {
 							newAppBean.setValue(prpName, contextBean.getValue(prpName));
 						}
 
-						Long appBeanId = newAppBean.getId();
-						// Logger.log("appBeanId", appBeanId);
-
-						// Init Form
-						if (appBeanId != null) {
-							BindingManager.initForm(GWTExtForm.this, (_BoundBean) newAppBean);
+						if (shoudAutoBind()) {
+							
+							Long appBeanId = newAppBean.getId();
+							// Logger.log("appBeanId", appBeanId);
+							
+							// Init Update Form
+							if (appBeanId != null) {
+								BindingManager.initForm(GWTExtForm.this, (_BoundBean) newAppBean);
+							}
+							
+							// Bind Manual Form
+							BindingManager.bindForm(GWTExtForm.this, (_BoundBean) newAppBean);
+						} else {
+							getCallback().initForm(GWTExtForm.this);
 						}
-						// Bind Form
-						BindingManager.bindForm(GWTExtForm.this, (_BoundBean) newAppBean);
 					}
 					// Logger.endMethod("FM", "valueChanged");
 				}

@@ -14,11 +14,15 @@ public interface ModuleHandler extends ObjectLifeCycleSupport<ApplicationBean> {
 
 	// Intialization
 
-	//void registerApplicationBean(String appBeanName);
+	// void registerApplicationBean(String appBeanName);
 
 	void registerApplicationBean(String appBeanName, Class<? extends ApplicationBean> appBeanType);
 
 	void registerApplicationBean(String appBeanName, Class<? extends ApplicationBean> appBeanType, ApplicationBeanHandler applicationBeanHandler);
+
+	ApplicationHandler getApplicationHandler();
+
+	void setApplicationHandler(ApplicationHandler abstractApplicationHandler);
 
 	// Helper
 
@@ -29,7 +33,7 @@ public interface ModuleHandler extends ObjectLifeCycleSupport<ApplicationBean> {
 	// Main
 
 	void handleRequest(ApplicationRequest req, ApplicationResponse resp);
-	
+
 	ObjectPersistor getObjectPersistor();
 
 	String getModuleName();

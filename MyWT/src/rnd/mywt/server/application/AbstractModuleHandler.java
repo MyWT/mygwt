@@ -14,6 +14,8 @@ public abstract class AbstractModuleHandler implements ModuleHandler {
 
 	private ObjectPersistor op;
 
+	private ApplicationHandler applicationHandler;
+
 	private final ModuleHandlerDelegate delegate = new ModuleHandlerDelegate(this);
 
 	public AbstractModuleHandler(String moduleName) {
@@ -87,6 +89,14 @@ public abstract class AbstractModuleHandler implements ModuleHandler {
 
 	public String getModuleName() {
 		return moduleName;
+	}
+
+	public void setApplicationHandler(ApplicationHandler applicationHandler) {
+		this.applicationHandler = applicationHandler;
+	}
+
+	public ApplicationHandler getApplicationHandler() {
+		return applicationHandler;
 	}
 
 }
