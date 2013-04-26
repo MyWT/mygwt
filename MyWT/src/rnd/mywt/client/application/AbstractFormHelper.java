@@ -23,15 +23,6 @@ public abstract class AbstractFormHelper implements FormHelper {
 		this.viewName = viewName;
 	}
 
-	// private Form form;
-
-	// public Form getForm() {
-	// if (this.form == null) {
-	// this.form = createForm();
-	// }
-	// return this.form;
-	// }
-
 	public Form createForm() {
 		Form newForm = MyWTHelper.getMVCFactory().createForm();
 		((FormModel) newForm.getModel()).setShouldAutoBind(shouldAutoBind());

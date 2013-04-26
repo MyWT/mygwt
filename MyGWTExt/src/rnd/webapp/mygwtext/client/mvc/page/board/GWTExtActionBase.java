@@ -114,23 +114,11 @@ public class GWTExtActionBase extends GWTExtPage implements ActionBase {
 
 	public Board getBoard(String moduleName, String appBeanName, String viewName, BoardType boardType) {
 		List<Board> boards = getListValue(BOARD);
-		switch (boardType) {
-		case FORM_BOARD:
-			for (Board board : boards) {
-				if (board.getBoardType() == BoardType.FORM_BOARD && //
-						board.getModuleName().equals(moduleName) && //
-						board.getApplicationBeanName().equals(appBeanName)) {
-					return board;
-				}
-			}
-		case DATA_BOARD:
-			for (Board board : boards) {
-				if (board.getBoardType() == BoardType.DATA_BOARD && //
-						board.getModuleName().equals(moduleName) && //
-						board.getApplicationBeanName().equals(appBeanName) && //
-						((DataBoard) board).getViewName().equals(viewName)) {
-					return board;
-				}
+		for (Board board : boards) {
+			if (board.getModuleName().equals(moduleName) && //
+					board.getApplicationBeanName().equals(appBeanName) && //
+					(boardType == BoardType.FORM_BOARD || ((DataBoard) board).getViewName().equals(viewName))) {
+				return board;
 			}
 		}
 		return null;

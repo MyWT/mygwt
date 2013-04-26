@@ -31,8 +31,6 @@ public class MetadataFormHelper extends AbstractFormHelper {
 		Label label = MyWTHelper.getMVCFactory().createLabel(getFormName());
 		form.addField(label);
 
-		// loadForm(getFormName(), form);
-
 		return form;
 	}
 
@@ -48,11 +46,16 @@ public class MetadataFormHelper extends AbstractFormHelper {
 
 					form.addField(createTextField((String) field.getValue("label"), (String) field.getValue("boundTo")));
 				}
-				
+
 				ApplicationBean appBean = ((FormModel) form.getModel()).getApplicationBean();
 				// after creating Fields
+				Long appBeanId = appBean.getId();
+				// Logger.log("appBeanId", appBeanId);
+
 				// Init Update Form
-				BindingManager.initForm(form, (_BoundBean) appBean);
+				if (appBeanId != null) {
+					BindingManager.initForm(form, (_BoundBean) appBean);
+				}
 				// Bind Form after creating Fields
 				BindingManager.bindForm(form, (_BoundBean) appBean);
 			}

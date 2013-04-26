@@ -172,19 +172,18 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 
 						String moduleName = NodeUtils.getModuleName(node.getParentNode());
 						String appBeanName = NodeUtils.getAppBeanName(node);
-						String formName = NodeUtils.getFormName(node);
 						String viewName = NodeUtils.getViewName(node);
 
-						DataBoard dataBoard = (DataBoard) actionBoard.getActionBase().getBoard(moduleName, formName, viewName, BoardType.DATA_BOARD);
+						DataBoard dataBoard = (DataBoard) actionBoard.getActionBase().getBoard(moduleName, appBeanName, viewName, BoardType.DATA_BOARD);
 
 						if (dataBoard == null) {
 
 							ModuleHelper moduleHelper = MyWTHelper.getApplicationHelper().getModuleHelper(moduleName);
 							if (moduleHelper != null) {
-
 								FormHelper formHelper = moduleHelper.getFormHelper(appBeanName);
-								dataBoard = formHelper.createDataBoard();
-
+								if (formHelper != null) {
+									dataBoard = formHelper.createDataBoard();
+								}
 							}
 							if (dataBoard == null) {
 								dataBoard = MyWTHelper.getMVCFactory().createDataBoard(moduleName, appBeanName, viewName);
