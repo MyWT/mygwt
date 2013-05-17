@@ -135,21 +135,22 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 				Field editorField = null;
 
 				switch (tableColumnMetadatas[i].getType()) {
-					case Types.VARCHAR:
-						editorField = new TextField();
-						break;
-					case Types.INTEGER:
-					case Types.FLOAT:
-					case Types.BIGINT:
-						editorField = new NumberField();
-						break;
-					case Types.DATE:
-						editorField = new DateField();
-						break;
-					case Types.BOOLEAN:
-					case Types.BIT:
-						editorField = new Checkbox();
-						break;
+				case Types.VARCHAR:
+					editorField = new TextField();
+					break;
+				case Types.INTEGER:
+				case Types.FLOAT:
+				case Types.BIGINT:
+				case Types.SMALLINT:
+					editorField = new NumberField();
+					break;
+				case Types.DATE:
+					editorField = new DateField();
+					break;
+				case Types.BOOLEAN:
+				case Types.BIT:
+					editorField = new Checkbox();
+					break;
 				}
 				cc.setEditor(new GridEditor(editorField));
 			}
@@ -157,23 +158,24 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 			FieldDef fd = null;
 
 			switch (tableColumnMetadatas[i].getType()) {
-				case Types.VARCHAR:
-					fd = new StringFieldDef(tableColumnMetadatas[i].getName());
-					break;
-				case Types.INTEGER:
-				case Types.BIGINT:
-					fd = new IntegerFieldDef(tableColumnMetadatas[i].getName());
-					break;
-				case Types.FLOAT:
-					fd = new FloatFieldDef(tableColumnMetadatas[i].getName());
-					break;
-				case Types.DATE:
-					fd = new DateFieldDef(tableColumnMetadatas[i].getName());
-					break;
-				case Types.BOOLEAN:
-				case Types.BIT:
-					fd = new BooleanFieldDef(tableColumnMetadatas[i].getName());
-					break;
+			case Types.VARCHAR:
+				fd = new StringFieldDef(tableColumnMetadatas[i].getName());
+				break;
+			case Types.INTEGER:
+			case Types.BIGINT:
+			case Types.SMALLINT:
+				fd = new IntegerFieldDef(tableColumnMetadatas[i].getName());
+				break;
+			case Types.FLOAT:
+				fd = new FloatFieldDef(tableColumnMetadatas[i].getName());
+				break;
+			case Types.DATE:
+				fd = new DateFieldDef(tableColumnMetadatas[i].getName());
+				break;
+			case Types.BOOLEAN:
+			case Types.BIT:
+				fd = new BooleanFieldDef(tableColumnMetadatas[i].getName());
+				break;
 			}
 			fds[i] = fd;
 
@@ -280,14 +282,18 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 				public void stateChanged(XChangeEvent xChangeEvent) {
 					Record r = getStore().getRecordAt(getDataList().indexOf(xChangeEvent.getSource()));
 					r.set(getColumnMetaData(xChangeEvent.getExpression()).getName(), xChangeEvent.getNewValue());
-					// r.set(((BeanPropertyExpression) xChangeEvent.getExpression()).getPropertyName(), xChangeEvent.getNewValue());
+					// r.set(((BeanPropertyExpression)
+					// xChangeEvent.getExpression()).getPropertyName(),
+					// xChangeEvent.getNewValue());
 					r.commit();
 				}
 
 				private ColumnMetaData getColumnMetaData(Expression expression) {
 					ColumnMetaData[] columnMetaDatas = getColumnMetaDatas();
 					for (int i = 0; i < columnMetaDatas.length; i++) {
-						if (columnMetaDatas[i].getExpression() == expression) { return columnMetaDatas[i]; }
+						if (columnMetaDatas[i].getExpression() == expression) {
+							return columnMetaDatas[i];
+						}
 					}
 					return null;
 				}
@@ -562,19 +568,18 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 					try {
 						char key = (char) e.getKey();
 						switch (key) {
-							case 'e': // 101
-							case 'E': // 69
-								editSelectedCell();
-								break;
-							case 4: // Ctrl + D
-								deleteSelectedRow();
-								break;
-							case 9:// Ctrl + I
-								insertRow();
-								break;
+						case 'e': // 101
+						case 'E': // 69
+							editSelectedCell();
+							break;
+						case 4: // Ctrl + D
+							deleteSelectedRow();
+							break;
+						case 9:// Ctrl + I
+							insertRow();
+							break;
 						}
-					}
-					catch (Exception ex) {
+					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
 				}

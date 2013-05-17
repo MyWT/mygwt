@@ -8,7 +8,6 @@ import rnd.bean.ValueChangeEvent;
 import rnd.bean.ValueChangeListenerAdapter;
 import rnd.bean._Bean;
 import rnd.bean._BoundBean;
-import rnd.mywt.client.application.FormHelperCallback;
 import rnd.mywt.client.expression.BindingManager;
 import rnd.mywt.client.mvc.field.Field;
 import rnd.mywt.client.mvc.page.board.DataBoard.DataBoardModel;
@@ -20,8 +19,6 @@ import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.form.FormPanel;
 
 public class GWTExtForm extends GWTExtPage implements Form {
-
-	private FormHelperCallback callback;
 
 	public GWTExtForm() {
 		setModel(new GWTExtFormModel());
@@ -47,14 +44,6 @@ public class GWTExtForm extends GWTExtPage implements Form {
 
 	public List getFields() {
 		return getChildren();
-	}
-
-	public void setCallback(FormHelperCallback callback) {
-		this.callback = callback;
-	}
-
-	public FormHelperCallback getCallback() {
-		return callback;
 	}
 
 	public class GWTExtFormModel implements FormModel {
@@ -95,21 +84,21 @@ public class GWTExtForm extends GWTExtPage implements Form {
 							newAppBean.setValue(prpName, contextBean.getValue(prpName));
 						}
 
-						if (shoudAutoBind()) {
-							
-							Long appBeanId = newAppBean.getId();
-							// Logger.log("appBeanId", appBeanId);
-							
-							// Init Update Form
-							if (appBeanId != null) {
-								BindingManager.initForm(GWTExtForm.this, (_BoundBean) newAppBean);
-							}
-							
-							// Bind Manual Form
-							BindingManager.bindForm(GWTExtForm.this, (_BoundBean) newAppBean);
-						} else {
-							getCallback().initForm(GWTExtForm.this);
+						// if (shoudAutoBind()) {
+
+						Long appBeanId = newAppBean.getId();
+						// Logger.log("appBeanId", appBeanId);
+
+						// Init Update Form
+						if (appBeanId != null) {
+							BindingManager.initForm(GWTExtForm.this, (_BoundBean) newAppBean);
 						}
+
+						// Bind Manual Form
+						BindingManager.bindForm(GWTExtForm.this, (_BoundBean) newAppBean);
+						// } else {
+						// getCallback().initForm(GWTExtForm.this);
+						// }
 					}
 					// Logger.endMethod("FM", "valueChanged");
 				}

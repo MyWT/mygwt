@@ -13,11 +13,13 @@ import rnd.mywt.client.mvc.page.form.Form.FormModel;
 
 public abstract class AbstractFormHelper implements FormHelper {
 
+	private final String moduleName;
 	private final String appBeanName;
 	private final String formName;
 	private final String viewName;
 
-	public AbstractFormHelper(String appBeanName, String formName, String viewName) {
+	public AbstractFormHelper(String moduleName, String appBeanName, String formName, String viewName) {
+		this.moduleName = moduleName;
 		this.appBeanName = appBeanName;
 		this.formName = formName;
 		this.viewName = viewName;
@@ -75,6 +77,11 @@ public abstract class AbstractFormHelper implements FormHelper {
 	public boolean shouldAutoBind() {
 		return true;
 	}
+	
+	@Override
+	public String getModuleName() {
+		return moduleName;
+	}
 
 	@Override
 	public String getAppBeanName() {
@@ -89,10 +96,6 @@ public abstract class AbstractFormHelper implements FormHelper {
 	@Override
 	public String getViewName() {
 		return viewName;
-	}
-
-	@Override
-	public void initForm(Form form) {
 	}
 
 }

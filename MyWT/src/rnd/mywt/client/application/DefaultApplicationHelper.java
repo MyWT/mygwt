@@ -35,8 +35,12 @@ public class DefaultApplicationHelper extends AbstractApplicationHelper implemen
 						Collection<ApplicationDynaBean> forms = (Collection<ApplicationDynaBean>) appBean.getListValueReadOnly("form");
 						for (ApplicationDynaBean form : forms) {
 
-							MetadataFormHelper formHelper = new MetadataFormHelper((String) appBean.getValue("name"), (String) form.getValue("name"), (String) appBean.getValue("name"),
-									(String) appBean.getValue("className"));
+							MetadataFormHelper formHelper = new MetadataFormHelper( //
+									(String) module.getValue("name"), // Module
+									(String) appBean.getValue("name"), // AppBean
+									(String) form.getValue("name"), // Form
+									(String) appBean.getValue("name"),// View
+									(String) appBean.getValue("className")); // ClassName
 							moduleHelper.addFormHelper(formHelper);
 						}
 					}

@@ -60,7 +60,6 @@ public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 		// Create Form
 		Form newForm = formHelper.createForm();
 		newForm.setParent(this);
-		newForm.setCallback(formHelper);
 
 		Long appBeanId = getApplicationBeanId();
 		if (appBeanId == null) {

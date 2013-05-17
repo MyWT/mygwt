@@ -4,7 +4,9 @@ import rnd.bean.ApplicationBean;
 import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.mvc.page.form.Form;
 
-public interface FormHelper extends FormHelperCallback {
+public interface FormHelper {
+
+	String getModuleName();
 
 	String getAppBeanName();
 

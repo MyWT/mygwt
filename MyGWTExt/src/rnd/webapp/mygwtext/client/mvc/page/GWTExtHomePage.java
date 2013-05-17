@@ -179,18 +179,21 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 						if (dataBoard == null) {
 
 							ModuleHelper moduleHelper = MyWTHelper.getApplicationHelper().getModuleHelper(moduleName);
+							if (moduleHelper == null) {
+								moduleHelper = MyWTHelper.getDefaultApplicationHelper().getModuleHelper(moduleName);
+							}
 							if (moduleHelper != null) {
 								FormHelper formHelper = moduleHelper.getFormHelper(appBeanName);
 								if (formHelper != null) {
 									dataBoard = formHelper.createDataBoard();
 								}
 							}
+
 							if (dataBoard == null) {
 								dataBoard = MyWTHelper.getMVCFactory().createDataBoard(moduleName, appBeanName, viewName);
 							}
 							actionBoard.getActionBase().addBoard(dataBoard);
 						}
-
 						actionBoard.getActionBase().setCurrentBoard(dataBoard);
 
 					} catch (RuntimeException re) {
