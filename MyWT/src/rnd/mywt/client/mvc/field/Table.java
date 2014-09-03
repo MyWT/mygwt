@@ -3,7 +3,7 @@ package rnd.mywt.client.mvc.field;
 import rnd.bean._BoundList;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
-import rnd.mywt.client.data.Row;
+import rnd.mywt.client.data._Row;
 
 public interface Table extends Field {
 
@@ -23,7 +23,7 @@ public interface Table extends Field {
 
 		boolean isUpdatable();
 
-		void initialiseListner();
+		void initializeListner();
 
 	}
 
@@ -39,19 +39,19 @@ public interface Table extends Field {
 
 		String CURRENT_ROW = "currentRow";
 
-		Row getCurrentRow();
+		_Row getCurrentRow();
 
-		void addRow(Row newRow);
+		void addRow(_Row newRow);
 
-		void addRow(int index, Row newRow);
+		void addRow(int index, _Row newRow);
 
-		void removeRow(Row row);
+		void removeRow(_Row row);
 
 		void removeCurrentRow();
 
-		void updateRow(Row oldRow, Row newRow);
+		void updateRow(_Row oldRow, _Row newRow);
 
-		void updateCurrentRow(Row newRow);
+		void updateCurrentRow(_Row newRow);
 	}
 
 	// _Bean Table Model

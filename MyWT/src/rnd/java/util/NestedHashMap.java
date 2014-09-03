@@ -12,21 +12,13 @@ public class NestedHashMap implements Map {
 
 		private Map parentMap;
 
-		// private int childDepth;
-
 		private ChildHashMap(Map parentMap, int depth) {
 			this.parentMap = parentMap;
-			// this.childDepth = depth;
 		}
 
 		public Map getParentMap() {
 			return parentMap;
 		}
-
-		// public int getDepth() {
-		// return childDepth;
-		// }
-
 	}
 
 	private HashMap<?, ChildHashMap> rootMap;

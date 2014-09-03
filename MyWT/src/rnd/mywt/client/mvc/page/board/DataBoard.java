@@ -3,7 +3,7 @@ package rnd.mywt.client.mvc.page.board;
 import rnd.expression.Expression;
 import rnd.mywt.client.Context;
 import rnd.mywt.client.data.FilterInfo;
-import rnd.mywt.client.data.Row;
+import rnd.mywt.client.data._Row;
 import rnd.mywt.client.mvc.field.Field;
 import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
@@ -22,11 +22,11 @@ public interface DataBoard extends Board {
 
 	// Row Operation
 
-	void addRow(Row newRow);
+	void addRow(_Row newRow);
 
 	void removeCurrentRow();
 
-	void updateCurrentRow(Row updatedRow);
+	void updateCurrentRow(_Row updatedRow);
 
 	// Referenced Data Board
 

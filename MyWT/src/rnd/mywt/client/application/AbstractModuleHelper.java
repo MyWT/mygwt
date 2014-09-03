@@ -47,8 +47,4 @@ public abstract class AbstractModuleHelper extends AbstractApplicationHelper imp
 		return moduleName;
 	}
 
-	@Override
-	public void initialiseApplication() {
-	}
-
 }

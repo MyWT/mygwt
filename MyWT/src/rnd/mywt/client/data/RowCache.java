@@ -2,18 +2,51 @@ package rnd.mywt.client.data;
 
 import java.util.Collection;
 
-public interface RowCache {
+import rnd.java.util.NestedHashMap;
 
-	Object addRow(String moduleName, String applicationBeanName, String viewName, Row row);
+public class RowCache implements _RowCache {
 
-	Object removeRow(String moduleName, String applicationBeanName, String viewName, Long rowId);
+	private NestedHashMap rowCacheMap;
 
-	void removeRows(String moduleName, String applicationBeanName, String viewName);
+	private RowCache() {
+		rowCacheMap = new NestedHashMap(2);
+	}
 
-	Row getRow(String moduleName, String applicationBeanName, String viewName, Long rowId);
+	private static class RowCacheHolder {
+		private static _RowCache rowCache = new RowCache();
+	}
 
-	Collection<Row> getRows(String moduleName, String applicationBeanName, String viewName);
+	public synchronized static _RowCache get() {
+		return RowCacheHolder.rowCache;
+	}
 
-	void flushCache();
+	public Object addRow(String moduleName, String applicationBeanName, String viewName, _Row row) {
+		return rowCacheMap.put(wrapKey(moduleName, applicationBeanName, viewName, row.getId()), row);
+	}
+
+	public void flushCache() {
+		rowCacheMap.clear();
+	}
+
+	public _Row getRow(String moduleName, String applicationBeanName, String viewName, Long rowId) {
+		return (_Row) rowCacheMap.get(wrapKey(moduleName, applicationBeanName, viewName, rowId));
+	}
+
+	public _Row removeRow(String moduleName, String applicationBeanName, String viewName, Long rowId) {
+		return (_Row) rowCacheMap.remove(wrapKey(moduleName, applicationBeanName, viewName, rowId));
+	}
+
+	public Collection<_Row> getRows(String moduleName, String applicationBeanName, String viewName) {
+		return (Collection<_Row>) rowCacheMap.get(wrapKey(moduleName, applicationBeanName, viewName, null));
+	}
+
+	public void removeRows(String moduleName, String applicationBeanName, String viewName) {
+		rowCacheMap.remove(wrapKey(moduleName, applicationBeanName, viewName, null));
+	}
+
+	private Object[] wrapKey(String moduleName, String applicationBeanName, String viewName, Long rowId) {
+		return new Object[] { moduleName + "." + applicationBeanName + "." + viewName, rowId };
+		// return new Object[] { moduleName, applicationBeanName, viewName, rowId };
+	}
 
 }

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import rnd.mywt.client.Logger;
 import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.arb.ARBServiceResponseHandler;
-import rnd.mywt.client.data.Row;
+import rnd.mywt.client.data._Row;
 import rnd.mywt.client.mvc.AbstractMVCBean;
 import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.mvc.field.Table.RowTableModel;
@@ -84,7 +84,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 
 					DataBoard currentDataBoard = getCurrentDataBoard();
 
-					Row currRow = ((Table.RowTableModel) currentDataBoard.getTable().getModel()).getCurrentRow();
+					_Row currRow = ((Table.RowTableModel) currentDataBoard.getTable().getModel()).getCurrentRow();
 
 					if (currRow == null) {
 						Window.alert("No Row Selected");
@@ -109,7 +109,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 			public void onClick(Button button, EventObject e) {
 				try {
 
-					Row currRow = ((Table.RowTableModel) (getCurrentDataBoard()).getTable().getModel()).getCurrentRow();
+					_Row currRow = ((Table.RowTableModel) (getCurrentDataBoard()).getTable().getModel()).getCurrentRow();
 
 					if (currRow == null) {
 						Window.alert("No Row Selected");
@@ -210,7 +210,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 					Long applicationBeanId = formBoard.getApplicationBeanId();
 					Logger.log("applicationBeanId", applicationBeanId);
 
-					Row savedRow = (Row) result;
+					_Row savedRow = (_Row) result;
 					Logger.log("savedRow", savedRow);
 
 					performCloseAction();
@@ -290,7 +290,7 @@ public class GWTExtActionBar extends AbstractMVCBean implements ActionBar {
 		DataBoard currentDataBoard = getCurrentDataBoard();
 		ReferenceField referenceField = currentDataBoard.getReferenceField();
 		if (referenceField != null) {
-			Row currRow = ((RowTableModel) currentDataBoard.getTable().getModel()).getCurrentRow();
+			_Row currRow = ((RowTableModel) currentDataBoard.getTable().getModel()).getCurrentRow();
 
 			if (currRow == null) {
 				Window.alert("No Row Selected");

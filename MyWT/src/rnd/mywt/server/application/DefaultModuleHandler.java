@@ -16,7 +16,7 @@ public class DefaultModuleHandler extends AbstractModuleHandler {
 		// Default Module
 	}
 
-	public static ModuleHandler getInstance(String moduleName) {
+	public static ModuleHandler getNewInstance(String moduleName) {
 		return new DefaultModuleHandler(moduleName);
 	}
 

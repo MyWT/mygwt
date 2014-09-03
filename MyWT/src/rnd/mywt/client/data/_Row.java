@@ -2,7 +2,7 @@ package rnd.mywt.client.data;
 
 import java.util.List;
 
-public interface Row {
+public interface _Row {
 
 	Long getId();
 

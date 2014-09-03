@@ -13,16 +13,15 @@ import java.util.Map;
 import java.util.Set;
 
 import rnd.bean.ApplicationBean;
-import rnd.bean.ApplicationDynaBean;
 import rnd.dao.rdbms.jdbc.JDBCDataAccessObject;
 import rnd.dao.rdbms.jdbc.rsmdp.ResultSetMetaDataProcessor;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
 import rnd.mywt.client.data.FilterInfo;
-import rnd.mywt.client.data.Row;
+import rnd.mywt.client.data._Row;
 import rnd.mywt.client.data.impl.ColumnMetaDataImpl;
 import rnd.mywt.client.data.impl.DataTableImpl;
-import rnd.mywt.client.data.impl.RowImpl;
+import rnd.mywt.client.data.impl.Row;
 import rnd.mywt.client.data.impl.RowMetaDataImpl;
 import rnd.mywt.client.expression.RowColumnExpression;
 import rnd.mywt.client.rpc.ApplicationRequest;
@@ -219,7 +218,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 			dataTable = new DataTableImpl(rmd);
 
 			for (Object[] columns : columnsList) {
-				Row row = new RowImpl(rmd);
+				_Row row = new Row(rmd);
 				// D.println("row", row);
 
 				List columnList = new ArrayList(columns.length);
@@ -286,10 +285,7 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 		ApplicationBean serverBean = (ApplicationBean) getObjectPersistor().findObject(id, objType);
 		serverBean.setId((Long) id);
 
-		ApplicationBean clientBean = AppBeanUtils.getNewClientBean(objType);
-		AppBeanUtils.copyBean(serverBean, clientBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
-		clientBean.setValue("ClassName", serverBean.getClass().getName());
-
+		ApplicationBean clientBean = AppBeanUtils.copy(serverBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
 		return clientBean;
 	}
 
@@ -301,31 +297,18 @@ public final class ModuleHandlerDelegate implements ModuleHandler {
 	@Override
 	public ApplicationBean saveObject(ApplicationBean clientBean) {
 
-		Class serverBeanType = getServerBeanType(clientBean);
-		ApplicationBean serverBean = AppBeanUtils.getNewApplicationBean(serverBeanType);
-		AppBeanUtils.copyBean(clientBean, serverBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
-
+		ApplicationBean serverBean = AppBeanUtils.copy(clientBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
 		return (ApplicationBean) getObjectPersistor().saveObject(serverBean);
 
 	}
 
 	public ApplicationBean updateObject(Object id, ApplicationBean clientBean) {
 
-		Class serverBeanType = getServerBeanType(clientBean);
+		Class serverBeanType = AppBeanUtils.loadClass(AppBeanUtils.getServerBeanTypeName(clientBean.getClassName()));
 		ApplicationBean serverBean = (ApplicationBean) getObjectPersistor().findObject(clientBean.getId(), serverBeanType);
-		AppBeanUtils.copyBean(clientBean, serverBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
+		AppBeanUtils.copy(clientBean, serverBean, AppBeanUtils.getServerCopyBeanCtx(), AppBeanUtils.getClientBeanCopyCtx());
 
 		return (ApplicationBean) getObjectPersistor().updateObject(serverBean.getId(), serverBean);
-	}
-
-	private Class getServerBeanType(ApplicationBean clientBean) {
-		Class serverBeanType;
-		if (clientBean instanceof ApplicationDynaBean) {
-			serverBeanType = AppBeanUtils.loadClass(((ApplicationDynaBean) clientBean).getClassName());
-		} else {
-			serverBeanType = AppBeanUtils.getServerBeanType(clientBean.getClass());
-		}
-		return serverBeanType;
 	}
 
 }

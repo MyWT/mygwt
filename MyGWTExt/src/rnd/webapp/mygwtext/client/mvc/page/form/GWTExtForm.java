@@ -51,7 +51,7 @@ public class GWTExtForm extends GWTExtPage implements Form {
 		boolean shouldAutoBind;
 
 		@Override
-		public boolean shoudAutoBind() {
+		public boolean shouldAutoBind() {
 			return shouldAutoBind;
 		}
 

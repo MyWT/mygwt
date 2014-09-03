@@ -28,7 +28,7 @@ public class ARBImpl implements ARB {
 
 			ModuleHandler moduleHandler = ApplicationHandlerPool.getApplicationHandler("myapp").getModuleHandler(module);
 			if (moduleHandler == null) {
-				moduleHandler = DefaultModuleHandler.getInstance(module);
+				moduleHandler = DefaultModuleHandler.getNewInstance(module);
 			}
 
 			moduleHandler.handleRequest(req, resp);

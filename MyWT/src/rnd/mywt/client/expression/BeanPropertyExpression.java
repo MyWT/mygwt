@@ -24,11 +24,11 @@ public class BeanPropertyExpression extends ValueExpression {
 	}
 
 	public void addXChangeListener(Object object, XChangeListener xcl) {
-		((_BoundBean) object).addValueChangeListener(this.propertyName, (ValueChangeListener) getXChangeListenerDelegate(xcl, false));
+		((_BoundBean) object).addValueChangeListener(this.propertyName, (ValueChangeListener) getXChangeListenerDelegate(xcl, true));
 	}
 
 	public void removeXChangeListener(Object object, XChangeListener xcl) {
-		((_BoundBean) object).removeValueChangeListener(this.propertyName, (ValueChangeListener) getXChangeListenerDelegate(xcl, true));
+		((_BoundBean) object).removeValueChangeListener(this.propertyName, (ValueChangeListener) getXChangeListenerDelegate(xcl, false));
 	}
 
 }

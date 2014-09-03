@@ -14,17 +14,19 @@ public class ApplicationJavaBean extends JavaBean implements ApplicationBean {
 		this.id = id;
 	}
 
-	// Due to no-access to applicationId by JavaBean
-	// If we do not override it JavaBean have to cycle through whole Class-Tree
-	// @Override
-	// protected Class<?> getFieldType(String propertyName) throws NoSuchFieldException {
-	// if (propertyName.equals("applicationBeanId")) { return Long.class; }
-	// return super.getFieldType(propertyName);
-	// }
+	@Override
+	public String getClassName() {
+		return getClass().getName();
+	}
+
+	@Override
+	public void setClassName(String className) {
+		throw new RuntimeException("Method not supported");
+	}
 
 	@Override
 	public String toString() {
-		return super.toString() + "-" + getId();
+		return getClassName() + "-" + getId();
 	}
 
 }

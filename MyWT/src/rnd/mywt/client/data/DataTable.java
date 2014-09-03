@@ -11,19 +11,19 @@ public interface DataTable {
 
 	String ROW = "row";
 
-	void addRows(Collection<Row> rows);
+	void addRows(Collection<_Row> rows);
 
-	boolean addRow(Row row);
+	boolean addRow(_Row row);
 
-	void addRow(int index, Row row);
+	void addRow(int index, _Row row);
 
-	boolean removeRow(Row row);
+	boolean removeRow(_Row row);
 
-	Row removeRow(int index);
+	_Row removeRow(int index);
 
-	Row getRow(int index);
+	_Row getRow(int index);
 
-	List<Row> getRows();
+	List<_Row> getRows();
 
 	String ROW_META_DATA = "rowMetaData";
 

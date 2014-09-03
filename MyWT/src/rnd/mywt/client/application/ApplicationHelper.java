@@ -4,7 +4,7 @@ import java.util.Collection;
 
 public interface ApplicationHelper {
 	
-	void initialiseApplication();
+	void initializeApplication();
 
 	void addModuleHelper(ModuleHelper moduleHelper);
 

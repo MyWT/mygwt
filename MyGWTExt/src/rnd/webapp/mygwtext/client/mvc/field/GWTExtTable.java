@@ -13,7 +13,7 @@ import rnd.expression.XChangeListener;
 import rnd.mywt.client.Logger;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
-import rnd.mywt.client.data.Row;
+import rnd.mywt.client.data._Row;
 import rnd.mywt.client.mvc.AbstractMVCBean;
 import rnd.mywt.client.mvc.field.Table;
 import rnd.mywt.client.sql.Types;
@@ -190,7 +190,7 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 		this.setStore(new Store(this.recordDef));
 		this.grid.setStore(this.getStore());
 
-		getTableModel().initialiseListner();
+		getTableModel().initializeListner();
 		getTableView().initialiseListner();
 	}
 
@@ -208,7 +208,7 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 			return true;
 		}
 
-		public void initialiseListner() {
+		public void initializeListner() {
 		}
 
 		protected void removeRowInternal(int index) {
@@ -261,7 +261,7 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 			});
 		}
 
-		public void initialiseListner() {
+		public void initializeListner() {
 
 			grid.addEditorGridListener(new EditorGridListenerAdapter() {
 
@@ -437,9 +437,9 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 					// Add New Row
 					DataTable newDataTable = (DataTable) vce.getNewValue();
 					if (newDataTable != null) {
-						Collection<Row> rows = newDataTable.getRows();
+						Collection<_Row> rows = newDataTable.getRows();
 						int index = 0;
-						for (Row row : rows) {
+						for (_Row row : rows) {
 							addRowInternal(index++, row);
 						}
 					}
@@ -459,18 +459,18 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 			setValue(DATA_TABLE, dataTable);
 		}
 
-		public Row getCurrentRow() {
-			return (Row) getValue(CURRENT_ROW);
+		public _Row getCurrentRow() {
+			return (_Row) getValue(CURRENT_ROW);
 		}
 
-		private void setCurrentRow(Row currentRow) {
+		private void setCurrentRow(_Row currentRow) {
 			// Logger.startMethod("GWTExtRowTableModel", "setCurrentRow");
 			// Logger.log("currentRow", currentRow);
 			setValue(RowTableModel.CURRENT_ROW, currentRow);
 			// Logger.endMethod("GWTExtRowTableModel", "setCurrentRow");
 		}
 
-		public void initialiseListner() {
+		public void initializeListner() {
 
 			GWTExtTable.this.grid.getSelectionModel().addListener(new RowSelectionListenerAdapter() {
 
@@ -486,7 +486,7 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 
 		}
 
-		public void addRow(int index, Row newRow) {
+		public void addRow(int index, _Row newRow) {
 			getDataTable().addRow(index, newRow);
 			addRowInternal(index, newRow);
 		}
@@ -499,11 +499,11 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 			// Logger.endMethod("GWTExtRowTableModel", "removeRow");
 		}
 
-		public void addRow(Row newRow) {
+		public void addRow(_Row newRow) {
 			addRow(getDataTable().getRowCount(), newRow);
 		}
 
-		public void removeRow(Row row) {
+		public void removeRow(_Row row) {
 			removeRow(getDataTable().getRows().indexOf(row));
 		}
 
@@ -511,7 +511,7 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 			removeRow(getCurrentRow());
 		}
 
-		public void updateRow(Row oldRow, Row newRow) {
+		public void updateRow(_Row oldRow, _Row newRow) {
 			Logger.startMethod("GWTExtRowTableModel", "updateRow");
 			int index = getDataTable().getRows().indexOf(oldRow);
 			Logger.log("index", index);
@@ -523,9 +523,9 @@ public class GWTExtTable extends AbstractMVCBean implements Table {
 			Logger.endMethod("GWTExtRowTableModel", "updateRow");
 		}
 
-		public void updateCurrentRow(Row newRow) {
+		public void updateCurrentRow(_Row newRow) {
 			Logger.startMethod("GWTExtRowTableModel", "updateCurrentRow");
-			Row currentRow = getCurrentRow();
+			_Row currentRow = getCurrentRow();
 
 			Logger.log("currentRow", currentRow);
 

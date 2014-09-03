@@ -7,9 +7,7 @@ import rnd.mywt.client.mvc.page.HomePage;
 
 public class MyWTHelper {
 
-	private static String applicationName;
 	private static ApplicationHelper applicationHelper;
-	private static ApplicationHelper defaultApplicationHelper;
 
 	private static HomePage homePage;
 	private static MVCBeanFactory mvcFactory;
@@ -37,22 +35,6 @@ public class MyWTHelper {
 
 	public static void setApplicationHelper(ApplicationHelper applicationHelper) {
 		MyWTHelper.applicationHelper = applicationHelper;
-	}
-
-	public static ApplicationHelper getDefaultApplicationHelper() {
-		return defaultApplicationHelper;
-	}
-
-	public static void setDefaultApplicationHelper(ApplicationHelper defaultApplicationHelper) {
-		MyWTHelper.defaultApplicationHelper = defaultApplicationHelper;
-	}
-
-	public static String getApplicationName() {
-		return applicationName;
-	}
-
-	public static void setApplicationName(String applicationName) {
-		MyWTHelper.applicationName = applicationName;
 	}
 
 	public static HomePage getHomePage() {

@@ -1,18 +1,17 @@
 package rnd.mywt.client.data.impl;
 
-import java.io.Serializable;
 import java.util.List;
 
 import rnd.bean.impl.DynaBean;
-import rnd.mywt.client.data.Row;
+import rnd.mywt.client.data._Row;
 import rnd.mywt.client.data.RowMetaData;
 
-public class RowImpl extends DynaBean implements Row, Serializable {
+public class Row extends DynaBean implements _Row {
 
-	public RowImpl() {
+	public Row() {
 	}
 
-	public RowImpl(RowMetaData rowMetaData) {
+	public Row(RowMetaData rowMetaData) {
 		setValue(ROW_META_DATA, rowMetaData);
 	}
 

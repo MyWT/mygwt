@@ -5,10 +5,9 @@ import java.io.Serializable;
 import rnd.bean.ApplicationBean;
 import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.application.FormHelper;
-import rnd.mywt.client.application.ModuleHelper;
 import rnd.mywt.client.arb.ARBServiceResponseHandler;
-import rnd.mywt.client.data.Row;
-import rnd.mywt.client.data.RowCacheImpl;
+import rnd.mywt.client.data.RowCache;
+import rnd.mywt.client.data._Row;
 import rnd.mywt.client.mvc.page.board.ActionBase;
 import rnd.mywt.client.mvc.page.board.DataBoard;
 import rnd.mywt.client.mvc.page.board.FormBoard;
@@ -51,11 +50,7 @@ public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 
 	private Form createForm() {
 
-		ModuleHelper moduleHelper = MyWTHelper.getApplicationHelper().getModuleHelper(getModuleName());
-		if (moduleHelper == null) {
-			moduleHelper = MyWTHelper.getDefaultApplicationHelper().getModuleHelper(getModuleName());
-		}
-		FormHelper formHelper = moduleHelper.getFormHelper(getApplicationBeanName());
+		FormHelper formHelper = MyWTHelper.getApplicationHelper().getModuleHelper(getModuleName()).getFormHelper(getApplicationBeanName());
 
 		// Create Form
 		Form newForm = formHelper.createForm();
@@ -100,7 +95,7 @@ public class GWTExtFormBoard extends GWTExtBoard implements FormBoard {
 			if (applicationBeanId == null) {
 				formPanel.setTitle("New " + getApplicationBeanName());
 			} else {
-				Row row = RowCacheImpl.get().getRow(getModuleName(), getApplicationBeanName(), getDataBoard().getViewName(), applicationBeanId);
+				_Row row = RowCache.get().getRow(getModuleName(), getApplicationBeanName(), getDataBoard().getViewName(), applicationBeanId);
 				formPanel.setTitle(getApplicationBeanName() + " ( " + row.getDisplayName() + " )");
 			}
 			return formPanel;

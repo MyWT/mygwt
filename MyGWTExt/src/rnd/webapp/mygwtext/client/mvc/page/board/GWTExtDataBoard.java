@@ -16,8 +16,8 @@ import rnd.mywt.client.arb.ARBServiceResponseHandler;
 import rnd.mywt.client.data.ColumnMetaData;
 import rnd.mywt.client.data.DataTable;
 import rnd.mywt.client.data.FilterInfo;
-import rnd.mywt.client.data.Row;
-import rnd.mywt.client.data.RowCacheImpl;
+import rnd.mywt.client.data._Row;
+import rnd.mywt.client.data.RowCache;
 import rnd.mywt.client.data.RowMetaData;
 import rnd.mywt.client.expression.BeanPropertyExpression;
 import rnd.mywt.client.expression.BindingManager;
@@ -82,10 +82,10 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 	}
 
 	@Override
-	public Expression addContextField(String key, Field field) {
+	public Expression addContextField(String fieldName, Field field) {
 		addChild(field);
 		getContextPanel().add((Widget) field.getView().getViewObject());
-		ContextValueExpression ctxExp = new ContextValueExpression(key);
+		ContextValueExpression ctxExp = new ContextValueExpression(fieldName);
 		BindingManager.bindExpression(field, new BeanPropertyExpression(field.getFieldProperty()), this.getModel(), ctxExp);
 		return ctxExp;
 	}
@@ -143,11 +143,11 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 					((Table.RowTableModel) table.getModel()).setDataTable(dataTable);
 					((DataBoardModel) getModel()).setDataTableIntialized(true);
 
-					List<Row> rows = dataTable.getRows();
+					List<_Row> rows = dataTable.getRows();
 					if (rows.size() > 0) {
 						RowMetaData rmd = rows.get(0).getRowMetaData();
-						for (Row row : rows) {
-							RowCacheImpl.get().addRow(rmd.getModuleName(), rmd.getApplicationBeanName(), rmd.getViewName(), row);
+						for (_Row row : rows) {
+							RowCache.get().addRow(rmd.getModuleName(), rmd.getApplicationBeanName(), rmd.getViewName(), row);
 						}
 					}
 
@@ -161,7 +161,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 		// Logger.endMethod("GWTExtDataBoard", "fetchDataTable");
 	}
 
-	public void addRow(Row newRow) {
+	public void addRow(_Row newRow) {
 		((RowTableModel) getTable().getModel()).addRow(newRow);
 	}
 
@@ -169,7 +169,7 @@ public class GWTExtDataBoard extends GWTExtBoard implements DataBoard {
 		((RowTableModel) getTable().getModel()).removeCurrentRow();
 	}
 
-	public void updateCurrentRow(Row updatedRow) {
+	public void updateCurrentRow(_Row updatedRow) {
 		// Logger.startMethod("GWTExtDataBoard", "updateCurrentRow");
 		((RowTableModel) getTable().getModel()).updateCurrentRow(updatedRow);
 		// Logger.endMethod("GWTExtDataBoard", "updateCurrentRow");

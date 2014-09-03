@@ -12,10 +12,10 @@ import rnd.bean.ApplicationDynaBean;
 import rnd.mywt.client.utils.Block;
 import rnd.mywt.client.utils.ExceptionUtils;
 
-public class AppBeanUtils {
+public final class AppBeanUtils {
 
-	protected static BeanCopyCtx serverCopyBeanCtx = new ServerBeanCopyCtx();
-	protected static BeanCopyCtx clientBeanCopyCtx = new ClientBeanCopyCtx();
+	private static BeanCopyCtx serverCopyBeanCtx = new ServerBeanCopyCtx();
+	private static BeanCopyCtx clientBeanCopyCtx = new ClientBeanCopyCtx();
 
 	public static BeanCopyCtx getServerCopyBeanCtx() {
 		return serverCopyBeanCtx;
@@ -25,34 +25,35 @@ public class AppBeanUtils {
 		return clientBeanCopyCtx;
 	}
 
-	public static void copyAllBean(Collection<ApplicationBean> sourceBeans, Collection<ApplicationBean> targetBeans, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx) {
+	public static Collection<ApplicationBean> copyAll(Collection<ApplicationBean> sourceBeans, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx) {
 
-		Map copyMap = new HashMap();
+		Collection<ApplicationBean> targetBeans = getNewInstance(sourceBeans.getClass());
 		for (ApplicationBean sourceBean : sourceBeans) {
-			ApplicationBean targetBean = AppBeanUtils.getNewApplicationBean(sourceBeanCopyCtx.getTargetBeanType(sourceBean.getClass()));
-			copyBean(sourceBean, targetBean, sourceBeanCopyCtx, targetBeanCopyCtx, copyMap);
-			targetBeans.add(targetBean);
+			targetBeans.add(copy(sourceBean, sourceBeanCopyCtx, targetBeanCopyCtx));
 		}
-
+		return targetBeans;
 	}
 
-	public static void copyBean(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx) {
-		copyBean(sourceBean, targetBean, sourceBeanCopyCtx, targetBeanCopyCtx, new HashMap());
+	public static ApplicationBean copy(ApplicationBean sourceBean, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx) {
+		return copy(sourceBean, null, sourceBeanCopyCtx, targetBeanCopyCtx);
 	}
-		
-	private static void copyBean(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx, Map<ApplicationBean, ApplicationBean> copyMap) {
-		// if
-		// (Debugger.D.pushCheck("rnd.webapp.mwt.server.application.AbstractModuleHandler.copy"))
-		// {
-		// Debugger.D.push(this, new Object[] { "sourceBean", sourceBean,
-		// "targetBean", targetBean
-		// });
-		// }
-		// try {
+
+	public static ApplicationBean copy(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx) {
+		return copy(sourceBean, targetBean, sourceBeanCopyCtx, targetBeanCopyCtx, new HashMap());
+	}
+
+	private static ApplicationBean copy(ApplicationBean sourceBean, ApplicationBean targetBean, BeanCopyCtx sourceBeanCopyCtx, BeanCopyCtx targetBeanCopyCtx, Map<ApplicationBean, ApplicationBean> copyMap) {
+
 		// Returing to avoid in-finite loop in Object Graph
-		if (copyMap.containsKey(sourceBean)) {
-			return;
+		ApplicationBean tempTargetBean = copyMap.get(sourceBean);
+		if (tempTargetBean != null) {
+			return tempTargetBean;
 		}
+
+		if (targetBean == null) {
+			targetBean = sourceBeanCopyCtx.getNewTargetApplicationBean(sourceBean.getClassName());
+		}
+
 		copyMap.put(sourceBean, targetBean);
 
 		// Copy ApplicationBean Id
@@ -60,55 +61,28 @@ public class AppBeanUtils {
 
 		// Copy properties
 		Set<String> propertyNames = sourceBean.getPropertyNames();
-		// D.println("prpSize", propertyNames.size());
 
-		// Copy simpe properties
+		// Copy properties
 		for (String propertyName : propertyNames) {
-			// D.println("propertyName", propertyName);
 
 			Object value = sourceBean.getValue(propertyName);
-			// D.println("tempValue", value);
 
 			if (value instanceof ApplicationBean) {
-
-				ApplicationBean sourceValue = (ApplicationBean) value;
-
-				// Long sourceObjectId =
-				// sourceBeanCopyCtx.getApplicationBeanId(sourceValue);
-				// sourceValue.setApplicationBeanId(sourceObjectId);
-				// D.println("sourceObjectId", sourceObjectId);
-				Long sourceObjectId = sourceValue.getId();
-
-				ApplicationBean targetValue = null;
-
-				if (sourceObjectId != null) {
-					targetValue = copyMap.get(sourceValue);
-				}
-				// D.println("targetValue", targetValue);
-
-				if (targetValue == null) {
-					targetValue = getNewApplicationBean(sourceBeanCopyCtx.getTargetBeanType(sourceValue.getClass()));
-					// targetValue.setApplicationBeanId(sourceObjectId);
-					copyBean(sourceValue, targetValue, sourceBeanCopyCtx, targetBeanCopyCtx, copyMap);
-				}
-				value = targetValue;
+				value = copy((ApplicationBean) value, null, sourceBeanCopyCtx, targetBeanCopyCtx, copyMap);
 			}
-			if (!propertyName.equals("ClassName"))
+
+			if (!propertyName.equals("ClassName")) {
 				targetBean.setValue(propertyName, value);
+			}
 		}
 
 		// Copy indexed properties
 		Set<String> indexedPropertyNames = sourceBean.getIndexedPropertyNames();
-		// D.println("IndxPrpSize", indexedPropertyNames.size());
 
 		for (String indexedPropertyName : indexedPropertyNames) {
-			// D.println("indexedPropertyName", indexedPropertyName);
 
 			int srcSize = sourceBean.size(indexedPropertyName);
-			// D.println("size", size);
-
 			int trgtSize = targetBean.size(indexedPropertyName);
-			// D.println("trtSize", trtSize);
 
 			String inverseOwner = targetBeanCopyCtx.getInverseOwner(targetBean.getClass(), indexedPropertyName);
 			// D.println("inverseOwner", inverseOwner);
@@ -118,17 +92,13 @@ public class AppBeanUtils {
 			for (int i = 0; i < trgtSize; i++) {
 
 				ApplicationBean targetElement = (ApplicationBean) targetBean.getElement(indexedPropertyName, i);
-				// Long targetElementId =
-				// targetBeanCopyCtx.getApplicationBeanId(targetElement);
-				// targetElement.setApplicationBeanId(targetElementId);
 				Long targetElementId = targetElement.getId();
 
 				if (targetElementId != null) {
 					existingTargetElementMap.put(targetElementId, targetElement);
 				}
 			}
-			// D.println("targetElementMap_size",
-			// existingTargetElementMap.size());
+			// D.println("targetElementMap_size", existingTargetElementMap.size());
 
 			List<ApplicationBean> newElements = new ArrayList<ApplicationBean>();
 
@@ -137,25 +107,22 @@ public class AppBeanUtils {
 				ApplicationBean sourceElement = (ApplicationBean) sourceBean.getElement(indexedPropertyName, i);
 				// D.println("sourceElement", sourceElement);
 
-				// Long sourceElementId =
-				// sourceBeanCopyCtx.getApplicationBeanId(sourceElement);
-				// sourceElement.setApplicationBeanId(sourceElementId);
-				// D.println("sourceElementId", sourceElementId);
 				Long sourceElementId = sourceElement.getId();
 
 				ApplicationBean targetElement = null;
-
+				boolean newElement = false;
 				if (sourceElementId != null) {
 					targetElement = existingTargetElementMap.remove(sourceElementId);
 				} else {
-					targetElement = getNewApplicationBean(sourceBeanCopyCtx.getTargetBeanType(sourceElement.getClass()));
+					newElement = true;
+				}
+
+				targetElement = copy(sourceElement, targetElement, sourceBeanCopyCtx, targetBeanCopyCtx, copyMap);
+				if (newElement) {
 					newElements.add(targetElement);
 				}
 
-				copyBean(sourceElement, targetElement, sourceBeanCopyCtx, targetBeanCopyCtx, copyMap);
-				// D.println("InverseOwnerRequired",
-				// targetBeanCopyHelper.isInverseOwnerRequired());
-
+				// D.println("InverseOwnerRequired", targetBeanCopyHelper.isInverseOwnerRequired());
 				if (targetBeanCopyCtx.isInverseOwnerRequired()) {
 					targetElement.setValue(inverseOwner, targetBean);
 				}
@@ -166,63 +133,41 @@ public class AppBeanUtils {
 			}
 
 			Collection<ApplicationBean> existingElements = existingTargetElementMap.values();
+
 			// D.println("existingElements_size", existingElements.size());
 			if (existingElements.size() > 0) {
 				targetBean.removeAllElement(indexedPropertyName, existingElements);
 			}
-
 		}
-		// }
-		// finally {
-		// Debugger.D.pop("rnd.webapp.mwt.server.application.AbstractModuleHandler.copy");
-		// }
 
-	}
-
-	public static Class getClientBeanType(Class serverBeanType) {
-		Class clientBeanType;
-		try {
-			clientBeanType = getTargetBeanType(serverBeanType, "server", "client");
-		} catch (Exception e) {
-			//e.printStackTrace();
-			clientBeanType = ApplicationDynaBean.class;
-		}
-		return clientBeanType;
-	}
-
-	public static Class getServerBeanType(Class clientBeanType) {
-		return getTargetBeanType(clientBeanType, "client", "server");
-	}
-
-	private static Class getTargetBeanType(Class srcBeanType, String srcType, String trgtType) {
-
-		String srcBeanTypeName = srcBeanType.getName();
-
-		int srcTypeIndex = srcBeanTypeName.lastIndexOf(srcType);
-		final String className = srcBeanTypeName.substring(0, srcTypeIndex) + trgtType + srcBeanTypeName.substring(srcTypeIndex + srcType.length());
-
-		return loadClass(className);
+		return targetBean;
 	}
 
 	public static Class loadClass(final String className) {
-		final Class targetClass = (Class) ExceptionUtils.executeUnchecked(new Block() {
+		final Class clazz = (Class) ExceptionUtils.executeUnchecked(new Block() {
 			public Object execute() throws Throwable {
 				return Class.forName(className);
 			}
 		});
-		return targetClass;
+		return clazz;
 	}
 
-	public static ApplicationBean getNewApplicationBean(final Class beanType) {
-		return (ApplicationBean) ExceptionUtils.executeUnchecked(new Block() {
+	public static <T> T getNewInstance(final Class<T> beanType) {
+		return (T) ExceptionUtils.executeUnchecked(new Block() {
 			public Object execute() throws Throwable {
 				return beanType.newInstance();
 			}
 		});
 	}
 
-	public static ApplicationBean getNewClientBean(Class beanType) {
-		return getNewApplicationBean(getClientBeanType(beanType));
+	public interface BeanCopyCtx {
+
+		boolean isInverseOwnerRequired();
+
+		String getInverseOwner(Class elementType, String indexedPrpName);
+
+		ApplicationBean getNewTargetApplicationBean(String sourceBeanTypeName);
+
 	}
 
 	public static class ClientBeanCopyCtx implements BeanCopyCtx {
@@ -236,9 +181,14 @@ public class AppBeanUtils {
 		}
 
 		@Override
-		public Class getTargetBeanType(Class sourceBeanType) {
-			return getServerBeanType(sourceBeanType);
+		public ApplicationBean getNewTargetApplicationBean(String clientBeanTypeName) {
+			return getNewInstance(loadClass(getServerBeanTypeName(clientBeanTypeName)));
 		}
+
+	}
+
+	public static String getServerBeanTypeName(String clientBeanTypeName) {
+		return clientBeanTypeName.replace("client", "server");
 	}
 
 	public static class ServerBeanCopyCtx implements BeanCopyCtx {
@@ -252,21 +202,26 @@ public class AppBeanUtils {
 		}
 
 		@Override
-		public Class getTargetBeanType(Class sourceBeanType) {
-			return getClientBeanType(sourceBeanType);
+		public ApplicationBean getNewTargetApplicationBean(String serverBeanTypeName) {
+
+			String clientBeanTypeName = getClientBeanTypeName(serverBeanTypeName);
+			Class<ApplicationBean> clientBeanType = null;
+			try {
+				clientBeanType = loadClass(clientBeanTypeName);
+			} catch (Exception e) {
+				//e.printStackTrace();
+			}
+
+			if (clientBeanType == null) {
+				return new ApplicationDynaBean(clientBeanTypeName);
+			} else {
+				return getNewInstance(clientBeanType);
+			}
 		}
 	}
 
-	public interface BeanCopyCtx {
-
-		// Long getApplicationBeanId(ApplicationBean applicationBean);
-
-		boolean isInverseOwnerRequired();
-
-		String getInverseOwner(Class elementType, String indexedPrpName);
-
-		Class getTargetBeanType(Class sourceBeanType);
-
+	public static String getClientBeanTypeName(String serverBeanTypeName) {
+		return serverBeanTypeName.replace("server", "client");
 	}
 
 }

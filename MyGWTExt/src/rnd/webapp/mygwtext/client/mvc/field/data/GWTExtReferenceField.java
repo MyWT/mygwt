@@ -8,8 +8,8 @@ import rnd.expression.Expression;
 import rnd.mywt.client.Logger;
 import rnd.mywt.client.MyWTHelper;
 import rnd.mywt.client.data.FilterInfo;
-import rnd.mywt.client.data.Row;
-import rnd.mywt.client.data.RowCacheImpl;
+import rnd.mywt.client.data._Row;
+import rnd.mywt.client.data.RowCache;
 import rnd.mywt.client.mvc.MVC;
 import rnd.mywt.client.mvc.field.Table.RowTableModel;
 import rnd.mywt.client.mvc.field.data.ReferenceField;
@@ -125,15 +125,15 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 
 		public GWTExtReferenceFieldView() {
 
-			addValueChangeListener(REFERENCE, new ValueChangeListenerAdapter<Row>() {
+			addValueChangeListener(REFERENCE, new ValueChangeListenerAdapter<_Row>() {
 
-				public void valueChanged(ValueChangeEvent<Row> vce) {
-					Row row = vce.getNewValue();
+				public void valueChanged(ValueChangeEvent<_Row> vce) {
+					_Row row = vce.getNewValue();
 					if (row == null) {
 						setValue(null);
 						setText("");
 					} else {
-						RowCacheImpl.get().addRow(getModuleName(), getApplicationBeanName(), getViewName(), row);
+						RowCache.get().addRow(getModuleName(), getApplicationBeanName(), getViewName(), row);
 						setValue(row.getId());
 						setDisplayText();
 					}
@@ -149,8 +149,8 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 						setReference(null);
 						setText("");
 					} else {
-						if (getReference() == null || !((Row) getReference()).getId().equals(rowId)) {
-							Row row = RowCacheImpl.get().getRow(getModuleName(), getApplicationBeanName(), getViewName(), rowId);
+						if (getReference() == null || !((_Row) getReference()).getId().equals(rowId)) {
+							_Row row = RowCache.get().getRow(getModuleName(), getApplicationBeanName(), getViewName(), rowId);
 							setReference(row);
 						}
 						setDisplayText();
@@ -291,9 +291,9 @@ public class GWTExtReferenceField extends GWTExtTextField implements ReferenceFi
 			Logger.log("searchCriteria", searchCriteria);
 
 			Expression displayExpression = ((ReferenceFieldView) getView()).getDisplayExpression();
-			List<Row> rows = ((RowTableModel) getDataBoard().getTable().getModel()).getDataTable().getRows();
+			List<_Row> rows = ((RowTableModel) getDataBoard().getTable().getModel()).getDataTable().getRows();
 
-			for (Row row : rows) {
+			for (_Row row : rows) {
 
 				Object value = displayExpression.getValue(row);
 				Logger.log("value", value);

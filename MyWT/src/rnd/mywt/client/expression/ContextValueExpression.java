@@ -22,11 +22,11 @@ public class ContextValueExpression extends ValueExpression {
 	}
 
 	public void addXChangeListener(Object object, XChangeListener xcl) {
-		((Context) object).addValueChangeListener(this.propertyName, (ValueChangeListener) getXChangeListenerDelegate(xcl, false));
+		((Context) object).addValueChangeListener(this.propertyName, (ValueChangeListener) getXChangeListenerDelegate(xcl, true));
 	}
 
 	public void removeXChangeListener(Object object, XChangeListener xcl) {
-		((Context) object).removeValueChangeListener(this.propertyName, (ValueChangeListener) getXChangeListenerDelegate(xcl, true));
+		((Context) object).removeValueChangeListener(this.propertyName, (ValueChangeListener) getXChangeListenerDelegate(xcl, false));
 	}
 
 }

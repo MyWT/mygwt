@@ -28,7 +28,7 @@ public interface Form extends Page {
 
 		ApplicationBean getApplicationBean();
 
-		boolean shoudAutoBind();
+		boolean shouldAutoBind();
 
 		void setShouldAutoBind(boolean shouldAutoBind);
 	}

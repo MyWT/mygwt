@@ -5,7 +5,7 @@ import java.util.List;
 
 import rnd.bean.impl.DynaBean;
 import rnd.mywt.client.data.DataTable;
-import rnd.mywt.client.data.Row;
+import rnd.mywt.client.data._Row;
 import rnd.mywt.client.data.RowMetaData;
 
 public class DataTableImpl extends DynaBean implements DataTable {
@@ -17,19 +17,19 @@ public class DataTableImpl extends DynaBean implements DataTable {
 		setValue(ROW_META_DATA, rowMetaData);
 	}
 
-	public boolean addRow(Row row) {
+	public boolean addRow(_Row row) {
 		return addElement(ROW, row);
 	}
 
-	public Row getRow(int index) {
-		return (Row) getListValue(ROW).get(index);
+	public _Row getRow(int index) {
+		return (_Row) getListValue(ROW).get(index);
 	}
 
-	public void addRows(Collection<Row> rows) {
+	public void addRows(Collection<_Row> rows) {
 		addAllElement(ROW, rows);
 	}
 
-	public List<Row> getRows() {
+	public List<_Row> getRows() {
 		return getListValueReadOnly(ROW);
 	}
 
@@ -41,15 +41,15 @@ public class DataTableImpl extends DynaBean implements DataTable {
 		return (RowMetaData) getValue(ROW_META_DATA);
 	}
 
-	public void addRow(int index, Row row) {
+	public void addRow(int index, _Row row) {
 		addElement(ROW, index, row);
 	}
 
-	public Row removeRow(int index) {
-		return (Row) removeElement(ROW, index);
+	public _Row removeRow(int index) {
+		return (_Row) removeElement(ROW, index);
 	}
 
-	public boolean removeRow(Row row) {
+	public boolean removeRow(_Row row) {
 		return removeElement(ROW, row);
 	}
 

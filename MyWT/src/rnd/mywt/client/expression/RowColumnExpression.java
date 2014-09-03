@@ -2,7 +2,7 @@ package rnd.mywt.client.expression;
 
 import rnd.expression.AbstractExpression;
 import rnd.mywt.client.data.ColumnMetaData;
-import rnd.mywt.client.data.Row;
+import rnd.mywt.client.data._Row;
 
 public class RowColumnExpression extends AbstractExpression {
 
@@ -21,11 +21,11 @@ public class RowColumnExpression extends AbstractExpression {
 
 	@Override
 	public Object getValue(Object object) {
-		Row row = (Row) object;
+		_Row row = (_Row) object;
 		return row.getColumns().get(getColumnIndex(row));
 	}
 
-	private int getColumnIndex(Row row) {
+	private int getColumnIndex(_Row row) {
 
 		if (!this.indexCalculated) {
 			ColumnMetaData[] columnMetaDatas = row.getRowMetaData().getColumnMetaDatas();

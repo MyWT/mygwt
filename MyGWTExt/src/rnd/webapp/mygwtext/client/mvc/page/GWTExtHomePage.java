@@ -3,8 +3,6 @@ package rnd.webapp.mygwtext.client.mvc.page;
 import java.util.Collection;
 
 import rnd.mywt.client.MyWTHelper;
-import rnd.mywt.client.application.ApplicationHelper;
-import rnd.mywt.client.application.DefaultApplicationHelper;
 import rnd.mywt.client.application.FormHelper;
 import rnd.mywt.client.application.ModuleHelper;
 import rnd.mywt.client.mvc.page.HomePage;
@@ -18,7 +16,6 @@ import rnd.webapp.mygwtext.client.tree.RootNode;
 
 import com.gwtext.client.core.EventObject;
 import com.gwtext.client.core.RegionPosition;
-import com.gwtext.client.data.Node;
 import com.gwtext.client.widgets.Button;
 import com.gwtext.client.widgets.MessageBox;
 import com.gwtext.client.widgets.MessageBoxConfig;
@@ -116,7 +113,7 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 		reloadButton.addListener(new ButtonListenerAdapter() {
 			@Override
 			public void onClick(Button button, EventObject e) {
-				initializeApplication();
+				MyWTHelper.getApplicationHelper().initializeApplication();
 			}
 		});
 		menuBar.addButton(reloadButton);
@@ -143,7 +140,6 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 	static int i = 0;
 
 	private TreePanel treePanel = new TreePanel("");;
-	RootNode root = new RootNode();
 
 	private void addFormActionPanel(Panel borderPanel) {
 		final Panel formActionPanel = new Panel();
@@ -156,10 +152,9 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 
 		treePanel.setRootVisible(false);
 		treePanel.setBorder(false);
-
-		initializeApplication();
-
-		treePanel.setRootNode(root);
+		
+		treePanel.setRootNode(new RootNode());
+		
 		treePanel.addListener(new TreePanelListenerAdapter() {
 
 			@Override
@@ -179,14 +174,10 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 						if (dataBoard == null) {
 
 							ModuleHelper moduleHelper = MyWTHelper.getApplicationHelper().getModuleHelper(moduleName);
-							if (moduleHelper == null) {
-								moduleHelper = MyWTHelper.getDefaultApplicationHelper().getModuleHelper(moduleName);
-							}
-							if (moduleHelper != null) {
-								FormHelper formHelper = moduleHelper.getFormHelper(appBeanName);
-								if (formHelper != null) {
-									dataBoard = formHelper.createDataBoard();
-								}
+							FormHelper formHelper = moduleHelper.getFormHelper(appBeanName);
+							
+							if (formHelper != null) {
+								dataBoard = formHelper.createDataBoard();
 							}
 
 							if (dataBoard == null) {
@@ -208,21 +199,12 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 		formActionPanel.add(treePanel);
 	}
 
-	public void initializeApplication() {
-		DefaultApplicationHelper defaultApplicationHelper = new DefaultApplicationHelper(MyWTHelper.getApplicationName());
-		MyWTHelper.setDefaultApplicationHelper(defaultApplicationHelper);
-	}
-
 	@Override
-	public void initializeFormAction(ApplicationHelper applicationHelper, boolean reload) {
+	public void initializeFormAction() {
 
-		if (reload) {
-			for (Node firstChild = root.getFirstChild(); firstChild != null; firstChild = root.getFirstChild()) {
-				root.removeChild(firstChild);
-			}
-		}
+		RootNode rootNode = new RootNode();
 
-		Collection<ModuleHelper> moduleHelpers = applicationHelper.getModuleHelpers();
+		Collection<ModuleHelper> moduleHelpers = MyWTHelper.getApplicationHelper().getModuleHelpers();
 		// System.out.println("module:" + moduleHelpers.size());
 
 		for (ModuleHelper moduleHelper : moduleHelpers) {
@@ -230,13 +212,15 @@ public class GWTExtHomePage extends GWTExtPage implements HomePage {
 			// System.out.println("\tform:" + formHelpers.size());
 
 			ModuleNode module = new ModuleNode(moduleHelper.getModuleName());
-			root.addModuleNode(module);
+			rootNode.addModuleNode(module);
 
 			for (FormHelper formHelper : formHelpers) {
 				FormNode form = new FormNode(formHelper.getAppBeanName(), formHelper.getFormName(), formHelper.getViewName());
 				module.addFormNode(form);
 			}
 		}
+		
+		treePanel.setRootNode(rootNode);
 		treePanel.expandAll();
 	}
 }

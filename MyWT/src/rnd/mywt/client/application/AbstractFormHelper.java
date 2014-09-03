@@ -52,20 +52,15 @@ public abstract class AbstractFormHelper implements FormHelper {
 		return textArea;
 	}
 
-	protected ReferenceField createReferenceField(String label, String moduleName, String applicationBeanName, String viewName) {
-		return MyWTHelper.getMVCFactory().createReferenceField(label, moduleName, applicationBeanName, viewName);
-	}
-
 	protected ReferenceField createReferenceField(String label, String moduleName, String applicationBeanName, String viewName, String columnName) {
-		ReferenceField referenceField = createReferenceField(label, moduleName, applicationBeanName, viewName);
+		ReferenceField referenceField = MyWTHelper.getMVCFactory().createReferenceField(label, moduleName, applicationBeanName, viewName);
 		((ReferenceFieldView) referenceField.getView()).setDisplayExpresion(new RowColumnExpression(columnName));
 		return referenceField;
 	}
 
-	protected ReferenceField createReferenceField(String label, String boundTo, String moduleName, String applicationBeanName, String viewName, String columnName) {
-		ReferenceField referenceField = createReferenceField(label, moduleName, applicationBeanName, viewName);
+	protected ReferenceField createReferenceField(String label, String moduleName, String applicationBeanName, String viewName, String columnName, String boundTo) {
+		ReferenceField referenceField = createReferenceField(label, moduleName, applicationBeanName, viewName, columnName);
 		referenceField.setBoundTo(boundTo);
-		((ReferenceFieldView) referenceField.getView()).setDisplayExpresion(new RowColumnExpression(columnName));
 		return referenceField;
 	}
 
@@ -77,7 +72,7 @@ public abstract class AbstractFormHelper implements FormHelper {
 	public boolean shouldAutoBind() {
 		return true;
 	}
-	
+
 	@Override
 	public String getModuleName() {
 		return moduleName;
