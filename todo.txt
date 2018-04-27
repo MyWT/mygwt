@@ -1,0 +1,84 @@
+
+Merge server and client bean - Dyna Bean and Java Bean
+
+DO
+Persistence
+
+
+DAO
+
+Validation
+  Data Input 
+  Logical
+  State
+  Data Consistency
+  Operation
+
+Data Board
+  Searchable
+  ther shud be sep data board for ref field
+
+Table
+   Pageable
+   Sortable
+   Refer field Editor Render
+
+Collect Row - > UI Meta Data
+
+------
+Next
+------
+Application Dictionary (Meta Data)
+Application Meta Data
+Module Meta Data
+AppBean Meta Data
+    View Meta Data
+    DO Meta Data
+      Field Meta Data
+    UI metadata
+	Component Meta Data
+	Default Value
+	Enable
+	Visible
+	Validation Meta Data
+	Action Meta Data
+	Form - Viewable/Readonly
+Focus Manager
+  focus veto for refer field
+
+Environment
+	System
+	View
+	Form
+
+ARB Module
+	Request Queue
+	Request Executor
+	Response Handler
+
+Data Input Action
+Exception Handling/logging
+Keyboard hot key suuport
+
+AA - Authentication and Authorization
+
+-----
+Plan
+-----
+Document attachment
+
+Alert b/w login user
+
+Reporting Integration
+
+Application versioning
+  porting
+  merging
+  release
+  maintain
+
+---------
+Design
+---------
+Mobile device support
+Workflow Integration
